@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAKE ME | Admin Dashboard</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Base Style CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Scoped Admin Styles -->
+  <style>
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+    }
+    
+    .admin-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .admin-nav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    
+    .admin-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .admin-logo-img {
+      height: 35px;
+      width: auto;
+    }
+    
+    .admin-logo-title {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+    }
+    
+    .admin-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .admin-main {
+      flex: 1;
+      padding: 40px 30px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .admin-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .admin-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      position: relative;
+    }
+    
+    .admin-title::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--gold-gradient);
+    }
+    
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+    
+    .stat-card:hover {
+      border-color: var(--gold-primary);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-gold);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gold-gradient);
+    }
+    
+    .stat-card-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    
+    .stat-card-icon {
+      font-size: 1.2rem;
+      color: var(--gold-primary);
+    }
+    
+    .stat-card-value {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      color: var(--text-light);
+      font-weight: 300;
+    }
+    
+    .stat-card-footer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    
+    .stat-card-footer.highlight {
+      color: #81c784;
+      font-weight: 500;
+    }
+    
+    /* Split Panels */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    @media (min-width: 1100px) {
+      .dashboard-layout {
+        grid-template-columns: 1.8fr 1fr;
+      }
+    }
+    
+    /* Panel Containers */
+    .panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 15px;
+    }
+    
+    .panel-title {
+      font-size: 1.25rem;
+      font-family: var(--font-serif);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .panel-title i {
+      color: var(--gold-primary);
+      font-size: 1.1rem;
+    }
+    
+    .panel-action-btn {
+      background: none;
+      border: none;
+      color: var(--gold-primary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .panel-action-btn:hover {
+      color: var(--gold-hover);
+      text-decoration: underline;
+    }
+    
+    /* Birthday Campaign Panel list */
+    .birthday-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .birthday-item {
+      background: var(--bg-tertiary);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition-fast);
+    }
+    
+    .birthday-item:hover {
+      border-color: rgba(197, 168, 128, 0.25);
+    }
+    
+    .bday-client-info h5 {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+    
+    .bday-client-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    .btn-campaign {
+      background: #25d366;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: var(--transition-fast);
+    }
+    
+    .btn-campaign:hover {
+      background: #128c7e;
+      transform: scale(1.02);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .empty-state i {
+      font-size: 2rem;
+      color: var(--gold-dark);
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    /* Filters and Search toolbar */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    
+    .search-wrap {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 15px 10px 38px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      transition: var(--transition-fast);
+    }
+    
+    .search-input:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 10px rgba(197, 168, 128, 0.1);
+    }
+    
+    .search-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-primary);
+      font-size: 0.85rem;
+    }
+    
+    .filter-select {
+      background: var(--bg-tertiary);
+      color: var(--text-light);
+      border: 1px solid var(--border-color);
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      min-width: 150px;
+      transition: var(--transition-fast);
+    }
+    
+    .filter-select:focus {
+      border-color: var(--gold-primary);
+    }
+    
+    /* Schedules Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    
+    .schedules-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    
+    .schedules-table th {
+      background: var(--bg-tertiary);
+      color: var(--gold-primary);
+      font-weight: 500;
+      padding: 12px 15px;
+      border-bottom: 2px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    
+    .schedules-table td {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      vertical-align: middle;
+    }
+    
+    .schedules-table tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+    
+    .client-cell-info {
+      font-weight: 600;
+      color: var(--text-light);
+    }
+    
+    .client-cell-phone {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    
+    .services-cell-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      max-width: 250px;
+    }
+    
+    .service-badge {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
+    .status-select {
+      background: var(--bg-tertiary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    
+    .status-select.confirmed {
+      border-color: #4fc3f7;
+      color: #4fc3f7;
+    }
+    
+    .status-select.completed {
+      border-color: #81c784;
+      color: #81c784;
+    }
+    
+    .status-select.cancelled {
+      border-color: #e57373;
+      color: #e57373;
+    }
+    
+    .action-btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn-action-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 5px;
+      transition: var(--transition-fast);
+      border-radius: 4px;
+    }
+    
+    .btn-action-icon:hover {
+      color: var(--gold-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .btn-action-icon.reminder:hover {
+      color: #64b5f6;
+      background: rgba(100, 181, 246, 0.1);
+    }
+    
+    .btn-action-icon.whatsapp:hover {
+      color: #81c784;
+      background: rgba(129, 199, 132, 0.1);
+    }
+    
+    .btn-action-icon.delete:hover {
+      color: #e57373;
+      background: rgba(229, 115, 115, 0.1);
+    }
+    
+    .admin-date-input {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      transition: var(--transition-fast);
+      width: 130px;
+    }
+    .admin-date-input:hover, .admin-date-input:focus {
+      border-color: var(--gold-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .admin-date-input::-webkit-calendar-picker-indicator {
+      filter: invert(0.7);
+      cursor: pointer;
+    }
+    
+    /* Floating modal or utility panel */
+    .db-management-panel {
+      margin-top: 30px;
+      padding: 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .db-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+    
+    .db-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .btn-db {
+      background: var(--bg-tertiary);
+      color: var(--text-light);
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .btn-db:hover {
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+    }
+    
+    .btn-db.primary {
+      background: var(--gold-gradient);
+      color: var(--text-dark);
+      border: none;
+      font-weight: 600;
+    }
+    
+    .btn-db.primary:hover {
+      opacity: 0.9;
+      color: var(--text-dark);
+    }
+    
+    .btn-db.danger {
+      border-color: rgba(229, 115, 115, 0.3);
+      color: #e57373;
+    }
+    
+    .btn-db.danger:hover {
+      background: rgba(229, 115, 115, 0.1);
+      border-color: #e57373;
+    }
+
+    /* Login Gate Styles */
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-primary);
+      background-image: radial-gradient(circle at 50% 50%, rgba(197, 168, 128, 0.08) 0%, transparent 80%);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: var(--transition-smooth);
+    }
+    
+    .login-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-premium);
+      text-align: center;
+      position: relative;
+    }
+    
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 2px;
+      background: var(--gold-gradient);
+    }
+    
+    .login-logo {
+      height: 50px;
+      width: auto;
+      margin-bottom: 15px;
+    }
+    
+    .login-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+    
+    .login-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+    
+    .login-form-group {
+      margin-bottom: 20px;
+      text-align: left;
+      position: relative;
+    }
+    
+    .login-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .login-input-wrap i.input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--gold-primary);
+      font-size: 0.9rem;
+    }
+    
+    .login-input-wrap i.toggle-password {
+      position: absolute;
+      right: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition-fast);
+    }
+    
+    .login-input-wrap i.toggle-password:hover {
+      color: var(--gold-primary);
+    }
+    
+    .login-input {
+      width: 100%;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 15px 12px 42px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      transition: var(--transition-fast);
+    }
+    
+    .login-input:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 12px rgba(197, 168, 128, 0.15);
+    }
+    
+    .login-input.has-toggle {
+      padding-right: 42px;
+    }
+    
+    .login-error-msg {
+      color: #e57373;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-top: 10px;
+      display: none;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+    }
+    
+    .btn-login {
+      width: 100%;
+      background: var(--gold-gradient);
+      color: var(--text-dark);
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: var(--transition-fast);
+    }
+    
+    .btn-login:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-logout {
+      background: none;
+      border: 1px solid rgba(229, 115, 115, 0.4);
+      color: #e57373;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .btn-logout:hover {
+      background: rgba(229, 115, 115, 0.1);
+      border-color: #e57373;
+    }
+
+    /* Holiday Management Styles */
+    .holiday-management-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+    
+    @media (max-width: 768px) {
+      .holiday-management-panel {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+    
+    .holiday-item {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      transition: var(--transition-fast);
+    }
+    
+    .holiday-item:hover {
+      border-color: rgba(229, 115, 115, 0.4);
+    }
+    
+    .btn-delete-holiday {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      padding: 4px;
+    }
+    
+    .btn-delete-holiday:hover {
+      color: #e57373;
+    }
+    
+    #holiday-date-input {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    #holiday-date-input:focus {
+      border-color: var(--gold-primary);
+    }
+  </style>
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <!-- ADMIN LOGIN OVERLAY GATE -->
+  <div class="login-overlay" id="login-overlay-container">
+    <div class="login-card">
+      <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="login-logo">
+      <h2 class="login-title">Admin Access Portal</h2>
+      <p class="login-subtitle">Please sign in to access the salon dashboard</p>
+      
+      <form id="admin-login-form" onsubmit="event.preventDefault();">
+        <div class="login-form-group">
+          <div class="login-input-wrap">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="login-username" class="login-input" placeholder="Username" required autocomplete="username">
+          </div>
+        </div>
+        
+        <div class="login-form-group">
+          <div class="login-input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="login-password" class="login-input has-toggle" placeholder="Password" required autocomplete="current-password">
+            <i class="fas fa-eye toggle-password" id="btn-toggle-password"></i>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn-login" id="btn-submit-login">Secure Sign In</button>
+        
+        <div class="login-error-msg" id="login-error-message">
+          <i class="fas fa-exclamation-circle"></i> Invalid username or password.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-wrapper" id="admin-dashboard-container" style="display: none;">
+    <!-- ADMIN NAVIGATION -->
+    <nav class="admin-nav">
+      <a href="index.html" class="admin-logo-wrap">
+        <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="admin-logo-img">
+        <span class="admin-logo-title">MAKE ME <span style="font-weight: 300; font-size: 0.85rem; opacity:0.8;">| ADMIN</span></span>
+      </a>
+      <div class="admin-nav-actions">
+        <span style="font-size: 0.8rem; color: var(--gold-primary); background: var(--bg-tertiary); padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-lock"></i> Secured Session</span>
+        <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.75rem; border-radius: 4px;"><i class="fas fa-arrow-left"></i> View Site</a>
+        <button class="btn-logout" id="btn-admin-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </nav>
+
+    <!-- ADMIN MAIN CONTENT -->
+    <main class="admin-main">
+      
+      <div class="admin-title-row">
+        <div>
+          <h1 class="admin-title">Salon Control Center</h1>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-top: 10px;">Monitor schedules, manage client profiles, and run automated marketing campaigns.</p>
+        </div>
+        <div style="font-size:0.8rem; color: var(--text-muted); text-align: right;">
+          <div id="live-time">Wednesday, July 1, 2026</div>
+          <div style="font-weight:600; color: var(--gold-primary); margin-top: 2px;" id="live-clock">12:00 PM</div>
+        </div>
+      </div>
+
+      <!-- KPI METRICS CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span>Total Bookings</span>
+            <i class="fas fa-calendar-check stat-card-icon"></i>
+          </div>
+          <div class="stat-card-value" id="kpi-bookings">0</div>
+          <div class="stat-card-footer">All-time salon reservations</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span>Estimated Revenue</span>
+            <i class="fas fa-indian-rupee-sign stat-card-icon"></i>
+          </div>
+          <div class="stat-card-value" id="kpi-revenue">₹0</div>
+          <div class="stat-card-footer">Value of scheduled services</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span>Today's Schedules</span>
+            <i class="fas fa-clock stat-card-icon"></i>
+          </div>
+          <div class="stat-card-value" id="kpi-today">0</div>
+          <div class="stat-card-footer" id="kpi-today-desc">Appointments for today</div>
+        </div>
+        
+        <div class="stat-card" style="border-color: rgba(129, 199, 132, 0.3);">
+          <div class="stat-card-header">
+            <span>Birthdays Today</span>
+            <i class="fas fa-birthday-cake stat-card-icon" style="color: #81c784;"></i>
+          </div>
+          <div class="stat-card-value" id="kpi-birthdays" style="color: #81c784;">0</div>
+          <div class="stat-card-footer highlight" id="kpi-birthdays-desc">No active birthday alerts</div>
+        </div>
+      </div>
+
+      <!-- SPLIT PANELS -->
+      <div class="dashboard-layout">
+        
+        <!-- PANEL LEFT: SCHEDULES & APPOINTMENTS FEED -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-calendar-alt"></i> Appointment Schedules</h2>
+            <span style="font-size: 0.75rem; color: var(--text-muted);" id="table-count-label">Showing 0 bookings</span>
+          </div>
+
+          <!-- Filters toolbar -->
+          <div class="toolbar">
+            <div class="search-wrap">
+              <i class="fas fa-search"></i>
+              <input type="text" class="search-input" id="search-bookings" placeholder="Search by client name or phone number...">
+            </div>
+            
+            <select class="filter-select" id="filter-stylist">
+              <option value="all">All Stylists</option>
+              <option value="MUKESH SIR">MUKESH SIR</option>
+              <option value="AMAR SIR">AMAR SIR</option>
+              <option value="BALAJI SIR">BALAJI SIR</option>
+              <option value="SAMARTH SIR">SAMARTH SIR</option>
+              <option value="PRATIKSHA MAM">PRATIKSHA MAM</option>
+              <option value="COMING SOON">COMING SOON</option>
+              <option value="Any Available Expert">Any Available Expert</option>
+            </select>
+            
+            <select class="filter-select" id="filter-date">
+              <option value="all">All Dates</option>
+              <option value="today">Today</option>
+              <option value="tomorrow">Tomorrow</option>
+              <option value="upcoming">Upcoming</option>
+            </select>
+          </div>
+
+          <!-- Table wrapper -->
+          <div class="table-container">
+            <table class="schedules-table">
+              <thead>
+                <tr>
+                  <th>Ticket</th>
+                  <th>Client</th>
+                  <th>Appointment Details</th>
+                  <th>Stylist</th>
+                  <th>Services Booked</th>
+                  <th>Total Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="schedules-tbody">
+                <!-- Injected dynamically by script -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PANEL RIGHT: CAMPAIGNS & BIRTHDAYS PANEL -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title"><i class="fas fa-bullhorn"></i> Birthday Campaigns</h2>
+            <button class="panel-action-btn" id="bulk-birthday-btn"><i class="fas fa-paper-plane"></i> Send All Today</button>
+          </div>
+          
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">
+            The system scans customer records daily to identify birthdays. Click the button to automatically dispatch a customized discount code offer via WhatsApp.
+          </p>
+
+          <!-- Birthdays list container -->
+          <div class="birthday-list" id="birthday-alerts-container">
+            <!-- Injected dynamically by script -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- HOLIDAY SETTINGS PANEL -->
+      <div class="holiday-management-panel">
+        <div>
+          <h4 style="font-family: var(--font-sans); font-size:0.95rem; font-weight:600; margin-bottom: 6px;"><i class="fas fa-calendar-times"></i> Manage Urgent Holidays</h4>
+          <p style="font-size:0.8rem; color:var(--text-muted); line-height: 1.5; margin-bottom: 15px;">Block specific dates when the salon is closed. Blocked dates will be immediately disabled on the client booking page, preventing new appointments.</p>
+          
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <input type="date" id="holiday-date-input">
+            <button class="btn-db primary" id="add-holiday-btn" style="padding: 10px 18px; border-radius: 8px; font-size: 0.85rem;"><i class="fas fa-ban"></i> Block Date</button>
+          </div>
+        </div>
+        
+        <div>
+          <h5 style="font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em;">Currently Blocked Dates</h5>
+          <div id="holiday-list-container" style="max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 5px;">
+            <!-- Rendered dynamically -->
+            <p style="font-size:0.8rem; color:var(--text-muted); font-style: italic;">No holidays configured. All dates are open.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATABASE UTILITIES PANEL -->
+      <div class="db-management-panel">
+        <div>
+          <h4 style="font-family: var(--font-sans); font-size:0.95rem; font-weight:600; margin-bottom: 6px;"><i class="fas fa-database"></i> Database Management</h4>
+          <p class="db-desc">The dashboard stores bookings locally in your web browser. You can seed mock bookings to test the system (this includes clients with birthdays set to today for immediate campaign testing) or wipe all records clean.</p>
+        </div>
+        <div class="db-buttons">
+          <button class="btn-db danger" id="clear-db-btn"><i class="fas fa-trash-alt"></i> Clear Database</button>
+          <button class="btn-db primary" id="seed-db-btn"><i class="fas fa-magic"></i> Seed Mock Data</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Live Firebase Configuration:
+    const firebaseConfig = {
+      apiKey: "AIzaSyAeWAOnrmdG73rnrUA5cw-vpnIjiWWElqQ",
+      authDomain: "makeme99-66073.firebaseapp.com",
+      projectId: "makeme99-66073",
+      storageBucket: "makeme99-66073.firebasestorage.app",
+      messagingSenderId: "83236853494",
+      appId: "1:83236853494:web:d066354c4643d2edb4bed7",
+      measurementId: "G-8YQ2W671L2"
+    };
+
+    // Initialize Firebase
+    if (typeof firebase !== 'undefined') {
+      firebase.initializeApp(firebaseConfig);
+      window.db = firebase.firestore();
+      console.log("Firebase Firestore Initialized Successfully.");
+    } else {
+      console.error("Firebase SDK failed to load. Check your internet connection.");
+    }
+
+    // Security Authentication Gate
+    const AUTH_USERNAME = 'admin';
+    const AUTH_PASSWORD = 'makeme@dharashiv';
+
+    // Live Firestore Database Synchronization Cache
+    let isInitialDashboardLoaded = false;
+    let liveBookingsCache = [];
+
+    function checkAdminSession() {
+      const isLoggedIn = sessionStorage.getItem('makeme_admin_logged_in') === 'true';
+      const loginOverlay = document.getElementById('login-overlay-container');
+      const dashboardContainer = document.getElementById('admin-dashboard-container');
+      
+      if (isLoggedIn) {
+        if (loginOverlay) loginOverlay.style.display = 'none';
+        if (dashboardContainer) dashboardContainer.style.display = 'block';
+        return true;
+      } else {
+        if (loginOverlay) loginOverlay.style.display = 'flex';
+        if (dashboardContainer) dashboardContainer.style.display = 'none';
+        return false;
+      }
+    }
+
+    // Handle Login Submission & Security Actions
+    function initLoginHandler() {
+      const form = document.getElementById('admin-login-form');
+      const usernameInput = document.getElementById('login-username');
+      const passwordInput = document.getElementById('login-password');
+      const errorMsg = document.getElementById('login-error-message');
+      const togglePasswordBtn = document.getElementById('btn-toggle-password');
+      const logoutBtn = document.getElementById('btn-admin-logout');
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const username = usernameInput.value.trim();
+          const password = passwordInput.value;
+
+          if (username === AUTH_USERNAME && password === AUTH_PASSWORD) {
+            sessionStorage.setItem('makeme_admin_logged_in', 'true');
+            errorMsg.style.display = 'none';
+            checkAdminSession();
+            renderDashboard();
+          } else {
+            errorMsg.style.display = 'flex';
+            passwordInput.value = '';
+            passwordInput.focus();
+          }
+        });
+      }
+
+      if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          togglePasswordBtn.className = type === 'password' ? 'fas fa-eye toggle-password' : 'fas fa-eye-slash toggle-password';
+        });
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to secure sign out?')) {
+            sessionStorage.removeItem('makeme_admin_logged_in');
+            if (usernameInput) usernameInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+            if (errorMsg) errorMsg.style.display = 'none';
+            checkAdminSession();
+          }
+        });
+      }
+    }
+
+    // Live Calendar & Clock Widget
+    function updateClock() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('live-time').textContent = now.toLocaleDateString('en-US', options);
+      
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      document.getElementById('live-clock').textContent = `${hours}:${minutes} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Mock Database Seeding Data
+    const mockBookings = [
+      {
+        ticketId: "MM-739182",
+        clientName: "Shrikant Deshmukh",
+        clientPhone: "9370756017",
+        clientDob: getTodayBirthdayDob(28), // Today's date, 28 years ago
+        stylistName: "MUKESH SIR",
+        stylistId: "st1",
+        appointmentDate: getRelativeDate(0), // Today
+        appointmentTime: "11:00 AM",
+        services: [
+          { name: "Hair Wash + Advance Setting", price: 300, duration: 45 },
+          { name: "Premium Korean Glass Facial", price: 2500, duration: 90 }
+        ],
+        totalPrice: 2800,
+        totalDuration: 135,
+        notes: "Requested soft music in styling cabin.",
+        status: "confirmed",
+        createdAt: new Date().toISOString()
+      },
+      {
+        ticketId: "MM-910482",
+        clientName: "Priyanka Patil",
+        clientPhone: "9021816517",
+        clientDob: getTodayBirthdayDob(24), // Today's date, 24 years ago
+        stylistName: "COMING SOON",
+        stylistId: "st6",
+        appointmentDate: getRelativeDate(0), // Today
+        appointmentTime: "02:00 PM",
+        services: [
+          { name: "Premium Hydra Facial", price: 2500, duration: 90 },
+          { name: "Global Colour (Medium Length)", price: 3000, duration: 105 }
+        ],
+        totalPrice: 5500,
+        totalDuration: 195,
+        notes: "First time trying the Hydra Facial.",
+        status: "confirmed",
+        createdAt: new Date(Date.now() - 3600000).toISOString()
+      },
+      {
+        ticketId: "MM-552910",
+        clientName: "Rohan Shinde",
+        clientPhone: "9876543210",
+        clientDob: "1997-05-12",
+        stylistName: "PRATIKSHA MAM",
+        stylistId: "st5",
+        appointmentDate: getRelativeDate(1), // Tomorrow
+        appointmentTime: "04:00 PM",
+        services: [
+          { name: "Beard Grooming", price: 150, duration: 30 },
+          { name: "Hair Cut + Hair Wash", price: 250, duration: 45 }
+        ],
+        totalPrice: 400,
+        totalDuration: 75,
+        notes: "Wants premium beard oil.",
+        status: "confirmed",
+        createdAt: new Date(Date.now() - 7200000).toISOString()
+      },
+      {
+        ticketId: "MM-884029",
+        clientName: "Karan Johar",
+        clientPhone: "9123456789",
+        clientDob: "1988-11-20",
+        stylistName: "PRATIKSHA MAM",
+        stylistId: "st5",
+        appointmentDate: getRelativeDate(-2), // 2 days ago
+        appointmentTime: "05:00 PM",
+        services: [
+          { name: "Premium Gold Clean Up", price: 800, duration: 50 },
+          { name: "Hair Cut + Hair Wash", price: 250, duration: 45 }
+        ],
+        totalPrice: 1050,
+        totalDuration: 95,
+        notes: "Regular client.",
+        status: "completed",
+        createdAt: new Date(Date.now() - 172800000).toISOString()
+      },
+      {
+        ticketId: "MM-382910",
+        clientName: "Anjali Sharma",
+        clientPhone: "9012345678",
+        clientDob: getTodayBirthdayDob(31), // Today's date, 31 years ago
+        stylistName: "MUKESH SIR",
+        stylistId: "st1",
+        appointmentDate: getRelativeDate(3), // In 3 days
+        appointmentTime: "01:00 PM",
+        services: [
+          { name: "Mixed Layer Hair Cut", price: 450, duration: 45 },
+          { name: "Wella Spa (Medium Length)", price: 1300, duration: 45 }
+        ],
+        totalPrice: 1750,
+        totalDuration: 90,
+        notes: "Wants an expert review of hair condition.",
+        status: "confirmed",
+        createdAt: new Date(Date.now() - 86400000).toISOString()
+      }
+    ];
+
+    // Helper to get formatted relative ISO date string (YYYY-MM-DD)
+    function getRelativeDate(daysOffset) {
+      const date = new Date();
+      date.setDate(date.getDate() + daysOffset);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Helper to get birthday string formatted YYYY-MM-DD matching current month and day
+    function getTodayBirthdayDob(yearsAgo) {
+      const now = new Date();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${now.getFullYear() - yearsAgo}-${month}-${day}`;
+    }
+
+    // Load Database Bookings (utilizing synchronized live cache or localStorage)
+    function getBookings() {
+      if (liveBookingsCache && liveBookingsCache.length > 0) {
+        return liveBookingsCache;
+      }
+      const stored = localStorage.getItem('makeme_bookings');
+      if (!stored) {
+        return [];
+      }
+      return JSON.parse(stored);
+    }
+
+    // Save Database Bookings locally (fallback/offline sync mirror)
+    function saveBookings(bookings) {
+      localStorage.setItem('makeme_bookings', JSON.stringify(bookings));
+      liveBookingsCache = bookings;
+      renderDashboard();
+    }
+
+    // Real-time synchronization listener for Firebase Bookings
+    function startBookingsListener() {
+      if (!window.db) {
+        liveBookingsCache = getBookings();
+        renderDashboard();
+        return;
+      }
+
+      window.db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(querySnapshot => {
+        const bookings = [];
+        querySnapshot.forEach(doc => {
+          bookings.push(doc.data());
+        });
+
+        // Run one-time migration to fix the specific bookings that shifted due to timezone bug
+        let firebaseMigrated = false;
+        bookings.forEach(b => {
+          if ((b.ticketId === 'MM-998513' || b.ticketId === 'MM-621304') && b.appointmentDate === '2026-07-30') {
+            window.db.collection('bookings').doc(b.ticketId).update({
+              appointmentDate: '2026-07-31'
+            }).then(() => {
+              console.log(`One-time migration: fixed booking ${b.ticketId} to 2026-07-31`);
+            });
+            firebaseMigrated = true;
+          }
+          if (b.ticketId === 'MM-844515' && b.appointmentDate === '2026-07-01') {
+            window.db.collection('bookings').doc(b.ticketId).update({
+              appointmentDate: '2026-07-02'
+            }).then(() => {
+              console.log(`One-time migration: fixed booking ${b.ticketId} to 2026-07-02`);
+            });
+            firebaseMigrated = true;
+          }
+        });
+        if (firebaseMigrated) return;
+        
+        // Do not auto-seed database if Firestore has absolutely no bookings
+
+        liveBookingsCache = bookings;
+        localStorage.setItem('makeme_bookings', JSON.stringify(bookings));
+        
+        isInitialDashboardLoaded = true;
+        renderDashboard();
+      }, err => {
+        console.error("Firebase listen failed:", err);
+        liveBookingsCache = getBookings();
+        renderDashboard();
+      });
+    }
+
+    // Core Dashboard Render Logic
+    function renderDashboard() {
+      const bookings = getBookings();
+      
+      // Auto-migrate local bookings if they are on shifted dates due to timezone bugs
+      let needsLocalMigration = false;
+      const updated = bookings.map(b => {
+        if ((b.ticketId === 'MM-998513' || b.ticketId === 'MM-621304') && b.appointmentDate === '2026-07-30') {
+          needsLocalMigration = true;
+          return { ...b, appointmentDate: '2026-07-31' };
+        }
+        if (b.ticketId === 'MM-844515' && b.appointmentDate === '2026-07-01') {
+          needsLocalMigration = true;
+          return { ...b, appointmentDate: '2026-07-02' };
+        }
+        return b;
+      });
+      if (needsLocalMigration) {
+        saveBookings(updated);
+        return;
+      }
+
+      const todayStr = getRelativeDate(0);
+      
+      // 1. Calculate KPI Metrics
+      const totalBookings = bookings.length;
+      
+      let totalRevenue = 0;
+      let todayCount = 0;
+      let birthdayCount = 0;
+      const birthdayClients = [];
+
+      const today = new Date();
+      const currentMonth = today.getMonth();
+      const currentDay = today.getDate();
+
+      bookings.forEach(b => {
+        // Exclude cancelled bookings from revenue metric
+        if (b.status !== 'cancelled') {
+          totalRevenue += b.totalPrice || 0;
+        }
+
+        // Today's appointments
+        if (b.appointmentDate === todayStr) {
+          todayCount++;
+        }
+
+        // Birthday checking (matching MM-DD of DOB)
+        if (b.clientDob) {
+          const parts = b.clientDob.split('-');
+          if (parts.length === 3) {
+            const dobDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            if (dobDate.getMonth() === currentMonth && dobDate.getDate() === currentDay) {
+              birthdayCount++;
+              
+              // Deduplicate clients in birthday alerts
+              const exists = birthdayClients.some(c => c.clientPhone === b.clientPhone);
+              if (!exists) {
+                birthdayClients.push({
+                  clientName: b.clientName,
+                  clientPhone: b.clientPhone,
+                  clientDob: b.clientDob,
+                  age: today.getFullYear() - dobDate.getFullYear()
+                });
+              }
+            }
+          }
+        }
+      });
+
+      // Update KPI DOM
+      document.getElementById('kpi-bookings').textContent = totalBookings;
+      document.getElementById('kpi-revenue').textContent = `₹${totalRevenue.toLocaleString()}`;
+      document.getElementById('kpi-today').textContent = todayCount;
+      document.getElementById('kpi-birthdays').textContent = birthdayCount;
+
+      // Update Birthday footer
+      const bdayDescEl = document.getElementById('kpi-birthdays-desc');
+      if (birthdayCount > 0) {
+        bdayDescEl.textContent = `${birthdayCount} active birthdays today!`;
+        bdayDescEl.className = "stat-card-footer highlight";
+      } else {
+        bdayDescEl.textContent = "No active birthday alerts";
+        bdayDescEl.className = "stat-card-footer";
+      }
+
+      // Update Today's schedule footer
+      document.getElementById('kpi-today-desc').textContent = `${todayCount} active slots for ${today.toLocaleDateString('en-US', {month:'short', day:'numeric'})}`;
+
+      // 2. Render Birthday Alert List
+      const birthdayContainer = document.getElementById('birthday-alerts-container');
+      birthdayContainer.innerHTML = '';
+      
+      if (birthdayClients.length === 0) {
+        birthdayContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-gift"></i>
+            <p>No client birthdays detected today.</p>
+          </div>
+        `;
+      } else {
+        birthdayClients.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'birthday-item';
+          
+          // Generate WhatsApp promo offer text
+          const promoCode = `BDAY${c.age}${Math.floor(10 + Math.random() * 90)}`;
+          const promoMessage = `*MAKE ME Unisex Salon* 💈✨\n\n` +
+                               `Dear *${c.clientName}*,\n` +
+                               `Wishing you a very *Happy ${getOrdinal(c.age)} Birthday!* 🎂🎉\n` +
+                               `To celebrate your special day, we would love to pamper you with a luxury treat. Use coupon code *${promoCode}* to get *20% OFF* on any haircut, grooming service or advanced facial this week!\n\n` +
+                               `Click below to book your appointment or call us at +91 93707 56017.\n` +
+                               `Let us help you glow! 🌟`;
+
+          const waUrl = `https://api.whatsapp.com/send?phone=91${c.clientPhone}&text=${encodeURIComponent(promoMessage)}`;
+
+          item.innerHTML = `
+            <div class="bday-client-info">
+              <h5>${c.clientName}</h5>
+              <p><i class="fas fa-phone-alt"></i> ${c.clientPhone} • Celebrating ${c.age} years</p>
+            </div>
+            <a href="${waUrl}" target="_blank" class="btn-campaign" data-phone="${c.clientPhone}">
+              <i class="fab fa-whatsapp"></i> Send Offer
+            </a>
+          `;
+          birthdayContainer.appendChild(item);
+        });
+      }
+
+      // 3. Render Schedules Table with Filters
+      renderSchedulesTable(bookings);
+    }
+
+    // Helper to get ordinal suffix for ages
+    function getOrdinal(n) {
+      const s = ["th", "st", "nd", "rd"],
+            v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    // Render Table based on current state and search
+    function renderSchedulesTable(bookings) {
+      const tbody = document.getElementById('schedules-tbody');
+      if (!tbody) return;
+
+      const searchValue = document.getElementById('search-bookings').value.toLowerCase().trim();
+      const stylistFilter = document.getElementById('filter-stylist').value;
+      const dateFilter = document.getElementById('filter-date').value;
+      const todayStr = getRelativeDate(0);
+      const tomorrowStr = getRelativeDate(1);
+
+      let filtered = bookings.filter(b => {
+        // Search filter
+        const matchSearch = b.clientName.toLowerCase().includes(searchValue) || 
+                            b.clientPhone.includes(searchValue) ||
+                            b.ticketId.toLowerCase().includes(searchValue);
+
+        // Stylist filter
+        const matchStylist = (stylistFilter === 'all') || (b.stylistName === stylistFilter);
+
+        // Date filter
+        let matchDate = true;
+        if (dateFilter === 'today') {
+          matchDate = (b.appointmentDate === todayStr);
+        } else if (dateFilter === 'tomorrow') {
+          matchDate = (b.appointmentDate === tomorrowStr);
+        } else if (dateFilter === 'upcoming') {
+          matchDate = (b.appointmentDate >= todayStr);
+        }
+
+        return matchSearch && matchStylist && matchDate;
+      });
+
+      // Sort bookings by appointment date and time
+      filtered.sort((a, b) => {
+        const dateA = new Date(a.appointmentDate + ' ' + (a.appointmentTime.includes('AM') || a.appointmentTime.includes('PM') ? convertTimeTo24(a.appointmentTime) : '00:00'));
+        const dateB = new Date(b.appointmentDate + ' ' + (b.appointmentTime.includes('AM') || b.appointmentTime.includes('PM') ? convertTimeTo24(b.appointmentTime) : '00:00'));
+        return dateB - dateA; // Newest first
+      });
+
+      // Update count label
+      document.getElementById('table-count-label').textContent = `Showing ${filtered.length} bookings`;
+
+      tbody.innerHTML = '';
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="empty-state">
+              <i class="fas fa-folder-open"></i>
+              No matching appointments found.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      filtered.forEach(b => {
+        const tr = document.createElement('tr');
+        
+        // Format services
+        const serviceBadges = (b.services || []).map(s => `<span class="service-badge">${s.name} (₹${s.price})</span>`).join('');
+        
+        // Status classes for dropdown
+        let statusClass = 'confirmed';
+        if (b.status === 'completed') statusClass = 'completed';
+        if (b.status === 'cancelled') statusClass = 'cancelled';
+
+        // Format dates nicely
+        let appointmentDateFormatted = 'N/A';
+        if (b.appointmentDate) {
+          const parts = b.appointmentDate.split('-');
+          if (parts.length === 3) {
+            appointmentDateFormatted = new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+          } else {
+            appointmentDateFormatted = b.appointmentDate;
+          }
+        }
+
+        // DOB Age Calculation
+        let clientAgeStr = '';
+        if (b.clientDob) {
+          const parts = b.clientDob.split('-');
+          if (parts.length === 3) {
+            clientAgeStr = `🎂 ${new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString('en-US', {month:'short', day:'numeric'})}`;
+          }
+        }
+
+        // Format services list text for reminder
+        const servicesListText = (b.services || []).map(s => `• ${s.name}`).join('\n');
+        const reminderText = `*MAKE ME Unisex Salon - Appointment Reminder* 💈✨\n\n` +
+                             `Dear *${b.clientName}*,\n` +
+                             `This is a friendly reminder of your upcoming booking at MAKE ME:\n\n` +
+                             `*Ticket ID:* ${b.ticketId}\n` +
+                             `*Date:* ${appointmentDateFormatted}\n` +
+                             `*Time:* ${b.appointmentTime}\n` +
+                             `*Stylist:* ${b.stylistName}\n` +
+                             `*Services:* \n${servicesListText}\n` +
+                             `*Total Amount:* ₹${b.totalPrice}\n\n` +
+                             `📍 *Location:* MAKE ME Unisex Salon, Pune\n` +
+                             `📞 *Contact:* +91 93707 56017\n\n` +
+                             `We look forward to styling you! Please arrive 5-10 minutes early.`;
+        const waReminderUrl = `https://api.whatsapp.com/send?phone=91${b.clientPhone}&text=${encodeURIComponent(reminderText)}`;
+
+        tr.innerHTML = `
+          <td style="font-family: monospace; font-weight:600; color:var(--gold-primary);">${b.ticketId}</td>
+          <td>
+            <div class="client-cell-info">${b.clientName}</div>
+            <div class="client-cell-phone">${b.clientPhone} ${clientAgeStr ? `• ${clientAgeStr}` : ''}</div>
+          </td>
+          <td>
+            <input type="date" class="admin-date-input" value="${b.appointmentDate}" data-ticket-id="${b.ticketId}">
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;"><i class="far fa-clock"></i> ${b.appointmentTime}</div>
+          </td>
+          <td style="font-style: italic; color: var(--text-muted);">${b.stylistName}</td>
+          <td>
+            <div class="services-cell-badges">${serviceBadges}</div>
+          </td>
+          <td style="font-weight: 600; color:var(--text-light);">₹${(b.totalPrice || 0).toLocaleString()}</td>
+          <td>
+            <select class="status-select ${statusClass}" data-ticket-id="${b.ticketId}">
+              <option value="confirmed" ${b.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="completed" ${b.status === 'completed' ? 'selected' : ''}>Completed</option>
+              <option value="cancelled" ${b.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          </td>
+          <td>
+            <div class="action-btn-group">
+              <a href="${waReminderUrl}" target="_blank" class="btn-action-icon reminder" title="Send Appointment Reminder on WhatsApp">
+                <i class="fas fa-bell"></i>
+              </a>
+              <a href="https://api.whatsapp.com/send?phone=91${b.clientPhone}&text=${encodeURIComponent(`Hi ${b.clientName}, this is MAKE ME Unisex Salon checking in regarding your appointment...`)}" target="_blank" class="btn-action-icon whatsapp" title="Chat on WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+              <button class="btn-action-icon delete" data-ticket-id="${b.ticketId}" title="Delete Record">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        `;
+
+        // Event listener for status select changes
+        const select = tr.querySelector('.status-select');
+        select.addEventListener('change', (e) => {
+          updateBookingStatus(b.ticketId, e.target.value);
+        });
+
+        // Event listener for delete button
+        const delBtn = tr.querySelector('.btn-action-icon.delete');
+        delBtn.addEventListener('click', () => {
+          if (confirm(`Are you sure you want to permanently delete booking ${b.ticketId} for ${b.clientName}?`)) {
+            deleteBooking(b.ticketId);
+          }
+        });
+
+        // Event listener for date input changes
+        const dateInput = tr.querySelector('.admin-date-input');
+        if (dateInput) {
+          dateInput.addEventListener('change', (e) => {
+            const newDate = e.target.value;
+            if (newDate) {
+              updateBookingDate(b.ticketId, newDate);
+            }
+          });
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Helper to translate 12h time to 24h for sorting
+    function convertTimeTo24(timeStr) {
+      const [time, modifier] = timeStr.split(' ');
+      let [hours, minutes] = time.split(':');
+      if (hours === '12') {
+        hours = '00';
+      }
+      if (modifier === 'PM') {
+        hours = parseInt(hours, 10) + 12;
+      }
+      return `${hours}:${minutes}`;
+    }
+
+    // Update Booking Date in Cloud Database
+    function updateBookingDate(ticketId, newDate) {
+      if (window.db) {
+        window.db.collection('bookings').doc(ticketId).update({ appointmentDate: newDate })
+          .then(() => console.log("Date successfully updated on Firebase."))
+          .catch(err => console.error("Error updating date on Firebase:", err));
+      } else {
+        // Local fallback
+        const bookings = getBookings();
+        const idx = bookings.findIndex(b => b.ticketId === ticketId);
+        if (idx !== -1) {
+          bookings[idx].appointmentDate = newDate;
+          saveBookings(bookings);
+        }
+      }
+    }
+
+    // Update Status Action in Cloud Database
+    function updateBookingStatus(ticketId, newStatus) {
+      if (window.db) {
+        window.db.collection('bookings').doc(ticketId).update({ status: newStatus })
+          .then(() => console.log("Status successfully updated on Firebase."))
+          .catch(err => console.error("Error updating status on Firebase:", err));
+      } else {
+        // Local fallback
+        const bookings = getBookings();
+        const idx = bookings.findIndex(b => b.ticketId === ticketId);
+        if (idx !== -1) {
+          bookings[idx].status = newStatus;
+          saveBookings(bookings);
+        }
+      }
+    }
+
+    // Delete Booking Action from Cloud Database
+    function deleteBooking(ticketId) {
+      if (window.db) {
+        window.db.collection('bookings').doc(ticketId).delete()
+          .then(() => console.log("Booking successfully deleted from Firebase."))
+          .catch(err => console.error("Error deleting booking from Firebase:", err));
+      } else {
+        // Local fallback
+        const bookings = getBookings();
+        const filtered = bookings.filter(b => b.ticketId !== ticketId);
+        saveBookings(filtered);
+      }
+    }
+
+    // Filter controls event wiring
+    document.getElementById('search-bookings').addEventListener('input', () => {
+      renderSchedulesTable(getBookings());
+    });
+    document.getElementById('filter-stylist').addEventListener('change', () => {
+      renderSchedulesTable(getBookings());
+    });
+    document.getElementById('filter-date').addEventListener('change', () => {
+      renderSchedulesTable(getBookings());
+    });
+
+    // Database Actions wiring (supports Firebase Cloud operations)
+    document.getElementById('seed-db-btn').addEventListener('click', () => {
+      if (confirm("This will seed mock appointment bookings and overwrite today's live database. Proceed?")) {
+        if (window.db) {
+          // Delete existing bookings
+          window.db.collection('bookings').get().then(qs => {
+            const batch = window.db.batch();
+            qs.forEach(doc => batch.delete(doc.ref));
+            return batch.commit();
+          }).then(() => {
+            // Add mock bookings
+            const promises = mockBookings.map(b => {
+              return window.db.collection('bookings').doc(b.ticketId).set(b);
+            });
+            return Promise.all(promises);
+          }).then(() => {
+            alert("Mock bookings data successfully seeded to Firebase Cloud.");
+          }).catch(err => {
+            console.error("Firebase seeding failed:", err);
+            alert("Firebase database error during seeding.");
+          });
+        } else {
+          // Local fallback
+          localStorage.setItem('makeme_bookings', JSON.stringify(mockBookings));
+          renderDashboard();
+          alert("Mock bookings data successfully seeded locally.");
+        }
+      }
+    });
+
+    document.getElementById('clear-db-btn').addEventListener('click', () => {
+      if (confirm("Are you absolutely sure you want to wipe all booking database entries? This action cannot be undone.")) {
+        if (window.db) {
+          window.db.collection('bookings').get().then(qs => {
+            const batch = window.db.batch();
+            qs.forEach(doc => batch.delete(doc.ref));
+            return batch.commit();
+          }).then(() => {
+            alert("Database wiped clean on Firebase Cloud.");
+          }).catch(err => {
+            console.error("Firebase clear failed:", err);
+            alert("Firebase database error during clearing.");
+          });
+        } else {
+          // Local fallback
+          localStorage.setItem('makeme_bookings', JSON.stringify([]));
+          renderDashboard();
+          alert("Database wiped clean locally.");
+        }
+      }
+    });
+
+    // Bulk birthday sender (triggers popup warnings as it loops)
+    document.getElementById('bulk-birthday-btn').addEventListener('click', () => {
+      const campaignButtons = document.querySelectorAll('.btn-campaign');
+      if (campaignButtons.length === 0) {
+        alert("There are no client birthdays today to send campaign offers to.");
+        return;
+      }
+      
+      if (confirm(`Do you want to send birthday campaigns to all ${campaignButtons.length} clients celebrating today? This will open WhatsApp chat tabs.`)) {
+        campaignButtons.forEach((btn, index) => {
+          setTimeout(() => {
+            window.open(btn.href, '_blank');
+          }, index * 800); // 800ms stagger to prevent popup blocker blocking all at once
+        });
+      }
+    });
+
+    // Holiday Management Logic (cloud synced)
+    function getHolidays() {
+      try {
+        return JSON.parse(localStorage.getItem('makeme_holidays') || '[]');
+      } catch (e) {
+        console.error('Error reading holidays from localStorage:', e);
+        return [];
+      }
+    }
+
+    function saveHolidays(holidays) {
+      localStorage.setItem('makeme_holidays', JSON.stringify(holidays));
+      
+      // Sync to Firebase Cloud Settings document
+      if (window.db) {
+        window.db.collection('settings').doc('holidays').set({ dates: holidays })
+          .then(() => console.log("Holidays synced to Cloud Firestore."))
+          .catch(err => console.error("Error updating holidays on Firebase:", err));
+      }
+      renderHolidaysList();
+    }
+
+    // Real-time synchronization listener for Holidays settings
+    function startHolidaysListener() {
+      if (!window.db) {
+        renderHolidaysList();
+        return;
+      }
+
+      window.db.collection('settings').doc('holidays').onSnapshot(doc => {
+        if (doc.exists) {
+          const dates = doc.data().dates || [];
+          localStorage.setItem('makeme_holidays', JSON.stringify(dates));
+        } else {
+          localStorage.setItem('makeme_holidays', JSON.stringify([]));
+        }
+        renderHolidaysList();
+      }, err => {
+        console.error("Firebase holidays listen failed:", err);
+        renderHolidaysList();
+      });
+    }
+
+    function renderHolidaysList() {
+      const container = document.getElementById('holiday-list-container');
+      if (!container) return;
+
+      const holidays = getHolidays().sort();
+      if (holidays.length === 0) {
+        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); font-style: italic;">No holidays configured. All dates are open.</p>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      holidays.forEach(dateStr => {
+        const div = document.createElement('div');
+        div.className = 'holiday-item';
+        
+        // Format date nicely: YYYY-MM-DD to e.g. Thu, Jul 2, 2026
+        let formattedDate = dateStr;
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+          formattedDate = new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+        }
+
+        div.innerHTML = `
+          <span><i class="far fa-calendar-times" style="color:#e57373; margin-right:6px;"></i> ${formattedDate}</span>
+          <button class="btn-delete-holiday" data-date="${dateStr}" title="Unblock Date">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        `;
+
+        // Wire up delete event
+        div.querySelector('.btn-delete-holiday').addEventListener('click', (e) => {
+          const dateToUnblock = e.currentTarget.getAttribute('data-date');
+          if (confirm(`Are you sure you want to unblock ${dateToUnblock} for appointments?`)) {
+            const updated = getHolidays().filter(d => d !== dateToUnblock);
+            saveHolidays(updated);
+          }
+        });
+
+        container.appendChild(div);
+      });
+    }
+
+    function initHolidayHandler() {
+      const addBtn = document.getElementById('add-holiday-btn');
+      const input = document.getElementById('holiday-date-input');
+
+      if (addBtn && input) {
+        // Set minimum date to today so they don't block past dates
+        const todayObj = new Date();
+        const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+        input.min = todayStr;
+
+        addBtn.addEventListener('click', () => {
+          const dateVal = input.value;
+          if (!dateVal) {
+            alert('Please select a valid date first.');
+            return;
+          }
+
+          const currentHolidays = getHolidays();
+          if (currentHolidays.includes(dateVal)) {
+            alert('This date is already marked as a holiday.');
+            return;
+          }
+
+          currentHolidays.push(dateVal);
+          saveHolidays(currentHolidays);
+          input.value = '';
+          alert(`Success! Salon will be closed on ${dateVal}. Clients will not be able to book.`);
+        });
+      }
+    }
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      initLoginHandler();
+      if (checkAdminSession()) {
+        // Initialize Firebase Real-time listeners
+        startBookingsListener();
+        startHolidaysListener();
+      } else {
+        // Render local fallback when logged out
+        renderHolidaysList();
+      }
+      initHolidayHandler();
+    });
+  </script>
+</body>
+</html>
