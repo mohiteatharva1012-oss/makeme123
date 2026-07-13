@@ -1890,3 +1890,41 @@ function downloadIcsFile(booking) {
   link.click();
   document.body.removeChild(link);
 }
+
+// Trigger Instagram popup modal after 5 seconds
+const initInstaPopup = () => {
+  setTimeout(() => {
+    const popup = document.getElementById('insta-popup');
+    const overlay = document.getElementById('insta-popup-overlay');
+    if (popup && overlay) {
+      popup.classList.add('active');
+      overlay.classList.add('active');
+      popup.setAttribute('aria-hidden', 'false');
+    }
+  }, 5000);
+
+  const closePopup = () => {
+    const popup = document.getElementById('insta-popup');
+    const overlay = document.getElementById('insta-popup-overlay');
+    if (popup && overlay) {
+      popup.classList.remove('active');
+      overlay.classList.remove('active');
+      popup.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  const closeBtn = document.getElementById('close-insta-popup');
+  const overlay = document.getElementById('insta-popup-overlay');
+  const followBtn = document.getElementById('insta-popup-follow-btn');
+
+  if (closeBtn) closeBtn.addEventListener('click', closePopup);
+  if (overlay) overlay.addEventListener('click', closePopup);
+  if (followBtn) followBtn.addEventListener('click', closePopup);
+};
+
+// Guarantee execution whether DOM is loading or already parsed
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initInstaPopup);
+} else {
+  initInstaPopup();
+}
