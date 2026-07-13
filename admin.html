@@ -775,7 +775,7 @@
       color: #e57373;
     }
     
-    #holiday-date-input {
+    #holiday-date-input, #holiday-stylist-select {
       background: var(--bg-tertiary);
       border: 1px solid var(--border-color);
       border-radius: 8px;
@@ -786,7 +786,7 @@
       transition: var(--transition-fast);
     }
 
-    #holiday-date-input:focus {
+    #holiday-date-input:focus, #holiday-stylist-select:focus {
       border-color: var(--gold-primary);
     }
   </style>
@@ -980,6 +980,15 @@
           
           <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
             <input type="date" id="holiday-date-input">
+            <select id="holiday-stylist-select" style="cursor: pointer;">
+              <option value="all">Entire Salon (All Stylists)</option>
+              <option value="st1">MUKESH SIR</option>
+              <option value="st2">AMAR SIR</option>
+              <option value="st3">BALAJI SIR</option>
+              <option value="st4">SAMARTH SIR</option>
+              <option value="st5">PRATIKSHA MAM</option>
+              <option value="st6">COMING SOON</option>
+            </select>
             <button class="btn-db primary" id="add-holiday-btn" style="padding: 10px 18px; border-radius: 8px; font-size: 0.85rem;"><i class="fas fa-ban"></i> Block Date</button>
           </div>
         </div>
@@ -1803,17 +1812,35 @@
       const container = document.getElementById('holiday-list-container');
       if (!container) return;
 
-      const holidays = getHolidays().sort();
+      const holidays = getHolidays().sort((a, b) => {
+        const dateA = typeof a === 'string' ? a : a.date;
+        const dateB = typeof b === 'string' ? b : b.date;
+        return dateA.localeCompare(dateB);
+      });
+
       if (holidays.length === 0) {
         container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); font-style: italic;">No holidays configured. All dates are open.</p>`;
         return;
       }
 
       container.innerHTML = '';
-      holidays.forEach(dateStr => {
+      holidays.forEach((h, index) => {
         const div = document.createElement('div');
         div.className = 'holiday-item';
         
+        let dateStr = '';
+        let isAll = false;
+        let stylistName = '';
+        
+        if (typeof h === 'string') {
+          dateStr = h;
+          isAll = true;
+        } else if (h && typeof h === 'object') {
+          dateStr = h.date;
+          isAll = (h.stylistId === 'all' || h.stylistId === 'salon');
+          stylistName = h.stylistName || '';
+        }
+
         // Format date nicely: YYYY-MM-DD to e.g. Thu, Jul 2, 2026
         let formattedDate = dateStr;
         const parts = dateStr.split('-');
@@ -1826,19 +1853,74 @@
           });
         }
 
+        let displayLabel = '';
+        let icon = '';
+        if (isAll) {
+          displayLabel = `${formattedDate} - Entire Salon`;
+          icon = `<i class="fas fa-store-slash" style="color:#e57373; margin-right:6px;" title="Entire Salon Closed"></i>`;
+        } else {
+          displayLabel = `${formattedDate} - ${stylistName} (Leave)`;
+          icon = `<i class="fas fa-user-slash" style="color:#ffb74d; margin-right:6px;" title="Stylist Leave"></i>`;
+        }
+
         div.innerHTML = `
-          <span><i class="far fa-calendar-times" style="color:#e57373; margin-right:6px;"></i> ${formattedDate}</span>
-          <button class="btn-delete-holiday" data-date="${dateStr}" title="Unblock Date">
+          <span>${icon} ${displayLabel}</span>
+          <button class="btn-delete-holiday" data-index="${index}" title="Unblock Date">
             <i class="fas fa-trash-alt"></i>
           </button>
         `;
 
         // Wire up delete event
         div.querySelector('.btn-delete-holiday').addEventListener('click', (e) => {
-          const dateToUnblock = e.currentTarget.getAttribute('data-date');
-          if (confirm(`Are you sure you want to unblock ${dateToUnblock} for appointments?`)) {
-            const updated = getHolidays().filter(d => d !== dateToUnblock);
-            saveHolidays(updated);
+          const idxToDelete = parseInt(e.currentTarget.getAttribute('data-index'), 10);
+          
+          // Re-get and sort so we index correctly
+          const currentHolidays = getHolidays().sort((a, b) => {
+            const dateA = typeof a === 'string' ? a : a.date;
+            const dateB = typeof b === 'string' ? b : b.date;
+            return dateA.localeCompare(dateB);
+          });
+          
+          const holidayToDelete = currentHolidays[idxToDelete];
+          if (!holidayToDelete) return;
+
+          let confirmMsg = '';
+          let delDateStr = '';
+          let delIsAll = false;
+          let delStylistName = '';
+          
+          if (typeof holidayToDelete === 'string') {
+            delDateStr = holidayToDelete;
+            delIsAll = true;
+          } else {
+            delDateStr = holidayToDelete.date;
+            delIsAll = (holidayToDelete.stylistId === 'all' || holidayToDelete.stylistId === 'salon');
+            delStylistName = holidayToDelete.stylistName || '';
+          }
+
+          if (delIsAll) {
+            confirmMsg = `Are you sure you want to unblock ${delDateStr} for the entire salon?`;
+          } else {
+            confirmMsg = `Are you sure you want to unblock ${delDateStr} for ${delStylistName}?`;
+          }
+
+          if (confirm(confirmMsg)) {
+            // Find the original index in the unsorted getHolidays() array
+            const originalHolidays = getHolidays();
+            const originalIndex = originalHolidays.findIndex(origH => {
+              if (typeof origH === 'string' && typeof holidayToDelete === 'string') {
+                return origH === holidayToDelete;
+              }
+              if (typeof origH === 'object' && typeof holidayToDelete === 'object' && origH !== null && holidayToDelete !== null) {
+                return origH.date === holidayToDelete.date && origH.stylistId === holidayToDelete.stylistId;
+              }
+              return false;
+            });
+
+            if (originalIndex !== -1) {
+              const updated = originalHolidays.filter((_, idx) => idx !== originalIndex);
+              saveHolidays(updated);
+            }
           }
         });
 
@@ -1849,8 +1931,9 @@
     function initHolidayHandler() {
       const addBtn = document.getElementById('add-holiday-btn');
       const input = document.getElementById('holiday-date-input');
+      const stylistSelect = document.getElementById('holiday-stylist-select');
 
-      if (addBtn && input) {
+      if (addBtn && input && stylistSelect) {
         // Set minimum date to today so they don't block past dates
         const todayObj = new Date();
         const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
@@ -1863,16 +1946,42 @@
             return;
           }
 
+          const stylistId = stylistSelect.value;
+          const stylistName = stylistSelect.options[stylistSelect.selectedIndex].text;
+
           const currentHolidays = getHolidays();
-          if (currentHolidays.includes(dateVal)) {
-            alert('This date is already marked as a holiday.');
+          
+          // Check duplicate
+          const isDuplicate = currentHolidays.some(h => {
+            if (typeof h === 'string') {
+              return h === dateVal && stylistId === 'all';
+            }
+            return h.date === dateVal && h.stylistId === stylistId;
+          });
+
+          if (isDuplicate) {
+            alert('This date/stylist is already blocked.');
             return;
           }
 
-          currentHolidays.push(dateVal);
+          if (stylistId === 'all') {
+            currentHolidays.push({
+              date: dateVal,
+              stylistId: 'all'
+            });
+            alert(`Success! Salon will be closed on ${dateVal}. Clients will not be able to book.`);
+          } else {
+            currentHolidays.push({
+              date: dateVal,
+              stylistId: stylistId,
+              stylistName: stylistName
+            });
+            alert(`Success! ${stylistName} is set on leave for ${dateVal}.`);
+          }
+
           saveHolidays(currentHolidays);
           input.value = '';
-          alert(`Success! Salon will be closed on ${dateVal}. Clients will not be able to book.`);
+          stylistSelect.value = 'all';
         });
       }
     }

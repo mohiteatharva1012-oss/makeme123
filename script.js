@@ -1146,8 +1146,52 @@ function selectStylistDOM(element, stylist) {
   element.querySelector('.stylist-picker-select i').className = 'fas fa-check-circle';
   selectedStylist = stylist;
 
-  // Refresh time slot availability since stylist changed
+  // If the currently selected date is blocked for the new stylist, clear selectedDate
+  if (selectedDate) {
+    const dateObj = selectedDate;
+    const yearStr = dateObj.getFullYear();
+    const monthStr = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const dayStr = String(dateObj.getDate()).padStart(2, '0');
+    const formattedDateStr = `${yearStr}-${monthStr}-${dayStr}`;
+    
+    // Check if this date is blocked for the new stylist
+    let blockedHolidays = [];
+    try {
+      blockedHolidays = JSON.parse(localStorage.getItem('makeme_holidays') || '[]');
+    } catch (e) {}
+
+    const isSalonClosed = blockedHolidays.some(h => {
+      if (typeof h === 'string') return h === formattedDateStr;
+      return h && h.date === formattedDateStr && (h.stylistId === 'all' || h.stylistId === 'salon');
+    });
+
+    let isBlocked = false;
+    if (isSalonClosed) {
+      isBlocked = true;
+    } else if (stylist.id === 'any') {
+      const blockedStylists = new Set();
+      blockedHolidays.forEach(h => {
+        if (h && typeof h === 'object' && h.date === formattedDateStr) {
+          blockedStylists.add(h.stylistId);
+        }
+      });
+      if (blockedStylists.size >= stylistsData.length) {
+        isBlocked = true;
+      }
+    } else {
+      isBlocked = blockedHolidays.some(h => {
+        return h && typeof h === 'object' && h.date === formattedDateStr && h.stylistId === stylist.id;
+      });
+    }
+
+    if (isBlocked) {
+      selectedDate = null;
+    }
+  }
+
+  // Refresh calendar and time slot availability since stylist changed
   selectedTime = null;
+  initCalendar();
   initTimePicker();
 }
 
@@ -1206,10 +1250,46 @@ function initCalendar() {
       const dayStr = String(dateObj.getDate()).padStart(2, '0');
       const formattedDateStr = `${yearStr}-${monthStr}-${dayStr}`;
 
-      // Disable holiday dates
-      if (blockedHolidays.includes(formattedDateStr)) {
+      // Disable holiday dates (salon-wide or stylist-specific)
+      const isSalonClosed = blockedHolidays.some(h => {
+        if (typeof h === 'string') return h === formattedDateStr;
+        return h && h.date === formattedDateStr && (h.stylistId === 'all' || h.stylistId === 'salon');
+      });
+
+      let isBlockedForSelected = false;
+      let blockReason = '';
+
+      if (isSalonClosed) {
+        isBlockedForSelected = true;
+        blockReason = 'Salon is closed (Holiday)';
+      } else if (selectedStylist) {
+        if (selectedStylist.id === 'any') {
+          // Check if ALL stylists are blocked on this date
+          const blockedStylists = new Set();
+          blockedHolidays.forEach(h => {
+            if (h && typeof h === 'object' && h.date === formattedDateStr) {
+              blockedStylists.add(h.stylistId);
+            }
+          });
+          if (blockedStylists.size >= stylistsData.length) {
+            isBlockedForSelected = true;
+            blockReason = 'No stylists available on this day';
+          }
+        } else {
+          // Specific stylist selected
+          const isStylistOnLeave = blockedHolidays.some(h => {
+            return h && typeof h === 'object' && h.date === formattedDateStr && h.stylistId === selectedStylist.id;
+          });
+          if (isStylistOnLeave) {
+            isBlockedForSelected = true;
+            blockReason = `${selectedStylist.name} is on leave`;
+          }
+        }
+      }
+
+      if (isBlockedForSelected) {
         dayCell.classList.add('disabled');
-        dayCell.title = 'Salon is closed (Holiday)';
+        dayCell.title = blockReason;
       }
 
       // Check if selected
