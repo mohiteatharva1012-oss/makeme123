@@ -1763,6 +1763,8 @@ function initPreloader() {
         preloader.classList.add('fade-out');
         // Re-enable scroll on body
         document.body.style.overflow = '';
+        // Dispatch custom event to trigger instagram popup
+        document.dispatchEvent(new CustomEvent('preloaderFinished'));
       }, 200);
     }
   }
@@ -1891,40 +1893,40 @@ function downloadIcsFile(booking) {
   document.body.removeChild(link);
 }
 
-// Trigger Instagram popup modal after 5 seconds
-const initInstaPopup = () => {
-  setTimeout(() => {
-    const popup = document.getElementById('insta-popup');
-    const overlay = document.getElementById('insta-popup-overlay');
-    if (popup && overlay) {
-      popup.classList.add('active');
-      overlay.classList.add('active');
-      popup.setAttribute('aria-hidden', 'false');
-    }
-  }, 5000);
+// Trigger Instagram toast notification after 15 seconds from preloader finish
+const initInstaToast = () => {
+  const triggerToast = () => {
+    setTimeout(() => {
+      const toast = document.getElementById('insta-toast');
+      if (toast) {
+        toast.classList.add('active');
+      }
+    }, 15000); // 15 seconds delay
+  };
 
-  const closePopup = () => {
-    const popup = document.getElementById('insta-popup');
-    const overlay = document.getElementById('insta-popup-overlay');
-    if (popup && overlay) {
-      popup.classList.remove('active');
-      overlay.classList.remove('active');
-      popup.setAttribute('aria-hidden', 'true');
+  const preloader = document.getElementById('preloader');
+  if (!preloader || preloader.classList.contains('fade-out')) {
+    // Trigger immediately if preloader is already finished or doesn't exist
+    triggerToast();
+  } else {
+    // Wait for preloader to finish
+    document.addEventListener('preloaderFinished', triggerToast);
+  }
+
+  const closeToast = () => {
+    const toast = document.getElementById('insta-toast');
+    if (toast) {
+      toast.classList.remove('active');
     }
   };
 
-  const closeBtn = document.getElementById('close-insta-popup');
-  const overlay = document.getElementById('insta-popup-overlay');
-  const followBtn = document.getElementById('insta-popup-follow-btn');
-
-  if (closeBtn) closeBtn.addEventListener('click', closePopup);
-  if (overlay) overlay.addEventListener('click', closePopup);
-  if (followBtn) followBtn.addEventListener('click', closePopup);
+  const closeBtn = document.getElementById('close-insta-toast');
+  if (closeBtn) closeBtn.addEventListener('click', closeToast);
 };
 
 // Guarantee execution whether DOM is loading or already parsed
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initInstaPopup);
+  document.addEventListener('DOMContentLoaded', initInstaToast);
 } else {
-  initInstaPopup();
+  initInstaToast();
 }
