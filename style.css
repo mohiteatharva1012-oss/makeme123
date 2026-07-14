@@ -2229,7 +2229,7 @@ select.form-input option {
   }
   
   .nav-links {
-    display: none; /* Mobile menu toggling logic in js */
+    display: none; /* Mobile navigation toggling logic in js */
   }
   
   .mobile-nav-toggle {

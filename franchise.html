@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Partner with MAKE ME Unisex Salon. Apply for franchise opportunities to bring Dharashiv's premium styling and luxury spa experience to your city.">
+  <title>Franchise Opportunities | MAKE ME - Premium Unisex Salon</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <!-- PRELOADER WELCOME SCREEN -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-content">
+      <h2 class="preloader-title">WELCOME TO</h2>
+      <h1 class="preloader-brand text-gradient">MAKE ME</h1>
+      <h3 class="preloader-subtitle">UNISEX SALON</h3>
+      <div class="preloader-status">
+        <span class="preloader-emoji" id="preloader-emoji">💈</span>
+        <span class="preloader-text" id="preloader-status-text">Powering up barber poles...</span>
+      </div>
+      <div class="preloader-bar-wrap">
+        <div class="preloader-bar" id="preloader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / NAVIGATION -->
+  <header class="header" id="salon-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo" id="header-logo">
+        <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="logo-img">
+      </a>
+      
+      <nav id="navbar">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="services.html" class="nav-link">Services</a></li>
+          <li><a href="lookbook.html" class="nav-link">Lookbook</a></li>
+          <li><a href="stylists.html" class="nav-link">Stylists</a></li>
+          <li><a href="franchise.html" class="nav-link active">Franchise<sup>MAKE ME</sup></a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="btn btn-secondary header-btn book-now-trigger" id="nav-booking-btn">
+        Book Appointment
+      </button>
+
+      <button class="mobile-nav-toggle" id="mobile-nav-btn" aria-label="Toggle Navigation Services">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- FRANCHISE SECTION -->
+    <section class="franchise section-padding" id="franchise">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-subtitle">Partner With Us</span>
+          <h2 class="section-title">Franchise Opportunities</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 600px; margin: 15px auto 0 auto; font-weight: 300;">
+            Bring Dharashiv's premium unisex salon experience to your city. Fill out the application form below, and our business expansion team will get in touch with you.
+          </p>
+        </div>
+        
+        <div class="franchise-form-panel glass-card reveal" style="max-width: 800px; margin: 0 auto; padding: 40px 30px;">
+          <form id="salon-franchise-form">
+            <div class="form-group-row">
+              <div class="form-group">
+                <input type="text" id="franchise-name" class="form-input" placeholder=" " required>
+                <label for="franchise-name" class="form-label">Full Name</label>
+              </div>
+              <div class="form-group">
+                <input type="email" id="franchise-email" class="form-input" placeholder=" " required>
+                <label for="franchise-email" class="form-label">Email Address</label>
+              </div>
+            </div>
+            
+            <div class="form-group-row">
+              <div class="form-group">
+                <input type="tel" id="franchise-phone" class="form-input" placeholder=" " required>
+                <label for="franchise-phone" class="form-label">Phone Number</label>
+              </div>
+              <div class="form-group">
+                <input type="text" id="franchise-city" class="form-input" placeholder=" " required>
+                <label for="franchise-city" class="form-label">Target City & State</label>
+              </div>
+            </div>
+            
+            <div class="form-group-row">
+              <div class="form-group">
+                <select id="franchise-investment" class="form-input form-select" required style="background: var(--bg-tertiary); color: var(--text-light); height: auto; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 8px;">
+                  <option value="" disabled selected hidden></option>
+                  <option value="15-20 Lakhs">₹15 Lakhs - ₹20 Lakhs</option>
+                  <option value="20-30 Lakhs">₹20 Lakhs - ₹30 Lakhs</option>
+                  <option value="30-50 Lakhs">₹30 Lakhs - ₹50 Lakhs</option>
+                  <option value="50 Lakhs+">₹50 Lakhs+</option>
+                </select>
+                <label for="franchise-investment" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Estimated Investment Budget</label>
+              </div>
+              <div class="form-group">
+                <select id="franchise-experience" class="form-input form-select" required style="background: var(--bg-tertiary); color: var(--text-light); height: auto; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 8px;">
+                  <option value="" disabled selected hidden></option>
+                  <option value="None">No prior business experience</option>
+                  <option value="Salon / Beauty">Prior experience in Salon / Beauty Industry</option>
+                  <option value="Retail / Franchise">Prior experience in Retail / Franchise</option>
+                  <option value="Other Business">Other business management experience</option>
+                </select>
+                <label for="franchise-experience" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Business Experience</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <textarea id="franchise-message" class="form-input" placeholder=" " style="min-height: 100px;"></textarea>
+              <label for="franchise-message" class="form-label">Tell us about your proposed site or investment plans (optional)</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+              Submit Franchise Application
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="salon-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="footer-logo" id="footer-logo-link">
+            <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="logo-img">
+          </a>
+          <p class="footer-desc">Premium unisex salon and luxury lounge defining styling, luxury aesthetics, and facial therapy in Dharashiv (Osmanabad).</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/share/1E6A1xGHci/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Follow us on Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/make_me_unisex_salon?igsh=dWJkMXRnMzA1amU5" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/919370756017" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Chat with us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@makemeunisexsalon?si=4zuUuIbYcDB7fgwC" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Subscribe to our YouTube channel"><i class="fab fa-youtube"></i></a>
+          </div>
+          <div style="margin-top: 18px;">
+            <a href="mailto:makemesalon617@gmail.com" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-fast);" onmouseover="this.style.color='var(--gold-primary)'" onmouseout="this.style.color='var(--text-muted)'">
+              <i class="fas fa-envelope" style="color: var(--gold-primary);"></i> makemesalon617@gmail.com
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-column-title">The Salon</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Philosophy</a></li>
+            <li><a href="services.html">Aesthetic Services</a></li>
+            <li><a href="lookbook.html">Transformations</a></li>
+            <li><a href="stylists.html">Artists</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-column-title">Categories</h4>
+          <ul class="footer-links">
+            <li><a href="services.html">Hair Cut & Styles</a></li>
+            <li><a href="services.html">Balayage Coloring</a></li>
+            <li><a href="services.html">Hydra-Facials</a></li>
+            <li><a href="services.html">Barber Straight Razor</a></li>
+            <li><a href="services.html">Luxury Spa Pedicures</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-column-title">Newsletter</h4>
+          <p class="footer-desc" style="font-size:0.85rem; margin-bottom: 15px;">Receive private event invitations, luxury tips and seasonal services.</p>
+          <form class="newsletter-form" id="newsletter-form">
+            <input type="email" placeholder="Your Luxury Email" required aria-label="Email for Newsletter">
+            <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 MAKE ME Unisex Salon. All Rights Reserved.</p>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted);">
+          <span>MADE WITH LOVE ❤️</span>
+          <img src="assets/logo_am_groups.jpeg" alt="AM DIGITAL AND CO." style="height: 30px; width: auto; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle;">
+          <span style="font-weight: 600; color: var(--gold-primary); letter-spacing: 0.05em;">AM DIGITAL AND CO.</span>
+        </div>
+        <div class="footer-bottom-links">
+          <a href="admin.html" style="color: var(--gold-primary); font-weight: 500;"><i class="fas fa-user-shield"></i> Admin Portal</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Safety Protocols</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING BOOKING SUMMARY BAR -->
+  <div class="booking-bar glass-card" id="booking-bar">
+    <div class="booking-bar-info">
+      <span class="booking-bar-title">Custom Package</span>
+      <div class="booking-bar-summary">
+        <span id="booking-count">0 Services</span> Selected: <span>₹</span><span id="booking-total-price" class="text-gradient">0</span>
+      </div>
+    </div>
+    <button class="btn btn-primary book-now-trigger" id="booking-bar-btn" style="padding: 10px 24px; font-size:0.8rem;">
+      Book Package <i class="fas fa-calendar-alt btn-icon"></i>
+    </button>
+  </div>
+
+  <!-- INTERACTIVE BOOKING WIZARD DRAWER/MODAL -->
+  <div class="booking-modal-overlay" id="booking-modal-overlay"></div>
+  <div class="booking-modal" id="booking-modal" aria-modal="true" role="dialog" aria-labelledby="booking-wizard-title">
+    <div class="booking-modal-header">
+      <h3 class="booking-modal-title" id="booking-wizard-title">Schedule Transformation</h3>
+      <button class="booking-modal-close" id="close-booking-modal" aria-label="Close Booking Drawer">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="wizard-progress">
+      <div class="wizard-step active" data-step="1">
+        <div class="wizard-step-num">1</div>
+        <span>Cart</span>
+      </div>
+      <div class="wizard-step" data-step="2">
+        <div class="wizard-step-num">2</div>
+        <span>Expert</span>
+      </div>
+      <div class="wizard-step" data-step="3">
+        <div class="wizard-step-num">3</div>
+        <span>Time</span>
+      </div>
+      <div class="wizard-step" data-step="4">
+        <div class="wizard-step-num">4</div>
+        <span>Details</span>
+      </div>
+    </div>
+
+    <div class="wizard-content">
+      <div class="wizard-step-panel active" id="step-1-panel">
+        <h4 class="wizard-panel-title">Review Selected Services</h4>
+        <div class="step-services-list" id="step-1-services-list"></div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-2-panel">
+        <h4 class="wizard-panel-title">Select Your Specialist</h4>
+        <div class="stylist-picker" id="step-2-stylists-list"></div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-3-panel">
+        <h4 class="wizard-panel-title">Choose Date & Time</h4>
+        <div class="calendar-widget">
+          <div class="calendar-header">
+            <button class="calendar-nav-btn" id="calendar-prev" aria-label="Previous Month"><i class="fas fa-chevron-left"></i></button>
+            <span class="calendar-month" id="calendar-current-month">June 2026</span>
+            <button class="calendar-nav-btn" id="calendar-next" aria-label="Next Month"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="calendar-grid">
+            <div class="calendar-day-label">Su</div>
+            <div class="calendar-day-label">Mo</div>
+            <div class="calendar-day-label">Tu</div>
+            <div class="calendar-day-label">We</div>
+            <div class="calendar-day-label">Th</div>
+            <div class="calendar-day-label">Fr</div>
+            <div class="calendar-day-label">Sa</div>
+          </div>
+          <div class="calendar-grid" id="calendar-days-grid"></div>
+        </div>
+        <h4 class="time-picker-title">Available Slots</h4>
+        <div class="time-slots" id="time-slots-container"></div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-4-panel">
+        <h4 class="wizard-panel-title">Contact & Ticket Details</h4>
+        <div id="booking-summary-receipt-container" style="margin-bottom: 24px;"></div>
+        <div class="glass-card" style="padding: 24px; border:1px solid var(--border-color);">
+          <div class="form-group" style="margin-bottom: 18px;">
+            <input type="text" id="booking-client-name" class="form-input" placeholder=" " required>
+            <label for="booking-client-name" class="form-label">Full Name</label>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px;">
+            <input type="tel" id="booking-client-phone" class="form-input" placeholder=" " required>
+            <label for="booking-client-phone" class="form-label">Phone Number</label>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px;">
+            <input type="date" id="booking-client-dob" class="form-input" placeholder=" " required style="color-scheme: dark;">
+            <label for="booking-client-dob" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Date of Birth (DOB)</label>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <textarea id="booking-client-notes" class="form-input" placeholder=" " style="min-height:80px;"></textarea>
+            <label for="booking-client-notes" class="form-label">Special instructions / requests (optional)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-5-panel">
+        <div class="booking-success-message">
+          <div class="success-icon-wrap">
+            <i class="fas fa-check"></i>
+          </div>
+          <h3 class="success-title text-gradient">Appointment Confirmed!</h3>
+          <p class="success-text">Your transformation ticket has been created. A confirmation email and text message containing calendar invites, directions, and health safety check-ins have been sent to you.</p>
+          <div style="font-size: 0.85rem; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Ticket ID: <span id="success-ticket-id">MM-000000</span></div>
+          <button class="btn btn-primary" onclick="window.location.reload();" style="margin-top: 40px;">
+            Return to Home
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-modal-footer">
+      <button class="btn btn-secondary" id="wizard-back-btn" style="visibility: hidden;">
+        Back
+      </button>
+      <button class="btn btn-primary" id="wizard-next-btn">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- Firebase Project Initialization -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAeWAOnrmdG73rnrUA5cw-vpnIjiWWElqQ",
+      authDomain: "makeme99-66073.firebaseapp.com",
+      projectId: "makeme99-66073",
+      storageBucket: "makeme99-66073.firebasestorage.app",
+      messagingSenderId: "83236853494",
+      appId: "1:83236853494:web:d066354c4643d2edb4bed7",
+      measurementId: "G-8YQ2W671L2"
+    };
+
+    if (typeof firebase !== 'undefined') {
+      firebase.initializeApp(firebaseConfig);
+      window.db = firebase.firestore();
+      console.log("Firebase Firestore Initialized Successfully.");
+    } else {
+      console.error("Firebase SDK failed to load. Check your internet connection.");
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

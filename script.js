@@ -260,7 +260,7 @@ let currentWizardStep = 1;
 let selectedStylist = null;
 let selectedDate = null;
 let selectedTime = null;
-let activeGender = 'male';
+let activeGender = 'female';
 let activeCategory = 'all';
 
 // Gender Subcategories Mapping
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
   initLiveHours();
   initStickyHeader();
-  initMobileMenu();
+  initMobileNav();
   initScrollReveal();
   initStatsCounter();
   initGenderSelector();
@@ -339,8 +339,7 @@ function initLiveHours() {
 // 2. Sticky Header & Active Nav Links
 function initStickyHeader() {
   const header = document.querySelector('.header');
-  const sections = document.querySelectorAll('section');
-  const navLinks = document.querySelectorAll('.nav-link');
+  if (!header) return;
 
   window.addEventListener('scroll', () => {
     // Header class scroll toggle
@@ -349,28 +348,11 @@ function initStickyHeader() {
     } else {
       header.classList.remove('scrolled');
     }
-
-    // Scroll Spy active nav links
-    let current = '';
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 150;
-      const sectionHeight = section.clientHeight;
-      if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
   });
 }
 
-// 3. Mobile Navigation Menu Toggle
-function initMobileMenu() {
+// 3. Mobile Navigation Toggle
+function initMobileNav() {
   const toggleBtn = document.querySelector('.mobile-nav-toggle');
   const header = document.querySelector('.header');
   const navLinks = document.querySelectorAll('.nav-link');
@@ -387,7 +369,7 @@ function initMobileMenu() {
     }
   });
 
-  // Close mobile menu when nav links are clicked
+  // Close mobile navigation when nav links are clicked
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       header.classList.remove('nav-active');
@@ -1001,7 +983,7 @@ function renderStep1Services() {
     container.innerHTML = `
       <div style="text-align: center; padding: 30px; color: var(--text-muted);">
         <i class="fas fa-shopping-bag" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i>
-        No services selected. Go back to our menu to add services, or select some below.
+        No services selected. Go back to our services list to add services, or select some below.
       </div>
     `;
     
@@ -1010,13 +992,20 @@ function renderStep1Services() {
     quickAddWrap.style.marginTop = '20px';
     quickAddWrap.innerHTML = '<h4 style="margin-bottom:15px; font-size: 1rem;">Recommended Services</h4>';
     
-    servicesData.filter(s => s.gender === activeGender).slice(0, 4).forEach(service => {
+    const recommendedIds = ['f3', 'f11', 'm1', 'm2'];
+    const recommendations = [];
+    recommendedIds.forEach(id => {
+      const found = servicesData.find(s => s.id === id);
+      if (found) recommendations.push(found);
+    });
+    
+    recommendations.forEach(service => {
       const item = document.createElement('div');
       item.className = 'stylist-picker-item';
       item.style.marginBottom = '10px';
       item.innerHTML = `
         <div style="flex-grow:1;">
-          <div style="font-weight:500;">${service.name}</div>
+          <div style="font-weight:500;">${service.name} <span style="font-size:0.75rem; color:var(--gold-primary); font-weight:normal; margin-left:5px;">(${service.gender === 'female' ? 'Female' : 'Male'})</span></div>
           <div style="font-size:0.8rem; color:var(--text-muted);">₹${service.price} • ${service.duration} mins</div>
         </div>
         <button class="btn btn-secondary" style="padding: 6px 12px; font-size:0.75rem;" data-quick-id="${service.id}">Add</button>
@@ -1727,6 +1716,14 @@ function initPreloader() {
   const textEl = document.getElementById('preloader-status-text');
   if (!preloader || !bar) return;
 
+  // Skip preloader if already shown in this session
+  if (sessionStorage.getItem('preloaderShown')) {
+    preloader.style.display = 'none';
+    document.body.style.overflow = '';
+    document.dispatchEvent(new CustomEvent('preloaderFinished'));
+    return;
+  }
+
   // Emojis and status steps
   const steps = [
     { emoji: '💈', text: 'Powering up barber poles...' },
@@ -1761,6 +1758,7 @@ function initPreloader() {
       // Finished! Fade out preloader
       setTimeout(() => {
         preloader.classList.add('fade-out');
+        sessionStorage.setItem('preloaderShown', 'true');
         // Re-enable scroll on body
         document.body.style.overflow = '';
         // Dispatch custom event to trigger instagram popup

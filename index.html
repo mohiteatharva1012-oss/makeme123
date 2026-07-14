@@ -40,19 +40,19 @@
   <!-- HEADER / NAVIGATION -->
   <header class="header" id="salon-header">
     <div class="container header-container">
-      <a href="#" class="logo" id="header-logo">
+      <a href="index.html" class="logo" id="header-logo">
         <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="logo-img">
       </a>
       
       <nav id="navbar">
         <ul class="nav-links">
-          <li><a href="#" class="nav-link active">Home</a></li>
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#services" class="nav-link">Services</a></li>
-          <li><a href="#lookbook" class="nav-link">Lookbook</a></li>
-          <li><a href="#stylists" class="nav-link">Stylists</a></li>
-          <li><a href="#franchise" class="nav-link">Franchise<sup>MAKE ME</sup></a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="services.html" class="nav-link">Services</a></li>
+          <li><a href="lookbook.html" class="nav-link">Lookbook</a></li>
+          <li><a href="stylists.html" class="nav-link">Stylists</a></li>
+          <li><a href="franchise.html" class="nav-link">Franchise<sup>MAKE ME</sup></a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
@@ -60,7 +60,7 @@
         Book Appointment
       </button>
 
-      <button class="mobile-nav-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+      <button class="mobile-nav-toggle" id="mobile-nav-btn" aria-label="Toggle Navigation Services">
         <i class="fas fa-bars"></i>
       </button>
     </div>
@@ -85,8 +85,8 @@
           <h1 class="hero-title">Crafting Looks That <br><span class="text-gradient">Command Attention</span></h1>
           <p class="hero-desc">Welcome to MAKE ME, a premium unisex salon for precision cuts, color artistry, and advanced skincare. Custom looks designed by certified master stylists.</p>
           <div class="hero-btn-group">
-            <a href="#services" class="btn btn-primary" id="hero-services-btn">
-              Explore Menu <i class="fas fa-arrow-right btn-icon"></i>
+            <a href="services.html" class="btn btn-primary" id="hero-services-btn">
+              Explore Services <i class="fas fa-arrow-right btn-icon"></i>
             </a>
             <a href="#booking-modal" class="btn btn-secondary book-now-trigger" id="hero-booking-btn">
               Book Appointment
@@ -153,560 +153,7 @@
       </div>
     </div>
 
-    <!-- ABOUT / PHILOSOPHY -->
-    <section class="about section-padding" id="about">
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-images reveal">
-            <div class="about-glow"></div>
-            <!-- Standard sizes, layered look -->
-            <img src="assets/about_stylist.jpg" alt="Master Stylist at MAKE ME" class="about-img-large">
-            <img src="assets/about_stylist_secondary.jpg" alt="Barber Specialist at MAKE ME" class="about-img-small">
-          </div>
-          
-          <div class="about-content reveal reveal-delay-2">
-            <span class="section-subtitle">Our Philosophy</span>
-            <h2 class="section-title">Where Craftsmanship <br>Meets Luxury</h2>
-            <p class="about-text">
-              MAKE ME is more than a salon; it is a creative space where master artists help you reveal your most confident self. Our team believes that beauty and grooming are deeply personal expressions, and we customize every detail to match your unique face structure, hair texture, and lifestyle.
-            </p>
-            
-            <ul class="feature-list">
-              <li class="feature-item">
-                <div class="feature-icon"><i class="fas fa-sparkles"></i></div>
-                <div>
-                  <h4 class="feature-title">Premium Professional Products</h4>
-                  <p class="feature-desc">We use top-tier global brands like L'Oréal, Wella, and Schwarzkopf to guarantee outstanding results and hair protection.</p>
-                </div>
-              </li>
-              <li class="feature-item">
-                <div class="feature-icon"><i class="fas fa-scissors"></i></div>
-                <div>
-                  <h4 class="feature-title">Expert Certified Stylists</h4>
-                  <p class="feature-desc">Our team consists of highly trained professionals specializing in advanced cuts, color techniques, and grooming.</p>
-                </div>
-              </li>
-              <li class="feature-item">
-                <div class="feature-icon"><i class="fas fa-user-check"></i></div>
-                <div>
-                  <h4 class="feature-title">Personalized Consultations</h4>
-                  <p class="feature-desc">Every service begins with a personal styling discussion to customize the look to your unique features.</p>
-                </div>
-              </li>
-            </ul>
-
-            <a href="#contact" class="btn btn-primary" id="about-read-more">Find Our Location</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES MENU SECTION -->
-    <section class="services section-padding" id="services">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="section-subtitle">Aesthetic Menu</span>
-          <h2 class="section-title">Elevate Your Presence</h2>
-        </div>
-
-        <!-- Gender Category Selector with Avatars -->
-        <div class="gender-selector reveal">
-          <button class="gender-btn active" data-gender="male" id="gender-male-btn">
-            <div class="gender-avatar-wrap">
-              <svg viewBox="0 0 100 100" class="gender-svg-avatar">
-                <circle cx="50" cy="50" r="46" class="avatar-bg" />
-                <path d="M 50 28 A 11 11 0 1 0 50 50 A 11 11 0 1 0 50 28 Z" class="avatar-stroke" />
-                <path d="M 30 76 Q 30 60 50 60 Q 70 60 70 76" class="avatar-stroke" />
-                <path d="M 45 42 L 35 32 M 55 42 L 65 32" class="avatar-detail" />
-              </svg>
-            </div>
-            <span class="gender-label">MALE SANCTUARY</span>
-          </button>
-          
-          <button class="gender-btn" data-gender="female" id="gender-female-btn">
-            <div class="gender-avatar-wrap">
-              <svg viewBox="0 0 100 100" class="gender-svg-avatar">
-                <circle cx="50" cy="50" r="46" class="avatar-bg" />
-                <path d="M 50 28 A 10 10 0 1 0 50 48 A 10 10 0 1 0 50 28 Z" class="avatar-stroke" />
-                <path d="M 32 76 Q 32 60 50 60 Q 68 60 68 76" class="avatar-stroke" />
-                <path d="M 70 30 L 74 34 M 74 30 L 70 34" class="avatar-detail" />
-              </svg>
-            </div>
-            <span class="gender-label">FEMALE SALON</span>
-          </button>
-        </div>
-
-        <!-- Filter controls -->
-        <div class="services-filter reveal reveal-delay-1" id="services-filter-container">
-          <!-- Populated dynamically by script.js -->
-        </div>
-
-        <!-- Service Search Bar -->
-        <div class="services-search reveal reveal-delay-2">
-          <i class="fas fa-search"></i>
-          <input type="text" id="service-search-input" placeholder="Search services (e.g. Balayage, Facial, Shave)...">
-        </div>
-
-        <!-- Services Grid (Populated dynamically, seed elements for SEO/crawlers) -->
-        <div class="services-grid" id="services-grid">
-          <!-- Seed Cards for fallback/crawling -->
-          <div class="service-card glass-card reveal">
-            <div class="service-header">
-              <h3 class="service-title">Signature Haircut & Blow Dry</h3>
-              <span class="service-price">₹95</span>
-            </div>
-            <div class="service-meta">
-              <span><i class="far fa-clock"></i> 60 Mins</span>
-              <span><i class="fas fa-tags"></i> hair</span>
-            </div>
-            <p class="service-desc">Personalized consult, luxury wash, precision cut, and signature blow out styling.</p>
-            <div class="service-action">
-              <button class="service-add-btn" data-id="h1">
-                <i class="fas fa-plus"></i> <span>Add to Booking</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="service-card glass-card reveal">
-            <div class="service-header">
-              <h3 class="service-title">Gold Radiance Facial</h3>
-              <span class="service-price">₹130</span>
-            </div>
-            <div class="service-meta">
-              <span><i class="far fa-clock"></i> 75 Mins</span>
-              <span><i class="fas fa-tags"></i> skin</span>
-            </div>
-            <p class="service-desc">Deep double cleanse, exfoliation, active hydration infusion, and a 24k gold leaf firming mask.</p>
-            <div class="service-action">
-              <button class="service-add-btn" data-id="s1">
-                <i class="fas fa-plus"></i> <span>Add to Booking</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="service-card glass-card reveal">
-            <div class="service-header">
-              <h3 class="service-title">Master Barber Classic Shave</h3>
-              <span class="service-price">₹60</span>
-            </div>
-            <div class="service-meta">
-              <span><i class="far fa-clock"></i> 45 Mins</span>
-              <span><i class="fas fa-tags"></i> grooming</span>
-            </div>
-            <p class="service-desc">Traditional hot towel service, pre-shave oil massage, straight razor shave, and soothing balm treatment.</p>
-            <div class="service-action">
-              <button class="service-add-btn" data-id="g1">
-                <i class="fas fa-plus"></i> <span>Add to Booking</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PORTFOLIO / LOOKBOOK SECTION -->
-    <section class="lookbook section-padding" id="lookbook">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="section-subtitle">Visual Inspiration</span>
-          <h2 class="section-title">The Transformations</h2>
-        </div>
-
-        <div class="lookbook-grid">
-          <!-- Lookbook Item 1 -->
-          <div class="lookbook-item reveal" id="lookbook-1" data-video-url="assets/new_video.mp4">
-            <video src="assets/new_video.mp4" class="lookbook-video" loop muted playsinline autoplay></video>
-            <div class="video-play-badge"><i class="fas fa-play"></i></div>
-            <div class="lookbook-overlay">
-              <span class="lookbook-category">Color & Style</span>
-              <h3 class="lookbook-title">Soft Champagne Balayage</h3>
-              <span class="lookbook-view-btn">Play Video <i class="fas fa-play"></i></span>
-            </div>
-          </div>
-
-          <!-- Lookbook Item 2 -->
-          <div class="lookbook-item reveal reveal-delay-1" id="lookbook-2" data-video-url="assets/videof2.mp4">
-            <video src="assets/videof2.mp4" class="lookbook-video" loop muted playsinline autoplay></video>
-            <div class="video-play-badge"><i class="fas fa-play"></i></div>
-            <div class="lookbook-overlay">
-              <span class="lookbook-category">Lash & Makeup</span>
-              <h3 class="lookbook-title">Luxury Bridal Makeover</h3>
-              <span class="lookbook-view-btn">Play Video <i class="fas fa-play"></i></span>
-            </div>
-          </div>
-
-          <!-- Lookbook Item 3 -->
-          <div class="lookbook-item reveal reveal-delay-2" id="lookbook-3" data-video-url="assets/videof3.mp4">
-            <video src="assets/videof3.mp4" class="lookbook-video" loop muted playsinline autoplay></video>
-            <div class="video-play-badge"><i class="fas fa-play"></i></div>
-            <div class="lookbook-overlay">
-              <span class="lookbook-category">Aesthetic Skin</span>
-              <h3 class="lookbook-title">Glow Hydration Treatment</h3>
-              <span class="lookbook-view-btn">Play Video <i class="fas fa-play"></i></span>
-            </div>
-          </div>
-
-          <!-- Lookbook Item 4 -->
-          <div class="lookbook-item reveal" id="lookbook-4" data-video-url="assets/videof4 (1).mp4">
-            <video src="assets/videof4 (1).mp4" class="lookbook-video" loop muted playsinline autoplay></video>
-            <div class="video-play-badge"><i class="fas fa-play"></i></div>
-            <div class="lookbook-overlay">
-              <span class="lookbook-category">Hair Coloring</span>
-              <h3 class="lookbook-title">Vibrant Balayage & Cut</h3>
-              <span class="lookbook-view-btn">Play Video <i class="fas fa-play"></i></span>
-            </div>
-          </div>
-
-          <!-- Lookbook Item 5 -->
-          <div class="lookbook-item reveal reveal-delay-1" id="lookbook-5" data-video-url="assets/videom1.mp4">
-            <video src="assets/videom1.mp4" class="lookbook-video" loop muted playsinline autoplay></video>
-            <div class="video-play-badge"><i class="fas fa-play"></i></div>
-            <div class="lookbook-overlay">
-              <span class="lookbook-category">Grooming</span>
-              <h3 class="lookbook-title">Precision Fade & Beard Sculpt</h3>
-              <span class="lookbook-view-btn">Play Video <i class="fas fa-play"></i></span>
-            </div>
-          </div>
-
-          <!-- Lookbook Item 6 -->
-          <div class="lookbook-item reveal reveal-delay-2" id="lookbook-6" data-video-url="assets/videom2 (1).mp4">
-            <video src="assets/videom2 (1).mp4" class="lookbook-video" loop muted playsinline autoplay></video>
-            <div class="video-play-badge"><i class="fas fa-play"></i></div>
-            <div class="lookbook-overlay">
-              <span class="lookbook-category">Barbering</span>
-              <h3 class="lookbook-title">Sharp Undercut & Razor Detailing</h3>
-              <span class="lookbook-view-btn">Play Video <i class="fas fa-play"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BRANDS TICKER BANNER -->
-    <section class="brands-ticker-section">
-      <div class="brands-ticker-container">
-        <div class="brands-ticker-track">
-          <!-- L'Oreal -->
-          <div class="brand-logo">
-            <img src="assets/logo_loreal.svg" alt="L'Oréal Professionnel" class="brand-logo-img logo-invert" style="height: 42px; width: auto;">
-          </div>
-          <!-- Wella -->
-          <div class="brand-logo">
-            <img src="assets/logo_wella.svg" alt="Wella Professionals" class="brand-logo-img" style="height: 44px; width: auto;">
-          </div>
-          <!-- Schwarzkopf -->
-          <div class="brand-logo">
-            <img src="assets/logo_schwarzkopf.svg" alt="Schwarzkopf Professional" class="brand-logo-img logo-invert" style="height: 65px; width: auto;">
-          </div>
-          <!-- O3+ -->
-          <div class="brand-logo">
-            <img src="assets/logo_o3plus.png" alt="O3+ Professional" class="brand-logo-img logo-invert" style="height: 46px; width: auto;">
-          </div>
-          <!-- Raaga -->
-          <div class="brand-logo">
-            <img src="assets/logo_raaga.png" alt="Raaga Professional" class="brand-logo-img logo-invert" style="height: 42px; width: auto;">
-          </div>
-          <!-- Aroma -->
-          <div class="brand-logo">
-            <img src="assets/logo_aroma.png" alt="Aroma Magic" class="brand-logo-img" style="height: 52px; width: auto;">
-          </div>
-          <!-- Lotus -->
-          <div class="brand-logo">
-            <img src="assets/logo_lotus.png" alt="Lotus Herbals" class="brand-logo-img" style="height: 54px; width: auto;">
-          </div>
-          <!-- VLCC -->
-          <div class="brand-logo">
-            <img src="assets/logo_vlcc.svg" alt="VLCC" class="brand-logo-img" style="height: 44px; width: auto;">
-          </div>
-
-          <!-- REPEATED PART FOR INFINITE LOOP -->
-          <!-- L'Oreal -->
-          <div class="brand-logo">
-            <img src="assets/logo_loreal.svg" alt="L'Oréal Professionnel" class="brand-logo-img logo-invert" style="height: 42px; width: auto;">
-          </div>
-          <!-- Wella -->
-          <div class="brand-logo">
-            <img src="assets/logo_wella.svg" alt="Wella Professionals" class="brand-logo-img" style="height: 44px; width: auto;">
-          </div>
-          <!-- Schwarzkopf -->
-          <div class="brand-logo">
-            <img src="assets/logo_schwarzkopf.svg" alt="Schwarzkopf Professional" class="brand-logo-img logo-invert" style="height: 65px; width: auto;">
-          </div>
-          <!-- O3+ -->
-          <div class="brand-logo">
-            <img src="assets/logo_o3plus.png" alt="O3+ Professional" class="brand-logo-img logo-invert" style="height: 46px; width: auto;">
-          </div>
-          <!-- Raaga -->
-          <div class="brand-logo">
-            <img src="assets/logo_raaga.png" alt="Raaga Professional" class="brand-logo-img logo-invert" style="height: 42px; width: auto;">
-          </div>
-          <!-- Aroma -->
-          <div class="brand-logo">
-            <img src="assets/logo_aroma.png" alt="Aroma Magic" class="brand-logo-img" style="height: 52px; width: auto;">
-          </div>
-          <!-- Lotus -->
-          <div class="brand-logo">
-            <img src="assets/logo_lotus.png" alt="Lotus Herbals" class="brand-logo-img" style="height: 54px; width: auto;">
-          </div>
-          <!-- VLCC -->
-          <div class="brand-logo">
-            <img src="assets/logo_vlcc.svg" alt="VLCC" class="brand-logo-img" style="height: 44px; width: auto;">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STYLISTS / EXPERTS SECTION -->
-    <section class="stylists section-padding" id="stylists">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="section-subtitle">The Creators</span>
-          <h2 class="section-title">Meet Our Master Artists</h2>
-        </div>
-
-        <div class="stylists-grid">
-          <!-- Stylist 1 -->
-          <div class="stylist-card glass-card reveal">
-            <div class="stylist-img-container">
-              <img src="assets/mukesh_sir.jpeg" alt="MUKESH SIR Director and Hair Artist" class="stylist-img">
-            </div>
-            <div class="stylist-info">
-              <h3 class="stylist-name">MUKESH SIR</h3>
-              <p class="stylist-role">Director and Hair Artist</p>
-              <div class="stylist-badge" style="margin-top: 10px;">
-                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stylist 2 -->
-          <div class="stylist-card glass-card reveal reveal-delay-1">
-            <div class="stylist-img-container">
-              <img src="assets/amar_sir.jpeg" alt="AMAR SIR Master Hair Stylist" class="stylist-img">
-            </div>
-            <div class="stylist-info">
-              <h3 class="stylist-name">AMAR SIR</h3>
-              <p class="stylist-role">Master Hair Stylist</p>
-              <div class="stylist-badge" style="margin-top: 10px;">
-                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stylist 3 -->
-          <div class="stylist-card glass-card reveal reveal-delay-2">
-            <div class="stylist-img-container">
-              <img src="assets/balaji_sir.jpeg" alt="BALAJI SIR Junior Artist" class="stylist-img">
-            </div>
-            <div class="stylist-info">
-              <h3 class="stylist-name">BALAJI SIR</h3>
-              <p class="stylist-role">Junior Artist</p>
-              <div class="stylist-badge" style="margin-top: 10px;">
-                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stylist 4 -->
-          <div class="stylist-card glass-card reveal">
-            <div class="stylist-img-container">
-              <img src="assets/samarth_sir.jpeg" alt="SAMARTH SIR Creative Hair Artist" class="stylist-img">
-            </div>
-            <div class="stylist-info">
-              <h3 class="stylist-name">SAMARTH SIR</h3>
-              <p class="stylist-role">Creative Hair Artist</p>
-              <div class="stylist-badge" style="margin-top: 10px;">
-                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stylist 5 -->
-          <div class="stylist-card glass-card reveal reveal-delay-1">
-            <div class="stylist-img-container">
-              <img src="assets/pratiksha_mam.jpeg" alt="PRATIKSHA MAM Senior Skincare Artist" class="stylist-img">
-            </div>
-            <div class="stylist-info">
-              <h3 class="stylist-name">PRATIKSHA MAM</h3>
-              <p class="stylist-role">Senior Skincare Artist</p>
-              <div class="stylist-badge" style="margin-top: 10px;">
-                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stylist 6 -->
-          <div class="stylist-card glass-card reveal reveal-delay-2">
-            <div class="stylist-img-container">
-              <img src="assets/coming_soon.png" alt="Coming Soon Artist" class="stylist-img">
-            </div>
-            <div class="stylist-info">
-              <h3 class="stylist-name">COMING SOON</h3>
-              <p class="stylist-role">Skincare & Makeup Expert</p>
-              <div class="stylist-badge" style="margin-top: 10px;">
-                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FRANCHISE SECTION -->
-    <section class="franchise section-padding" id="franchise">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="section-subtitle">Partner With Us</span>
-          <h2 class="section-title">Franchise Opportunities</h2>
-          <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 600px; margin: 15px auto 0 auto; font-weight: 300;">
-            Bring Dharashiv's premium unisex salon sanctuary to your city. Fill out the application form below, and our business expansion team will get in touch with you.
-          </p>
-        </div>
-        
-        <div class="franchise-form-panel glass-card reveal" style="max-width: 800px; margin: 0 auto; padding: 40px 30px;">
-          <form id="salon-franchise-form">
-            <div class="form-group-row">
-              <div class="form-group">
-                <input type="text" id="franchise-name" class="form-input" placeholder=" " required>
-                <label for="franchise-name" class="form-label">Full Name</label>
-              </div>
-              <div class="form-group">
-                <input type="email" id="franchise-email" class="form-input" placeholder=" " required>
-                <label for="franchise-email" class="form-label">Email Address</label>
-              </div>
-            </div>
-            
-            <div class="form-group-row">
-              <div class="form-group">
-                <input type="tel" id="franchise-phone" class="form-input" placeholder=" " required>
-                <label for="franchise-phone" class="form-label">Phone Number</label>
-              </div>
-              <div class="form-group">
-                <input type="text" id="franchise-city" class="form-input" placeholder=" " required>
-                <label for="franchise-city" class="form-label">Target City & State</label>
-              </div>
-            </div>
-            
-            <div class="form-group-row">
-              <div class="form-group">
-                <select id="franchise-investment" class="form-input form-select" required style="background: var(--bg-tertiary); color: var(--text-light); height: auto; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 8px;">
-                  <option value="" disabled selected hidden></option>
-                  <option value="15-20 Lakhs">₹15 Lakhs - ₹20 Lakhs</option>
-                  <option value="20-30 Lakhs">₹20 Lakhs - ₹30 Lakhs</option>
-                  <option value="30-50 Lakhs">₹30 Lakhs - ₹50 Lakhs</option>
-                  <option value="50 Lakhs+">₹50 Lakhs+</option>
-                </select>
-                <label for="franchise-investment" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Estimated Investment Budget</label>
-              </div>
-              <div class="form-group">
-                <select id="franchise-experience" class="form-input form-select" required style="background: var(--bg-tertiary); color: var(--text-light); height: auto; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 8px;">
-                  <option value="" disabled selected hidden></option>
-                  <option value="None">No prior business experience</option>
-                  <option value="Salon / Beauty">Prior experience in Salon / Beauty Industry</option>
-                  <option value="Retail / Franchise">Prior experience in Retail / Franchise</option>
-                  <option value="Other Business">Other business management experience</option>
-                </select>
-                <label for="franchise-experience" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Business Experience</label>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <textarea id="franchise-message" class="form-input" placeholder=" " style="min-height: 100px;"></textarea>
-              <label for="franchise-message" class="form-label">Tell us about your proposed site or investment plans (optional)</label>
-            </div>
-            
-            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px; margin-top: 15px;">
-              Submit Franchise Application
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT, MAP & HOURS SECTION -->
-    <section class="contact section-padding" id="contact">
-      <div class="container">
-        <div class="contact-grid">
-          <!-- Contact Form Panel -->
-          <div class="contact-form-panel glass-card reveal">
-            <h3 class="contact-form-title">Send a Request</h3>
-            <form id="salon-contact-form">
-              <div class="form-group-row">
-                <div class="form-group">
-                  <input type="text" id="contact-name" class="form-input" placeholder=" " required>
-                  <label for="contact-name" class="form-label">Full Name</label>
-                </div>
-                <div class="form-group">
-                  <input type="tel" id="contact-phone" class="form-input" placeholder=" " required>
-                  <label for="contact-phone" class="form-label">Phone Number</label>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <textarea id="contact-message" class="form-input" placeholder=" " required></textarea>
-                <label for="contact-message" class="form-label">How can we transform you today?</label>
-              </div>
-
-              <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 8px;">
-                Send Message
-              </button>
-            </form>
-          </div>
-
-          <!-- Contact Details and Map -->
-          <div class="contact-info reveal reveal-delay-2">
-            <div class="info-block">
-              <span class="section-subtitle">Luxury Headquarters</span>
-              <h2 class="section-title" style="margin-bottom: 24px;">Visit Our Sanctuary</h2>
-              
-              <div class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-details">
-                  <h4>Address</h4>
-                  <p>Barshi Naka, Jijau Chowk, Near Satish Pawar Hospital, Dharashiv - 413501</p>
-                </div>
-              </div>
-
-              <div class="info-item">
-                <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
-                <div class="info-details">
-                  <h4>Phone Reservations</h4>
-                  <p>+91 93707 56017<br><span style="font-size:0.85rem; color:var(--text-muted); font-weight:500;">Alt: +91 90218 16517</span></p>
-                </div>
-              </div>
-
-              <div class="info-item">
-                <div class="info-icon"><i class="fas fa-clock"></i></div>
-                <div class="info-details">
-                  <h4>Operating Hours</h4>
-                  <p>Wed - Mon: 11:00 AM - 10:00 PM</p>
-                  <p style="color:#e57373; font-size:0.85rem; font-weight:500; margin-top:2px;">Tuesday: Closed (Weekly Holiday)</p>
-                  <!-- Open/Closed Live Badge -->
-                  <div class="live-status-badge open" id="live-status">
-                    <span class="status-dot"></span>Checking status...
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Google Maps Embed -->
-            <div class="map-container" style="border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; height: 350px; box-shadow: var(--shadow-premium); position: relative;">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3790.4631631617854!2d76.0285888!3d18.1886277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc5a3aa68ccf293%3A0xf12740389da9234b!2sMake%20Me%20Unisex%20Salon!5e0!3m2!1sen!2sin!4v1719750000000!5m2!1sen!2sin" 
-                width="100%" 
-                height="100%" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-              </iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS SECTION (REPOSITIONED BELOW CONTACT) -->
+    <!-- TESTIMONIALS SECTION -->
     <section class="reviews section-padding" id="reviews">
       <div class="container">
         <div class="section-header reveal">
@@ -932,12 +379,11 @@
   <footer class="footer" id="salon-footer">
     <div class="container">
       <div class="footer-grid">
-        <!-- Logo & Brand philosophy -->
         <div>
-          <a href="#" class="footer-logo" id="footer-logo-link">
+          <a href="index.html" class="footer-logo" id="footer-logo-link">
             <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="logo-img">
           </a>
-          <p class="footer-desc">Premium unisex salon and restorative sanctuary defining styling, luxury aesthetics, and facial therapy in Dharashiv (Osmanabad).</p>
+          <p class="footer-desc">Premium unisex salon and luxury lounge defining styling, luxury aesthetics, and facial therapy in Dharashiv (Osmanabad).</p>
           <div class="social-links">
             <a href="https://www.facebook.com/share/1E6A1xGHci/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Follow us on Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/make_me_unisex_salon?igsh=dWJkMXRnMzA1amU5" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
@@ -951,34 +397,31 @@
           </div>
         </div>
 
-        <!-- Quick Links -->
         <div>
           <h4 class="footer-column-title">The Salon</h4>
           <ul class="footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#about">About Philosophy</a></li>
-            <li><a href="#services">Aesthetic Menu</a></li>
-            <li><a href="#lookbook">Transformations</a></li>
-            <li><a href="#stylists">Artists</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Philosophy</a></li>
+            <li><a href="services.html">Aesthetic Services</a></li>
+            <li><a href="lookbook.html">Transformations</a></li>
+            <li><a href="stylists.html">Artists</a></li>
           </ul>
         </div>
 
-        <!-- Services category links -->
         <div>
           <h4 class="footer-column-title">Categories</h4>
           <ul class="footer-links">
-            <li><a href="#services">Hair Cut & Styles</a></li>
-            <li><a href="#services">Balayage Coloring</a></li>
-            <li><a href="#services">Hydra-Facials</a></li>
-            <li><a href="#services">Barber Straight Razor</a></li>
-            <li><a href="#services">Luxury Spa Pedicures</a></li>
+            <li><a href="services.html">Hair Cut & Styles</a></li>
+            <li><a href="services.html">Balayage Coloring</a></li>
+            <li><a href="services.html">Hydra-Facials</a></li>
+            <li><a href="services.html">Barber Straight Razor</a></li>
+            <li><a href="services.html">Luxury Spa Pedicures</a></li>
           </ul>
         </div>
 
-        <!-- Newsletter Sign-up -->
         <div>
           <h4 class="footer-column-title">Newsletter</h4>
-          <p class="footer-desc" style="font-size:0.85rem; margin-bottom: 15px;">Receive private event invitations, luxury tips and seasonal menus.</p>
+          <p class="footer-desc" style="font-size:0.85rem; margin-bottom: 15px;">Receive private event invitations, luxury tips and seasonal services.</p>
           <form class="newsletter-form" id="newsletter-form">
             <input type="email" placeholder="Your Luxury Email" required aria-label="Email for Newsletter">
             <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
@@ -988,7 +431,6 @@
         </div>
       </div>
 
-      <!-- Bottom Credits -->
       <div class="footer-bottom">
         <p class="copyright">&copy; 2026 MAKE ME Unisex Salon. All Rights Reserved.</p>
         <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted);">
@@ -1022,7 +464,6 @@
   <!-- INTERACTIVE BOOKING WIZARD DRAWER/MODAL -->
   <div class="booking-modal-overlay" id="booking-modal-overlay"></div>
   <div class="booking-modal" id="booking-modal" aria-modal="true" role="dialog" aria-labelledby="booking-wizard-title">
-    
     <div class="booking-modal-header">
       <h3 class="booking-modal-title" id="booking-wizard-title">Schedule Transformation</h3>
       <button class="booking-modal-close" id="close-booking-modal" aria-label="Close Booking Drawer">
@@ -1030,7 +471,6 @@
       </button>
     </div>
 
-    <!-- Wizard Steps Breadcrumbs -->
     <div class="wizard-progress">
       <div class="wizard-step active" data-step="1">
         <div class="wizard-step-num">1</div>
@@ -1050,37 +490,25 @@
       </div>
     </div>
 
-    <!-- Wizard Main Panels Container -->
     <div class="wizard-content">
-      
-      <!-- STEP 1: SERVICE CONFIRMATION LIST -->
       <div class="wizard-step-panel active" id="step-1-panel">
         <h4 class="wizard-panel-title">Review Selected Services</h4>
-        <div class="step-services-list" id="step-1-services-list">
-          <!-- Dynamically populated or empty message render in script.js -->
-        </div>
+        <div class="step-services-list" id="step-1-services-list"></div>
       </div>
 
-      <!-- STEP 2: STYLIST SELECTOR -->
       <div class="wizard-step-panel" id="step-2-panel">
         <h4 class="wizard-panel-title">Select Your Specialist</h4>
-        <div class="stylist-picker" id="step-2-stylists-list">
-          <!-- Dynamically populated stylists list in script.js -->
-        </div>
+        <div class="stylist-picker" id="step-2-stylists-list"></div>
       </div>
 
-      <!-- STEP 3: DATE & TIME SELECTOR -->
       <div class="wizard-step-panel" id="step-3-panel">
         <h4 class="wizard-panel-title">Choose Date & Time</h4>
-        
-        <!-- Calendar Widget -->
         <div class="calendar-widget">
           <div class="calendar-header">
             <button class="calendar-nav-btn" id="calendar-prev" aria-label="Previous Month"><i class="fas fa-chevron-left"></i></button>
             <span class="calendar-month" id="calendar-current-month">June 2026</span>
             <button class="calendar-nav-btn" id="calendar-next" aria-label="Next Month"><i class="fas fa-chevron-right"></i></button>
           </div>
-          
           <div class="calendar-grid">
             <div class="calendar-day-label">Su</div>
             <div class="calendar-day-label">Mo</div>
@@ -1090,44 +518,28 @@
             <div class="calendar-day-label">Fr</div>
             <div class="calendar-day-label">Sa</div>
           </div>
-          
-          <!-- Day grid cells rendered dynamically by script.js -->
           <div class="calendar-grid" id="calendar-days-grid"></div>
         </div>
-
-        <!-- Time Slots Picker -->
         <h4 class="time-picker-title">Available Slots</h4>
-        <div class="time-slots" id="time-slots-container">
-          <!-- Renders slots dynamically -->
-        </div>
+        <div class="time-slots" id="time-slots-container"></div>
       </div>
 
-      <!-- STEP 4: CLIENT CONTACT INFO & TICKET SUMMARY -->
       <div class="wizard-step-panel" id="step-4-panel">
         <h4 class="wizard-panel-title">Contact & Ticket Details</h4>
-        
-        <!-- Booking details summary -->
-        <div id="booking-summary-receipt-container" style="margin-bottom: 24px;">
-          <!-- Receipt summary injected dynamically by script.js -->
-        </div>
-
-        <!-- Contact details inputs -->
+        <div id="booking-summary-receipt-container" style="margin-bottom: 24px;"></div>
         <div class="glass-card" style="padding: 24px; border:1px solid var(--border-color);">
           <div class="form-group" style="margin-bottom: 18px;">
             <input type="text" id="booking-client-name" class="form-input" placeholder=" " required>
             <label for="booking-client-name" class="form-label">Full Name</label>
           </div>
-          
           <div class="form-group" style="margin-bottom: 18px;">
             <input type="tel" id="booking-client-phone" class="form-input" placeholder=" " required>
             <label for="booking-client-phone" class="form-label">Phone Number</label>
           </div>
-
           <div class="form-group" style="margin-bottom: 18px;">
             <input type="date" id="booking-client-dob" class="form-input" placeholder=" " required style="color-scheme: dark;">
             <label for="booking-client-dob" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Date of Birth (DOB)</label>
           </div>
-          
           <div class="form-group" style="margin-bottom: 0;">
             <textarea id="booking-client-notes" class="form-input" placeholder=" " style="min-height:80px;"></textarea>
             <label for="booking-client-notes" class="form-label">Special instructions / requests (optional)</label>
@@ -1135,7 +547,6 @@
         </div>
       </div>
 
-      <!-- STEP 5: BOOKING SUCCESS TICKET -->
       <div class="wizard-step-panel" id="step-5-panel">
         <div class="booking-success-message">
           <div class="success-icon-wrap">
@@ -1144,7 +555,6 @@
           <h3 class="success-title text-gradient">Appointment Confirmed!</h3>
           <p class="success-text">Your transformation ticket has been created. A confirmation email and text message containing calendar invites, directions, and health safety check-ins have been sent to you.</p>
           <div style="font-size: 0.85rem; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Ticket ID: <span id="success-ticket-id">MM-000000</span></div>
-          
           <button class="btn btn-primary" onclick="window.location.reload();" style="margin-top: 40px;">
             Return to Home
           </button>
@@ -1152,7 +562,6 @@
       </div>
     </div>
 
-    <!-- Booking Modal Navigation Controls -->
     <div class="booking-modal-footer">
       <button class="btn btn-secondary" id="wizard-back-btn" style="visibility: hidden;">
         Back
@@ -1160,16 +569,6 @@
       <button class="btn btn-primary" id="wizard-next-btn">
         Continue
       </button>
-    </div>
-  </div>
-
-  <!-- LOOKBOOK LIGHTBOX OVERLAY -->
-  <div class="lightbox" id="lightbox-modal" aria-modal="true" role="dialog" aria-label="Lightbox visual viewer">
-    <div class="lightbox-content">
-      <button class="lightbox-close" aria-label="Close Lightbox Viewer">&times;</button>
-      <img src="" alt="" class="lightbox-img" style="display: none;">
-      <video src="" class="lightbox-video" controls style="display: none; width: 100%; max-height: 80vh; border-radius: 8px;"></video>
-      <div class="lightbox-caption">Transformation Title</div>
     </div>
   </div>
 
@@ -1187,7 +586,6 @@
 
   <!-- Firebase Project Initialization -->
   <script>
-    // Live Firebase Configuration:
     const firebaseConfig = {
       apiKey: "AIzaSyAeWAOnrmdG73rnrUA5cw-vpnIjiWWElqQ",
       authDomain: "makeme99-66073.firebaseapp.com",
@@ -1198,7 +596,6 @@
       measurementId: "G-8YQ2W671L2"
     };
 
-    // Initialize Firebase
     if (typeof firebase !== 'undefined') {
       firebase.initializeApp(firebaseConfig);
       window.db = firebase.firestore();
@@ -1207,8 +604,6 @@
       console.error("Firebase SDK failed to load. Check your internet connection.");
     }
   </script>
-
-  <!-- Main JavaScript Logic -->
   <script src="script.js"></script>
 </body>
 </html>

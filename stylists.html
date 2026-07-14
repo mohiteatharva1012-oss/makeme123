@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Meet the master hair stylists and skincare artists at MAKE ME Unisex Salon. Expert certified professionals ready for your transformation.">
+  <title>Our Stylists & Experts | MAKE ME - Premium Unisex Salon</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <!-- PRELOADER WELCOME SCREEN -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-content">
+      <h2 class="preloader-title">WELCOME TO</h2>
+      <h1 class="preloader-brand text-gradient">MAKE ME</h1>
+      <h3 class="preloader-subtitle">UNISEX SALON</h3>
+      <div class="preloader-status">
+        <span class="preloader-emoji" id="preloader-emoji">💈</span>
+        <span class="preloader-text" id="preloader-status-text">Powering up barber poles...</span>
+      </div>
+      <div class="preloader-bar-wrap">
+        <div class="preloader-bar" id="preloader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / NAVIGATION -->
+  <header class="header" id="salon-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo" id="header-logo">
+        <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="logo-img">
+      </a>
+      
+      <nav id="navbar">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="services.html" class="nav-link">Services</a></li>
+          <li><a href="lookbook.html" class="nav-link">Lookbook</a></li>
+          <li><a href="stylists.html" class="nav-link active">Stylists</a></li>
+          <li><a href="franchise.html" class="nav-link">Franchise<sup>MAKE ME</sup></a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="btn btn-secondary header-btn book-now-trigger" id="nav-booking-btn">
+        Book Appointment
+      </button>
+
+      <button class="mobile-nav-toggle" id="mobile-nav-btn" aria-label="Toggle Navigation Services">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- STYLISTS / EXPERTS SECTION -->
+    <section class="stylists section-padding" id="stylists">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-subtitle">The Creators</span>
+          <h2 class="section-title">Meet Our Master Artists</h2>
+        </div>
+
+        <div class="stylists-grid">
+          <!-- Stylist 1 -->
+          <div class="stylist-card glass-card reveal">
+            <div class="stylist-img-container">
+              <img src="assets/mukesh_sir.jpeg" alt="MUKESH SIR Director and Hair Artist" class="stylist-img">
+            </div>
+            <div class="stylist-info">
+              <h3 class="stylist-name">MUKESH SIR</h3>
+              <p class="stylist-role">Director and Hair Artist</p>
+              <div class="stylist-badge" style="margin-top: 10px;">
+                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stylist 2 -->
+          <div class="stylist-card glass-card reveal reveal-delay-1">
+            <div class="stylist-img-container">
+              <img src="assets/amar_sir.jpeg" alt="AMAR SIR Master Hair Stylist" class="stylist-img">
+            </div>
+            <div class="stylist-info">
+              <h3 class="stylist-name">AMAR SIR</h3>
+              <p class="stylist-role">Master Hair Stylist</p>
+              <div class="stylist-badge" style="margin-top: 10px;">
+                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stylist 3 -->
+          <div class="stylist-card glass-card reveal reveal-delay-2">
+            <div class="stylist-img-container">
+              <img src="assets/balaji_sir.jpeg" alt="BALAJI SIR Junior Artist" class="stylist-img">
+            </div>
+            <div class="stylist-info">
+              <h3 class="stylist-name">BALAJI SIR</h3>
+              <p class="stylist-role">Junior Artist</p>
+              <div class="stylist-badge" style="margin-top: 10px;">
+                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stylist 4 -->
+          <div class="stylist-card glass-card reveal">
+            <div class="stylist-img-container">
+              <img src="assets/samarth_sir.jpeg" alt="SAMARTH SIR Creative Hair Artist" class="stylist-img">
+            </div>
+            <div class="stylist-info">
+              <h3 class="stylist-name">SAMARTH SIR</h3>
+              <p class="stylist-role">Creative Hair Artist</p>
+              <div class="stylist-badge" style="margin-top: 10px;">
+                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stylist 5 -->
+          <div class="stylist-card glass-card reveal reveal-delay-1">
+            <div class="stylist-img-container">
+              <img src="assets/pratiksha_mam.jpeg" alt="PRATIKSHA MAM Senior Skincare Artist" class="stylist-img">
+            </div>
+            <div class="stylist-info">
+              <h3 class="stylist-name">PRATIKSHA MAM</h3>
+              <p class="stylist-role">Senior Skincare Artist</p>
+              <div class="stylist-badge" style="margin-top: 10px;">
+                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stylist 6 -->
+          <div class="stylist-card glass-card reveal reveal-delay-2">
+            <div class="stylist-img-container">
+              <img src="assets/coming_soon.png" alt="Coming Soon Artist" class="stylist-img">
+            </div>
+            <div class="stylist-info">
+              <h3 class="stylist-name">COMING SOON</h3>
+              <p class="stylist-role">Skincare & Makeup Expert</p>
+              <div class="stylist-badge" style="margin-top: 10px;">
+                <span style="color: var(--gold-primary); font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(197, 168, 128, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color);"><i class="fas fa-award"></i> Certified Artist</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="salon-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="footer-logo" id="footer-logo-link">
+            <img src="assets/logo.svg" alt="MAKE ME Unisex Salon" class="logo-img">
+          </a>
+          <p class="footer-desc">Premium unisex salon and luxury lounge defining styling, luxury aesthetics, and facial therapy in Dharashiv (Osmanabad).</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/share/1E6A1xGHci/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Follow us on Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/make_me_unisex_salon?igsh=dWJkMXRnMzA1amU5" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/919370756017" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Chat with us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@makemeunisexsalon?si=4zuUuIbYcDB7fgwC" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Subscribe to our YouTube channel"><i class="fab fa-youtube"></i></a>
+          </div>
+          <div style="margin-top: 18px;">
+            <a href="mailto:makemesalon617@gmail.com" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-fast);" onmouseover="this.style.color='var(--gold-primary)'" onmouseout="this.style.color='var(--text-muted)'">
+              <i class="fas fa-envelope" style="color: var(--gold-primary);"></i> makemesalon617@gmail.com
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-column-title">The Salon</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Philosophy</a></li>
+            <li><a href="services.html">Aesthetic Services</a></li>
+            <li><a href="lookbook.html">Transformations</a></li>
+            <li><a href="stylists.html">Artists</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-column-title">Categories</h4>
+          <ul class="footer-links">
+            <li><a href="services.html">Hair Cut & Styles</a></li>
+            <li><a href="services.html">Balayage Coloring</a></li>
+            <li><a href="services.html">Hydra-Facials</a></li>
+            <li><a href="services.html">Barber Straight Razor</a></li>
+            <li><a href="services.html">Luxury Spa Pedicures</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-column-title">Newsletter</h4>
+          <p class="footer-desc" style="font-size:0.85rem; margin-bottom: 15px;">Receive private event invitations, luxury tips and seasonal services.</p>
+          <form class="newsletter-form" id="newsletter-form">
+            <input type="email" placeholder="Your Luxury Email" required aria-label="Email for Newsletter">
+            <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 MAKE ME Unisex Salon. All Rights Reserved.</p>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted);">
+          <span>MADE WITH LOVE ❤️</span>
+          <img src="assets/logo_am_groups.jpeg" alt="AM DIGITAL AND CO." style="height: 30px; width: auto; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle;">
+          <span style="font-weight: 600; color: var(--gold-primary); letter-spacing: 0.05em;">AM DIGITAL AND CO.</span>
+        </div>
+        <div class="footer-bottom-links">
+          <a href="admin.html" style="color: var(--gold-primary); font-weight: 500;"><i class="fas fa-user-shield"></i> Admin Portal</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Safety Protocols</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING BOOKING SUMMARY BAR -->
+  <div class="booking-bar glass-card" id="booking-bar">
+    <div class="booking-bar-info">
+      <span class="booking-bar-title">Custom Package</span>
+      <div class="booking-bar-summary">
+        <span id="booking-count">0 Services</span> Selected: <span>₹</span><span id="booking-total-price" class="text-gradient">0</span>
+      </div>
+    </div>
+    <button class="btn btn-primary book-now-trigger" id="booking-bar-btn" style="padding: 10px 24px; font-size:0.8rem;">
+      Book Package <i class="fas fa-calendar-alt btn-icon"></i>
+    </button>
+  </div>
+
+  <!-- INTERACTIVE BOOKING WIZARD DRAWER/MODAL -->
+  <div class="booking-modal-overlay" id="booking-modal-overlay"></div>
+  <div class="booking-modal" id="booking-modal" aria-modal="true" role="dialog" aria-labelledby="booking-wizard-title">
+    <div class="booking-modal-header">
+      <h3 class="booking-modal-title" id="booking-wizard-title">Schedule Transformation</h3>
+      <button class="booking-modal-close" id="close-booking-modal" aria-label="Close Booking Drawer">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="wizard-progress">
+      <div class="wizard-step active" data-step="1">
+        <div class="wizard-step-num">1</div>
+        <span>Cart</span>
+      </div>
+      <div class="wizard-step" data-step="2">
+        <div class="wizard-step-num">2</div>
+        <span>Expert</span>
+      </div>
+      <div class="wizard-step" data-step="3">
+        <div class="wizard-step-num">3</div>
+        <span>Time</span>
+      </div>
+      <div class="wizard-step" data-step="4">
+        <div class="wizard-step-num">4</div>
+        <span>Details</span>
+      </div>
+    </div>
+
+    <div class="wizard-content">
+      <div class="wizard-step-panel active" id="step-1-panel">
+        <h4 class="wizard-panel-title">Review Selected Services</h4>
+        <div class="step-services-list" id="step-1-services-list"></div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-2-panel">
+        <h4 class="wizard-panel-title">Select Your Specialist</h4>
+        <div class="stylist-picker" id="step-2-stylists-list"></div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-3-panel">
+        <h4 class="wizard-panel-title">Choose Date & Time</h4>
+        <div class="calendar-widget">
+          <div class="calendar-header">
+            <button class="calendar-nav-btn" id="calendar-prev" aria-label="Previous Month"><i class="fas fa-chevron-left"></i></button>
+            <span class="calendar-month" id="calendar-current-month">June 2026</span>
+            <button class="calendar-nav-btn" id="calendar-next" aria-label="Next Month"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="calendar-grid">
+            <div class="calendar-day-label">Su</div>
+            <div class="calendar-day-label">Mo</div>
+            <div class="calendar-day-label">Tu</div>
+            <div class="calendar-day-label">We</div>
+            <div class="calendar-day-label">Th</div>
+            <div class="calendar-day-label">Fr</div>
+            <div class="calendar-day-label">Sa</div>
+          </div>
+          <div class="calendar-grid" id="calendar-days-grid"></div>
+        </div>
+        <h4 class="time-picker-title">Available Slots</h4>
+        <div class="time-slots" id="time-slots-container"></div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-4-panel">
+        <h4 class="wizard-panel-title">Contact & Ticket Details</h4>
+        <div id="booking-summary-receipt-container" style="margin-bottom: 24px;"></div>
+        <div class="glass-card" style="padding: 24px; border:1px solid var(--border-color);">
+          <div class="form-group" style="margin-bottom: 18px;">
+            <input type="text" id="booking-client-name" class="form-input" placeholder=" " required>
+            <label for="booking-client-name" class="form-label">Full Name</label>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px;">
+            <input type="tel" id="booking-client-phone" class="form-input" placeholder=" " required>
+            <label for="booking-client-phone" class="form-label">Phone Number</label>
+          </div>
+          <div class="form-group" style="margin-bottom: 18px;">
+            <input type="date" id="booking-client-dob" class="form-input" placeholder=" " required style="color-scheme: dark;">
+            <label for="booking-client-dob" class="form-label" style="top: -10px; font-size: 0.75rem; color: var(--gold-primary);">Date of Birth (DOB)</label>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <textarea id="booking-client-notes" class="form-input" placeholder=" " style="min-height:80px;"></textarea>
+            <label for="booking-client-notes" class="form-label">Special instructions / requests (optional)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-step-panel" id="step-5-panel">
+        <div class="booking-success-message">
+          <div class="success-icon-wrap">
+            <i class="fas fa-check"></i>
+          </div>
+          <h3 class="success-title text-gradient">Appointment Confirmed!</h3>
+          <p class="success-text">Your transformation ticket has been created. A confirmation email and text message containing calendar invites, directions, and health safety check-ins have been sent to you.</p>
+          <div style="font-size: 0.85rem; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Ticket ID: <span id="success-ticket-id">MM-000000</span></div>
+          <button class="btn btn-primary" onclick="window.location.reload();" style="margin-top: 40px;">
+            Return to Home
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-modal-footer">
+      <button class="btn btn-secondary" id="wizard-back-btn" style="visibility: hidden;">
+        Back
+      </button>
+      <button class="btn btn-primary" id="wizard-next-btn">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- Firebase Project Initialization -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAeWAOnrmdG73rnrUA5cw-vpnIjiWWElqQ",
+      authDomain: "makeme99-66073.firebaseapp.com",
+      projectId: "makeme99-66073",
+      storageBucket: "makeme99-66073.firebasestorage.app",
+      messagingSenderId: "83236853494",
+      appId: "1:83236853494:web:d066354c4643d2edb4bed7",
+      measurementId: "G-8YQ2W671L2"
+    };
+
+    if (typeof firebase !== 'undefined') {
+      firebase.initializeApp(firebaseConfig);
+      window.db = firebase.firestore();
+      console.log("Firebase Firestore Initialized Successfully.");
+    } else {
+      console.error("Firebase SDK failed to load. Check your internet connection.");
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
