@@ -1891,35 +1891,58 @@ function downloadIcsFile(booking) {
   document.body.removeChild(link);
 }
 
-// Trigger Instagram toast notification after 15 seconds from preloader finish
+// Trigger Instagram toast notification after 15 seconds from page load / preloader finish
 const initInstaToast = () => {
   const triggerToast = () => {
     setTimeout(() => {
-      const toast = document.getElementById('insta-toast');
-      if (toast) {
-        toast.classList.add('active');
+      let toast = document.getElementById('insta-toast');
+      if (!toast) {
+        toast = document.createElement('a');
+        toast.href = "https://www.instagram.com/make_me_unisex_salon?igsh=dWJkMXRnMzA1amU5";
+        toast.target = "_blank";
+        toast.rel = "noopener noreferrer";
+        toast.className = "insta-toast";
+        toast.id = "insta-toast";
+        toast.setAttribute('aria-live', 'polite');
+        toast.innerHTML = `
+          <div class="insta-toast-avatar">
+            <img src="assets/mukesh_sir.jpeg" alt="Mukesh - Owner of MAKE ME Salon">
+          </div>
+          <div class="insta-toast-content">
+            <div class="insta-toast-title">Instagram</div>
+            <div class="insta-toast-text">@make_me_unisex_salon shared a new look. Tap to follow! ⚡</div>
+          </div>
+          <button class="insta-toast-close" id="close-insta-toast" aria-label="Close Notification" onclick="event.preventDefault(); event.stopPropagation();">&times;</button>
+        `;
+        document.body.appendChild(toast);
+      } else {
+        const img = toast.querySelector('.insta-toast-avatar img');
+        if (img) {
+          img.src = "assets/mukesh_sir.jpeg";
+          img.alt = "Mukesh - Owner of MAKE ME Salon";
+        }
       }
+
+      // Bind close button event
+      const closeBtn = toast.querySelector('#close-insta-toast');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toast.classList.remove('active');
+        });
+      }
+      
+      toast.classList.add('active');
     }, 15000); // 15 seconds delay
   };
 
   const preloader = document.getElementById('preloader');
-  if (!preloader || preloader.classList.contains('fade-out')) {
-    // Trigger immediately if preloader is already finished or doesn't exist
+  if (!preloader || preloader.classList.contains('fade-out') || sessionStorage.getItem('preloaderShown')) {
     triggerToast();
   } else {
-    // Wait for preloader to finish
     document.addEventListener('preloaderFinished', triggerToast);
   }
-
-  const closeToast = () => {
-    const toast = document.getElementById('insta-toast');
-    if (toast) {
-      toast.classList.remove('active');
-    }
-  };
-
-  const closeBtn = document.getElementById('close-insta-toast');
-  if (closeBtn) closeBtn.addEventListener('click', closeToast);
 };
 
 // Guarantee execution whether DOM is loading or already parsed
