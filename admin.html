@@ -789,6 +789,46 @@
     #holiday-date-input:focus, #holiday-stylist-select:focus {
       border-color: var(--gold-primary);
     }
+    
+    /* Highlighting today's slots/appointments */
+    .row-today {
+      background: rgba(239, 83, 80, 0.04) !important;
+      border-left: 4px solid #ef5350 !important;
+    }
+    .row-today td {
+      border-bottom: 1px solid rgba(239, 83, 80, 0.15) !important;
+    }
+    .badge-today {
+      background: rgba(239, 83, 80, 0.15);
+      color: #ff5252;
+      border: 1px solid rgba(239, 83, 80, 0.3);
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 0 10px rgba(239, 83, 80, 0.1);
+      animation: pulse-today 2s infinite alternate;
+    }
+    @keyframes pulse-today {
+      0% {
+        box-shadow: 0 0 5px rgba(239, 83, 80, 0.15);
+        border-color: rgba(239, 83, 80, 0.3);
+      }
+      100% {
+        box-shadow: 0 0 12px rgba(239, 83, 80, 0.4);
+        border-color: rgba(239, 83, 80, 0.7);
+      }
+    }
+    .stat-card-footer.highlight-red {
+      color: #ef5350;
+      font-weight: 500;
+    }
   </style>
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -876,10 +916,10 @@
           <div class="stat-card-footer">Value of scheduled services</div>
         </div>
         
-        <div class="stat-card">
+        <div class="stat-card" id="kpi-card-today">
           <div class="stat-card-header">
             <span>Today's Schedules</span>
-            <i class="fas fa-clock stat-card-icon"></i>
+            <i class="fas fa-clock stat-card-icon" id="kpi-today-icon"></i>
           </div>
           <div class="stat-card-value" id="kpi-today">0</div>
           <div class="stat-card-footer" id="kpi-today-desc">Appointments for today</div>
@@ -1400,8 +1440,25 @@
         bdayDescEl.className = "stat-card-footer";
       }
 
-      // Update Today's schedule footer
-      document.getElementById('kpi-today-desc').textContent = `${todayCount} active slots for ${today.toLocaleDateString('en-US', {month:'short', day:'numeric'})}`;
+      // Update Today's schedule footer & card highlight
+      const todayCardEl = document.getElementById('kpi-card-today');
+      const todayIconEl = document.getElementById('kpi-today-icon');
+      const todayValEl = document.getElementById('kpi-today');
+      const todayDescEl = document.getElementById('kpi-today-desc');
+
+      todayDescEl.textContent = `${todayCount} active slots for ${today.toLocaleDateString('en-US', {month:'short', day:'numeric'})}`;
+
+      if (todayCount > 0) {
+        if (todayCardEl) todayCardEl.style.borderColor = 'rgba(239, 83, 80, 0.4)';
+        if (todayIconEl) todayIconEl.style.color = '#ef5350';
+        if (todayValEl) todayValEl.style.color = '#ef5350';
+        todayDescEl.className = "stat-card-footer highlight-red";
+      } else {
+        if (todayCardEl) todayCardEl.style.borderColor = '';
+        if (todayIconEl) todayIconEl.style.color = '';
+        if (todayValEl) todayValEl.style.color = '';
+        todayDescEl.className = "stat-card-footer";
+      }
 
       // 2. Render Birthday Alert List
       const birthdayContainer = document.getElementById('birthday-alerts-container');
@@ -1513,6 +1570,10 @@
 
       filtered.forEach(b => {
         const tr = document.createElement('tr');
+        const isToday = (b.appointmentDate === todayStr);
+        if (isToday) {
+          tr.classList.add('row-today');
+        }
         
         // Format services
         const serviceBadges = (b.services || []).map(s => `<span class="service-badge">${s.name} (₹${s.price})</span>`).join('');
@@ -1565,8 +1626,9 @@
             <div class="client-cell-phone">${b.clientPhone} ${clientAgeStr ? `• ${clientAgeStr}` : ''}</div>
           </td>
           <td>
+            ${isToday ? `<div style="margin-bottom: 4px;"><span class="badge-today"><i class="fas fa-exclamation-circle"></i> Today</span></div>` : ''}
             <input type="date" class="admin-date-input" value="${b.appointmentDate}" data-ticket-id="${b.ticketId}">
-            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;"><i class="far fa-clock"></i> ${b.appointmentTime}</div>
+            <div style="font-size:0.75rem; color:${isToday ? '#ff5252' : 'var(--text-muted)'}; margin-top:2px; font-weight: ${isToday ? '600' : 'normal'};"><i class="far fa-clock"></i> ${b.appointmentTime}</div>
           </td>
           <td style="font-style: italic; color: var(--text-muted);">${b.stylistName}</td>
           <td>

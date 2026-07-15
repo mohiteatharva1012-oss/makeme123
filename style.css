@@ -2652,3 +2652,51 @@ select.form-input option {
   color: #ffffff;
   transform: scale(1.2);
 }
+
+/* Animated footer brand credits */
+.footer-logo-anim {
+  height: 30px;
+  width: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+  transition: transform 0.5s ease;
+  animation: logo-spin 4s ease-in-out infinite alternate;
+}
+
+@keyframes logo-spin {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(197, 168, 128, 0.2);
+  }
+  50% {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 0 15px rgba(197, 168, 128, 0.5);
+  }
+  100% {
+    transform: scale(1) rotate(-3deg);
+    box-shadow: 0 0 5px rgba(197, 168, 128, 0.2);
+  }
+}
+
+.footer-text-anim {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(90deg, #c5a880 0%, #f5f5f7 50%, #c5a880 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine-text 3s linear infinite;
+  display: inline-block;
+  text-shadow: 0 0 10px rgba(197, 168, 128, 0.1);
+}
+
+@keyframes shine-text {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
