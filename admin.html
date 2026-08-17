@@ -1121,6 +1121,9 @@
             sessionStorage.setItem('makeme_admin_logged_in', 'true');
             errorMsg.style.display = 'none';
             checkAdminSession();
+            // Start Firebase listeners immediately upon login
+            startBookingsListener();
+            startHolidaysListener();
             renderDashboard();
           } else {
             errorMsg.style.display = 'flex';
@@ -1315,7 +1318,10 @@
       window.db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(querySnapshot => {
         const bookings = [];
         querySnapshot.forEach(doc => {
-          bookings.push(doc.data());
+          // Exclude metadata/settings document from bookings array
+          if (doc.id !== 'settings_holidays' && doc.data().ticketId) {
+            bookings.push(doc.data());
+          }
         });
 
         // Run one-time migration to fix the specific bookings that shifted due to timezone bug
@@ -1765,7 +1771,11 @@
           // Delete existing bookings
           window.db.collection('bookings').get().then(qs => {
             const batch = window.db.batch();
-            qs.forEach(doc => batch.delete(doc.ref));
+            qs.forEach(doc => {
+              if (doc.id !== 'settings_holidays') {
+                batch.delete(doc.ref);
+              }
+            });
             return batch.commit();
           }).then(() => {
             // Add mock bookings
@@ -1793,7 +1803,11 @@
         if (window.db) {
           window.db.collection('bookings').get().then(qs => {
             const batch = window.db.batch();
-            qs.forEach(doc => batch.delete(doc.ref));
+            qs.forEach(doc => {
+              if (doc.id !== 'settings_holidays') {
+                batch.delete(doc.ref);
+              }
+            });
             return batch.commit();
           }).then(() => {
             alert("Database wiped clean on Firebase Cloud.");
@@ -1840,11 +1854,18 @@
     function saveHolidays(holidays) {
       localStorage.setItem('makeme_holidays', JSON.stringify(holidays));
       
-      // Sync to Firebase Cloud Settings document
+      // Sync to Firebase Cloud Bookings collection
       if (window.db) {
-        window.db.collection('settings').doc('holidays').set({ dates: holidays })
-          .then(() => console.log("Holidays synced to Cloud Firestore."))
-          .catch(err => console.error("Error updating holidays on Firebase:", err));
+        window.db.collection('bookings').doc('settings_holidays').set({ dates: holidays })
+          .then(() => {
+            console.log("Holidays synced to Cloud Firestore.");
+          })
+          .catch(err => {
+            console.error("Error updating holidays on Firebase:", err);
+            alert("Database Error: Failed to sync blocked dates to Firebase. " + err.message);
+          });
+      } else {
+        alert("Offline Mode: Firebase database not initialized. Date blocked locally only.");
       }
       renderHolidaysList();
     }
@@ -1856,7 +1877,7 @@
         return;
       }
 
-      window.db.collection('settings').doc('holidays').onSnapshot(doc => {
+      window.db.collection('bookings').doc('settings_holidays').onSnapshot(doc => {
         if (doc.exists) {
           const dates = doc.data().dates || [];
           localStorage.setItem('makeme_holidays', JSON.stringify(dates));

@@ -1794,28 +1794,37 @@ function sendWhatsAppMessage(text) {
 function syncFirebaseData() {
   if (!window.db) return;
 
-  // 1. Sync Holidays
-  window.db.collection('settings').doc('holidays').get().then(doc => {
+  // 1. Sync Holidays using real-time listener
+  window.db.collection('bookings').doc('settings_holidays').onSnapshot(doc => {
     if (doc.exists) {
       const dates = doc.data().dates || [];
       localStorage.setItem('makeme_holidays', JSON.stringify(dates));
-      // Re-render calendar to reflect holiday blocks
-      initCalendar();
+    } else {
+      localStorage.setItem('makeme_holidays', JSON.stringify([]));
     }
-  }).catch(e => console.error("Firebase holidays fetch failed:", e));
+    // Re-render calendar to reflect holiday blocks
+    initCalendar();
+  }, err => {
+    console.error("Firebase holidays real-time sync failed:", err);
+  });
 
-  // 2. Sync Bookings for overlap check
-  window.db.collection('bookings').get().then(querySnapshot => {
+  // 2. Sync Bookings using real-time listener for overlap check
+  window.db.collection('bookings').onSnapshot(querySnapshot => {
     const liveBookings = [];
     querySnapshot.forEach(doc => {
-      liveBookings.push(doc.data());
+      // Exclude settings document from bookings array
+      if (doc.id !== 'settings_holidays' && doc.data().ticketId) {
+        liveBookings.push(doc.data());
+      }
     });
     localStorage.setItem('makeme_bookings', JSON.stringify(liveBookings));
     // If user is currently picking a time slot, update UI
     if (selectedDate && selectedTime === null) {
       initTimePicker();
     }
-  }).catch(e => console.error("Firebase bookings fetch failed:", e));
+  }, err => {
+    console.error("Firebase bookings real-time sync failed:", err);
+  });
 }
 
 // Translate 12h time to 24h for calendar formatting
