@@ -933,6 +933,9 @@ function goToStep(step) {
   panels.forEach(p => p.classList.remove('active'));
   document.getElementById(`step-${step}-panel`).classList.add('active');
 
+  const wizardContent = document.querySelector('.wizard-content');
+  if (wizardContent) wizardContent.scrollTop = 0;
+
   // Update step progress breadcrumbs
   const breadcrumbs = document.querySelectorAll('.wizard-step');
   breadcrumbs.forEach((bc, idx) => {
@@ -1497,12 +1500,6 @@ function handleWizardNext() {
       phoneInput.focus();
       return;
     }
-    if (!dobInput.value) {
-      alert('Please select your Date of Birth (DOB).');
-      dobInput.focus();
-      return;
-    }
-
     submitBookingForm();
   }
 }
@@ -1514,79 +1511,14 @@ function handleWizardBack() {
 }
 
 function submitBookingForm() {
-  // Simulate API network submission
   const nextBtn = document.getElementById('wizard-next-btn');
   const backBtn = document.getElementById('wizard-back-btn');
   
   nextBtn.disabled = true;
-  nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirming...';
+  nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
   backBtn.style.visibility = 'hidden';
 
-  // Gather booking details before resetting/clearing selectedServices
-  const clientName = document.getElementById('booking-client-name').value.trim();
-  const clientPhone = document.getElementById('booking-client-phone').value.trim();
-  const clientDob = document.getElementById('booking-client-dob').value;
-  const clientNotes = document.getElementById('booking-client-notes').value.trim() || 'None';
-  
-  const stylistName = selectedStylist ? selectedStylist.name : 'Any Available Expert';
-  const formattedDate = selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'No date selected';
-  const timeStr = selectedTime || 'No time selected';
-  
-  const servicesList = selectedServices.map(s => `• ${s.name} (₹${s.price})`).join('\n');
-  const totalPrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
-  const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
-  
-  const ticketId = `MM-${Math.floor(100000 + Math.random() * 900000)}`;
-
-  // Save booking payload to localStorage database
-  const newBooking = {
-    ticketId: ticketId,
-    clientName: clientName,
-    clientPhone: clientPhone,
-    clientDob: clientDob,
-    stylistName: stylistName,
-    stylistId: selectedStylist ? selectedStylist.id : 'any',
-    appointmentDate: selectedDate ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}` : '',
-    appointmentTime: timeStr,
-    services: selectedServices.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })),
-    totalPrice: totalPrice,
-    totalDuration: totalDuration,
-    notes: clientNotes,
-    createdAt: new Date().toISOString()
-  };
-
-  try {
-    const existingBookings = JSON.parse(localStorage.getItem('makeme_bookings') || '[]');
-    existingBookings.push(newBooking);
-    localStorage.setItem('makeme_bookings', JSON.stringify(existingBookings));
-  } catch (e) {
-    console.error('Error saving booking to localStorage:', e);
-  }
-
-  // Upload booking directly to Cloud Firestore Database
-  if (window.db) {
-    window.db.collection('bookings').doc(newBooking.ticketId).set(newBooking)
-      .then(() => console.log("Booking successfully synced to Cloud Firestore."))
-      .catch(err => console.error("Error uploading booking to Firebase:", err));
-  }
-
-  const text = `*New Appointment Booking - MAKE ME*\n\n` +
-               `*Ticket ID:* ${ticketId}\n` +
-               `*Client Name:* ${clientName}\n` +
-               `*Client Phone:* ${clientPhone}\n\n` +
-               `*Appointment Details:*\n` +
-               `*Stylist:* ${stylistName}\n` +
-               `*Date:* ${formattedDate}\n` +
-               `*Time:* ${timeStr}\n\n` +
-               `*Services Selected:*\n${servicesList}\n\n` +
-               `*Total Price:* ₹${totalPrice}\n` +
-               `*Total Duration:* ${totalDuration} mins\n` +
-               `*Special Notes:* ${clientNotes}`;
-
   setTimeout(() => {
-    // Open WhatsApp windows
-    sendWhatsAppMessage(text);
-
     // Clear selections
     selectedServices = [];
     updateBookingBar();
@@ -1598,84 +1530,51 @@ function submitBookingForm() {
       btn.querySelector('span').textContent = 'Add to Booking';
     });
 
-    // Set Ticket ID dynamically
-    const ticketIdEl = document.getElementById('success-ticket-id');
-    if (ticketIdEl) {
-      ticketIdEl.textContent = ticketId;
-    }
+    const phone1 = "919370756017";
+    const phone2 = "919021816517";
+    const waText = encodeURIComponent("Hello MAKE ME Salon, I would like to book an appointment.");
+    const url1 = `https://api.whatsapp.com/send?phone=${phone1}&text=${waText}`;
+    const url2 = `https://api.whatsapp.com/send?phone=${phone2}&text=${waText}`;
 
-    // Add WhatsApp backup and user reminder buttons dynamically onto the success container
-    const successMsgEl = document.querySelector('.booking-success-message');
-    if (successMsgEl) {
-      const existingBackup = document.getElementById('wa-backup-container');
-      if (existingBackup) existingBackup.remove(); // clear if already exists
-      
-      const phone1 = "919370756017";
-      const phone2 = "919021816517";
-      const url1 = `https://api.whatsapp.com/send?phone=${phone1}&text=${encodeURIComponent(text)}`;
-      const url2 = `https://api.whatsapp.com/send?phone=${phone2}&text=${encodeURIComponent(text)}`;
-      
-      const clientText = `*Your MAKE ME Salon Appointment Confirmed!* 💈✨\n\n` +
-                         `Dear *${clientName}*,\n` +
-                         `Your appointment at MAKE ME Unisex Salon has been confirmed. Here are your details:\n\n` +
-                         `*Ticket ID:* ${ticketId}\n` +
-                         `*Stylist:* ${stylistName}\n` +
-                         `*Date:* ${formattedDate}\n` +
-                         `*Time:* ${timeStr}\n\n` +
-                         `*Services:* \n${servicesList}\n\n` +
-                         `*Total Price:* ₹${totalPrice}\n` +
-                         `*Duration:* ${totalDuration} mins\n\n` +
-                         `📍 *Location:* MAKE ME Unisex Salon, Pune\n` +
-                         `📞 *Support:* +91 93707 56017\n\n` +
-                         `We look forward to pampering you!`;
-                         
-      const clientUrl = `https://api.whatsapp.com/send?phone=91${clientPhone}&text=${encodeURIComponent(clientText)}`;
-      const googleCalUrl = getGoogleCalendarUrl(newBooking);
-      
-      const backupDiv = document.createElement('div');
-      backupDiv.id = 'wa-backup-container';
-      backupDiv.style.marginTop = '24px';
-      backupDiv.innerHTML = `
-        <!-- Salon Backup Notification -->
-        <p class="success-text" style="font-size: 0.85rem; margin-bottom: 10px; opacity:0.85;">
-          Booking sent to salon. If the chats did not open automatically, send via backup:
-        </p>
-        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;">
-          <a href="${url1}" target="_blank" class="btn btn-secondary btn-reminder-wa" style="padding: 8px 14px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 40px; text-decoration: none;">
-            <i class="fab fa-whatsapp"></i> Send to Line 1
-          </a>
-          <a href="${url2}" target="_blank" class="btn btn-secondary btn-reminder-wa" style="padding: 8px 14px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 40px; text-decoration: none;">
-            <i class="fab fa-whatsapp"></i> Send to Line 2
-          </a>
-        </div>
+    // Render the maintenance screen into step-5-panel with the animated photo
+    const step5Panel = document.getElementById('step-5-panel');
+    if (step5Panel) {
+      step5Panel.innerHTML = `
+        <div class="booking-success-message booking-maintenance-message">
+          <div class="maintenance-animated-wrapper">
+            <img src="assets/maintenance-animated.svg" alt="Website Under Maintenance" class="maintenance-animated-img">
+          </div>
+          <div class="maintenance-badge-pill">
+            <span class="maintenance-pulse-dot"></span> System Maintenance in Progress
+          </div>
+          <h3 class="success-title text-gradient" style="font-size:1.85rem; margin-bottom:12px;">Website is Under Maintenance</h3>
+          <p class="maintenance-main-text">
+            Our online booking portal is currently undergoing scheduled maintenance and will be start soon!
+          </p>
 
-        <!-- User Reminder & Confirmation -->
-        <p class="success-text" style="font-size: 0.85rem; margin-bottom: 10px; font-weight: 600; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em;">
-          Set Reminder & Save Appointment:
-        </p>
-        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
-          <a href="${googleCalUrl}" target="_blank" class="btn btn-reminder-google" style="padding: 8px 14px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 40px; text-decoration: none;">
-            <i class="fab fa-google"></i> Google Calendar
-          </a>
-          <button id="download-ics-btn" class="btn btn-reminder-ics" style="padding: 8px 14px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 40px; cursor: pointer;">
-            <i class="far fa-calendar-alt"></i> Apple/Outlook (.ics)
+          <div class="maintenance-direct-contact">
+            <div class="maintenance-contact-header" style="margin-bottom: 14px;">
+              <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold-primary); margin-bottom: 4px;">Contact to Salon</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">For appointments and bookings, please reach out to us directly:</p>
+            </div>
+            <div class="maintenance-contact-btns">
+              <a href="${url1}" target="_blank" class="btn btn-wa-direct">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp (Line 1)
+              </a>
+              <a href="${url2}" target="_blank" class="btn btn-secondary" style="border-radius: 40px; font-size: 0.82rem; padding: 10px 16px;">
+                <i class="fab fa-whatsapp"></i> WhatsApp (Line 2)
+              </a>
+              <a href="tel:+919370756017" class="btn btn-call-direct">
+                <i class="fas fa-phone-alt"></i> Call +91 93707 56017
+              </a>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" onclick="closeBookingModal();" style="margin-top: 20px; border-radius: 30px; font-size: 0.85rem; padding: 10px 24px; border: 1px solid var(--border-color);">
+            <i class="fas fa-times" style="margin-right: 6px;"></i> Close &amp; Return to Salon
           </button>
-          <a href="${clientUrl}" target="_blank" class="btn btn-reminder-wa" style="padding: 8px 14px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 40px; text-decoration: none;">
-            <i class="fab fa-whatsapp"></i> Save to My WhatsApp
-          </a>
         </div>
       `;
-      
-      const reloadBtn = successMsgEl.querySelector('button');
-      successMsgEl.insertBefore(backupDiv, reloadBtn);
-      
-      // Attach event listener for ICS download
-      const icsBtn = backupDiv.querySelector('#download-ics-btn');
-      if (icsBtn) {
-        icsBtn.addEventListener('click', () => {
-          downloadIcsFile(newBooking);
-        });
-      }
     }
 
     // Reset wizard input fields
@@ -1684,9 +1583,9 @@ function submitBookingForm() {
     document.getElementById('booking-client-dob').value = '';
     document.getElementById('booking-client-notes').value = '';
 
-    // Push state step to 5 (success)
+    // Push state step to 5 (maintenance end screen)
     goToStep(5);
-  }, 2000);
+  }, 1000);
 }
 
 // 9. Background Video Audio Toggle

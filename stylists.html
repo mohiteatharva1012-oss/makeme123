@@ -337,15 +337,36 @@
       </div>
 
       <div class="wizard-step-panel" id="step-5-panel">
-        <div class="booking-success-message">
-          <div class="success-icon-wrap">
-            <i class="fas fa-check"></i>
+        <div class="booking-success-message booking-maintenance-message">
+          <div class="maintenance-animated-wrapper">
+            <img src="assets/maintenance-animated.svg" alt="Website Under Maintenance" class="maintenance-animated-img">
           </div>
-          <h3 class="success-title text-gradient">Appointment Confirmed!</h3>
-          <p class="success-text">Your transformation ticket has been created. A confirmation email and text message containing calendar invites, directions, and health safety check-ins have been sent to you.</p>
-          <div style="font-size: 0.85rem; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Ticket ID: <span id="success-ticket-id">MM-000000</span></div>
-          <button class="btn btn-primary" onclick="window.location.reload();" style="margin-top: 40px;">
-            Return to Home
+          <div class="maintenance-badge-pill">
+            <span class="maintenance-pulse-dot"></span> System Maintenance in Progress
+          </div>
+          <h3 class="success-title text-gradient" style="font-size:1.85rem; margin-bottom:12px;">Website is Under Maintenance</h3>
+          <p class="maintenance-main-text">
+            Our online booking portal is currently undergoing scheduled maintenance and will be start soon!
+          </p>
+          <div class="maintenance-direct-contact">
+            <div class="maintenance-contact-header" style="margin-bottom: 14px;">
+              <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold-primary); margin-bottom: 4px;">Contact to Salon</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">For appointments and bookings, please reach out to us directly:</p>
+            </div>
+            <div class="maintenance-contact-btns">
+              <a href="https://api.whatsapp.com/send?phone=919370756017&text=Hello%20MAKE%20ME%20Salon%2C%20I%20would%20like%20to%20book%20an%20appointment." target="_blank" class="btn btn-wa-direct">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp (Line 1)
+              </a>
+              <a href="https://api.whatsapp.com/send?phone=919021816517&text=Hello%20MAKE%20ME%20Salon%2C%20I%20would%20like%20to%20book%20an%20appointment." target="_blank" class="btn btn-secondary" style="border-radius: 40px; font-size: 0.82rem; padding: 10px 16px;">
+                <i class="fab fa-whatsapp"></i> WhatsApp (Line 2)
+              </a>
+              <a href="tel:+919370756017" class="btn btn-call-direct">
+                <i class="fas fa-phone-alt"></i> Call +91 93707 56017
+              </a>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="closeBookingModal();" style="margin-top: 20px; border-radius: 30px; font-size: 0.85rem; padding: 10px 24px; border: 1px solid var(--border-color);">
+            <i class="fas fa-times" style="margin-right: 6px;"></i> Close &amp; Return to Salon
           </button>
         </div>
       </div>
