@@ -1071,7 +1071,7 @@ function renderStep1Services() {
         <div style="background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
           <div style="text-align: left;">
             <span style="font-size: 0.72rem; color: #25D366; text-transform: uppercase; font-weight: 600; display: block;">Your Active Booking</span>
-            <strong style="color: #fff; font-size: 0.88rem;">#${pastConfirmed.ticketId} • ${pastConfirmed.appointmentTime} with ${pastConfirmed.stylistName}</strong>
+            <strong style="color: #fff; font-size: 0.88rem;">#${pastConfirmed.ticketId} • ${pastConfirmed.appointmentDate} at ${pastConfirmed.appointmentTime}</strong>
           </div>
           <button type="button" id="btn-view-active-receipt" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 20px;">
             <i class="fas fa-receipt"></i> View Receipt
@@ -1422,10 +1422,6 @@ function renderSlotFixedView(booking) {
       <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
         <span style="color: var(--text-muted);">Appointment Slot:</span>
         <strong style="color: #fff;">${booking.appointmentDate} at ${booking.appointmentTime}</strong>
-      </div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <span style="color: var(--text-muted);">Assigned Expert:</span>
-        <span style="color: var(--gold-primary); font-weight: 600;">${booking.stylistName}</span>
       </div>
       <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
         <span style="color: var(--text-muted);">Services:</span>
@@ -2244,8 +2240,7 @@ function submitBookingForm() {
         `*Client:* ${clientName}\n` +
         `*Phone:* ${clientPhone}\n` +
         `*Date:* ${appDateStr}\n` +
-        `*Time:* ${appTime}\n` +
-        `*Stylist:* ${stylistName}\n\n` +
+        `*Time:* ${appTime}\n\n` +
         `*Services:*\n${serviceListText}\n\n` +
         `*Total Amount:* ₹${totalPrice}\n` +
         `*Duration:* ${totalDuration} mins` +
