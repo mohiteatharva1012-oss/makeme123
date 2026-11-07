@@ -251,7 +251,9 @@ const stylistsData = [
   { id: 'st3', name: 'BALAJI SIR', role: 'Junior Artist', avatar: 'assets/balaji_sir.jpeg', rating: 4.8, reviews: 290 },
   { id: 'st4', name: 'SAMARTH SIR', role: 'Creative Hair Artist', avatar: 'assets/samarth_sir.jpeg', rating: 4.9, reviews: 185 },
   { id: 'st5', name: 'PRATIKSHA MAM', role: 'Senior Skincare Artist', avatar: 'assets/pratiksha_mam.jpeg', rating: 4.9, reviews: 298 },
-  { id: 'st6', name: 'COMING SOON', role: 'Skincare & Makeup Expert', avatar: 'assets/coming_soon.png', rating: 5.0, reviews: 100 }
+  { id: 'st6', name: 'ANAS SIR', role: 'Hair & Styling Expert', avatar: 'assets/coming_soon.png', rating: 4.9, reviews: 154 },
+  { id: 'st7', name: 'YOGITA MAM', role: 'Senior Skincare Specialist', avatar: 'assets/coming_soon.png', rating: 4.9, reviews: 142 },
+  { id: 'st8', name: 'DIVYA MAM', role: 'Salon & Beauty Specialist', avatar: 'assets/coming_soon.png', rating: 4.8, reviews: 120 }
 ];
 
 // State Management
@@ -306,10 +308,32 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initBookingWizard();
   initHeroVideoAudio();
+  initStylistSlotViewers();
+
+  // Clean past days' booking data locally to keep website smooth
+  cleanPastDaysLocalBookings();
 
   // Load and sync live data from Firebase
   syncFirebaseData();
 });
+
+// Auto-clean previous days' local storage data
+function cleanPastDaysLocalBookings() {
+  try {
+    const stored = localStorage.getItem('makeme_bookings');
+    if (!stored) return;
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const parsed = JSON.parse(stored);
+    const cleaned = parsed.filter(b => !b.appointmentDate || b.appointmentDate >= todayStr);
+    if (cleaned.length !== parsed.length) {
+      localStorage.setItem('makeme_bookings', JSON.stringify(cleaned));
+      console.log(`Auto-cleaned ${parsed.length - cleaned.length} previous day bookings from customer local storage.`);
+    }
+  } catch (e) {
+    console.error("cleanPastDaysLocalBookings error:", e);
+  }
+}
 
 // 1. Live Hours Status
 function initLiveHours() {
@@ -320,19 +344,19 @@ function initLiveHours() {
   const day = now.getDay(); // 0 is Sunday, 2 is Tuesday, 6 is Saturday
   const hour = now.getHours();
   
-  // Salon hours: 11 AM to 10 PM (11:00 - 22:00), Tuesday closed
-  const openHour = 11;
-  const closeHour = 22;
+  // Salon hours: 10 AM to 11 PM (10:00 - 23:00), Tuesday closed
+  const openHour = 10;
+  const closeHour = 23;
 
   if (day === 2) {
     statusBadge.className = 'live-status-badge closed';
     statusBadge.innerHTML = '<span class="status-dot"></span>Closed Today (Weekly Holiday)';
   } else if (hour >= openHour && hour < closeHour) {
     statusBadge.className = 'live-status-badge open';
-    statusBadge.innerHTML = '<span class="status-dot"></span>Open Now (Closes at 10:00 PM)';
+    statusBadge.innerHTML = '<span class="status-dot"></span>Open Now (Closes at 11:00 PM)';
   } else {
     statusBadge.className = 'live-status-badge closed';
-    statusBadge.innerHTML = '<span class="status-dot"></span>Closed (Opens at 11:00 AM)';
+    statusBadge.innerHTML = '<span class="status-dot"></span>Closed (Opens at 10:00 AM)';
   }
 }
 
@@ -623,6 +647,7 @@ function toggleServiceSelection(service, buttonElement) {
 
   if (index === -1) {
     selectedServices.push(service);
+    sessionStorage.setItem('makeme_dismiss_confirmed', 'true');
     buttonElement.classList.add('added');
     buttonElement.querySelector('i').className = 'fas fa-check';
     buttonElement.querySelector('span').textContent = 'Selected';
@@ -912,6 +937,11 @@ function openBookingModal() {
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
+  const titleEl = document.getElementById('booking-wizard-title');
+  if (titleEl) {
+    titleEl.textContent = 'Selected Package & Booking Confirmation';
+  }
+
   currentWizardStep = 1;
   goToStep(1);
 }
@@ -952,19 +982,41 @@ function goToStep(step) {
   const nextBtn = document.getElementById('wizard-next-btn');
 
   if (step === 1) {
-    backBtn.style.visibility = 'hidden';
-  } else {
-    backBtn.style.visibility = 'visible';
-  }
-
-  if (step === 4) {
-    nextBtn.textContent = 'Confirm Booking';
+    if (backBtn) {
+      backBtn.style.visibility = 'visible';
+      backBtn.innerHTML = '<i class="fas fa-times"></i> Close Drawer';
+      backBtn.onclick = closeBookingModal;
+    }
+    if (nextBtn) {
+      nextBtn.innerHTML = '<i class="fas fa-phone-alt"></i> Call Line 1 (+91 93707 56017)';
+      nextBtn.onclick = () => { window.location.href = 'tel:+919370756017'; };
+    }
+    const modalFooter = document.querySelector('.booking-modal-footer');
+    if (modalFooter) modalFooter.style.display = 'flex';
+  } else if (step === 4) {
+    if (backBtn) {
+      backBtn.style.visibility = 'visible';
+      backBtn.onclick = handleWizardBack;
+    }
+    if (nextBtn) {
+      nextBtn.textContent = 'Confirm Booking';
+      nextBtn.onclick = handleWizardNext;
+    }
   } else if (step === 5) {
     // Success screen has no buttons
-    document.querySelector('.booking-modal-footer').style.display = 'none';
+    const modalFooter = document.querySelector('.booking-modal-footer');
+    if (modalFooter) modalFooter.style.display = 'none';
   } else {
-    nextBtn.textContent = 'Continue';
-    document.querySelector('.booking-modal-footer').style.display = 'flex';
+    if (backBtn) {
+      backBtn.style.visibility = 'visible';
+      backBtn.onclick = handleWizardBack;
+    }
+    if (nextBtn) {
+      nextBtn.textContent = 'Continue';
+      nextBtn.onclick = handleWizardNext;
+    }
+    const modalFooter = document.querySelector('.booking-modal-footer');
+    if (modalFooter) modalFooter.style.display = 'flex';
   }
 
   // Pre-step renders
@@ -975,25 +1027,104 @@ function goToStep(step) {
   }
 }
 
-// Wizard Step 1: Render selected services & cart control
+// Wizard Step 1: Render selected services & cart control with Direct Call confirmation
 function renderStep1Services() {
   const container = document.getElementById('step-1-services-list');
   if (!container) return;
 
   container.innerHTML = '';
 
+  const userPhone = localStorage.getItem('makeme_client_phone') || '';
+  const confirmedTicketId = localStorage.getItem('makeme_confirmed_ticket');
+  const isDismissed = sessionStorage.getItem('makeme_dismiss_confirmed') === 'true';
+  const bookings = JSON.parse(localStorage.getItem('makeme_bookings') || '[]');
+
+  // If user has actively selected services for a new booking, ALWAYS show their cart!
+  if (selectedServices.length > 0) {
+    // Continue to render active cart below
+  } else if (!isDismissed && confirmedTicketId) {
+    const confirmedBooking = bookings.find(b => b.ticketId === confirmedTicketId && b.status === 'confirmed');
+    if (confirmedBooking) {
+      renderSlotFixedView(confirmedBooking);
+      return;
+    }
+  }
+
+  // Restore title and footer buttons if returning from confirmation view
+  const titleEl = document.getElementById('booking-wizard-title');
+  if (titleEl) {
+    titleEl.textContent = 'Selected Package & Booking Confirmation';
+  }
+  const backBtn = document.getElementById('wizard-back-btn');
+  const nextBtn = document.getElementById('wizard-next-btn');
+  if (backBtn) backBtn.style.visibility = 'hidden';
+  if (nextBtn) {
+    nextBtn.innerHTML = 'Add More Services <i class="fas fa-plus"></i>';
+    nextBtn.onclick = () => { closeBookingModal(); };
+  }
+
   if (selectedServices.length === 0) {
+    const pastConfirmed = bookings.find(b => (b.clientPhone === userPhone || b.ticketId === confirmedTicketId) && b.status === 'confirmed');
+
     container.innerHTML = `
-      <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-        <i class="fas fa-shopping-bag" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i>
-        No services selected. Go back to our services list to add services, or select some below.
+      ${pastConfirmed ? `
+        <div style="background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div style="text-align: left;">
+            <span style="font-size: 0.72rem; color: #25D366; text-transform: uppercase; font-weight: 600; display: block;">Your Active Booking</span>
+            <strong style="color: #fff; font-size: 0.88rem;">#${pastConfirmed.ticketId} • ${pastConfirmed.appointmentTime} with ${pastConfirmed.stylistName}</strong>
+          </div>
+          <button type="button" id="btn-view-active-receipt" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 20px;">
+            <i class="fas fa-receipt"></i> View Receipt
+          </button>
+        </div>
+      ` : ''}
+
+      <div style="text-align: center; padding: 20px 10px 14px 10px; color: var(--text-muted);">
+        <i class="fas fa-shopping-bag" style="font-size: 2.2rem; margin-bottom: 12px; display: block; color: var(--gold-primary);"></i>
+        <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: #fff; margin-bottom: 6px;">Your Booking Cart is Empty</h4>
+        <p style="font-size: 0.85rem; line-height: 1.5; max-width: 360px; margin: 0 auto 14px auto;">
+          Select services from our salon catalog, or call our team directly to book another appointment!
+        </p>
+      </div>
+
+      <div class="direct-booking-call-card" style="margin-top: 10px;">
+        <h4 style="font-family: var(--font-serif); font-size: 1.15rem; color: var(--gold-primary); margin-bottom: 6px;">
+          <i class="fas fa-phone-volume" style="margin-right: 6px;"></i> Call Salon Directly
+        </h4>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+          Our workers manage appointment slots manually on the common salon calendar:
+        </p>
+
+        <div class="direct-call-pill">
+          <div style="text-align: left;">
+            <span style="font-size: 0.72rem; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em; display: block;">Primary Desk</span>
+            <strong style="font-size: 0.95rem; color: #fff;">+91 93707 56017</strong>
+          </div>
+          <div class="direct-call-actions">
+            <a href="tel:+919370756017" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.82rem; border-radius: 20px;">
+              <i class="fas fa-phone-alt"></i> Call Now
+            </a>
+          </div>
+        </div>
+
+        <div class="direct-call-pill">
+          <div style="text-align: left;">
+            <span style="font-size: 0.72rem; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em; display: block;">Secondary Desk</span>
+            <strong style="font-size: 0.95rem; color: #fff;">+91 90218 16517</strong>
+          </div>
+          <div class="direct-call-actions">
+            <a href="tel:+919021816517" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.82rem; border-radius: 20px;">
+              <i class="fas fa-phone-alt"></i> Call Now
+            </a>
+          </div>
+        </div>
       </div>
     `;
     
     // Render Quick Add recommendations inside step 1
     const quickAddWrap = document.createElement('div');
-    quickAddWrap.style.marginTop = '20px';
-    quickAddWrap.innerHTML = '<h4 style="margin-bottom:15px; font-size: 1rem;">Recommended Services</h4>';
+    quickAddWrap.style.marginTop = '24px';
+    quickAddWrap.innerHTML = '<h4 style="margin-bottom:12px; font-size: 0.95rem; color: var(--gold-primary);">Quick Add Popular Services</h4>';
     
     const recommendedIds = ['f3', 'f11', 'm1', 'm2'];
     const recommendations = [];
@@ -1011,7 +1142,7 @@ function renderStep1Services() {
           <div style="font-weight:500;">${service.name} <span style="font-size:0.75rem; color:var(--gold-primary); font-weight:normal; margin-left:5px;">(${service.gender === 'female' ? 'Female' : 'Male'})</span></div>
           <div style="font-size:0.8rem; color:var(--text-muted);">₹${service.price} • ${service.duration} mins</div>
         </div>
-        <button class="btn btn-secondary" style="padding: 6px 12px; font-size:0.75rem;" data-quick-id="${service.id}">Add</button>
+        <button class="btn btn-secondary" style="padding: 6px 14px; font-size:0.75rem;" data-quick-id="${service.id}">+ Add</button>
       `;
 
       item.querySelector('button').addEventListener('click', () => {
@@ -1029,10 +1160,25 @@ function renderStep1Services() {
     });
 
     container.appendChild(quickAddWrap);
+
+    const viewReceiptBtn = container.querySelector('#btn-view-active-receipt');
+    if (viewReceiptBtn && pastConfirmed) {
+      viewReceiptBtn.addEventListener('click', () => {
+        renderSlotFixedView(pastConfirmed);
+      });
+    }
+
     return;
   }
 
   // Render list of selected services in step 1 panel
+  const listTitle = document.createElement('div');
+  listTitle.style.marginBottom = '12px';
+  listTitle.style.fontSize = '0.9rem';
+  listTitle.style.color = 'var(--text-muted)';
+  listTitle.innerHTML = `<span>Selected Package (${selectedServices.length} items):</span>`;
+  container.appendChild(listTitle);
+
   selectedServices.forEach((service, index) => {
     const row = document.createElement('div');
     row.style.display = 'flex';
@@ -1042,13 +1188,13 @@ function renderStep1Services() {
     row.style.border = '1px solid var(--glass-border)';
     row.style.borderRadius = '8px';
     row.style.marginBottom = '10px';
-    row.style.background = 'rgba(255,255,255,0.01)';
+    row.style.background = 'rgba(255,255,255,0.02)';
     row.innerHTML = `
       <div>
         <div style="font-weight:500;">${service.name}</div>
         <div style="font-size:0.8rem; color:var(--gold-primary);">₹${service.price} • ${service.duration} Mins</div>
       </div>
-      <button style="background:none; border:none; color:#e57373; cursor:pointer;" data-remove-idx="${index}">
+      <button style="background:none; border:none; color:#e57373; cursor:pointer; padding: 6px;" title="Remove service" data-remove-idx="${index}">
         <i class="far fa-trash-alt"></i>
       </button>
     `;
@@ -1067,18 +1213,512 @@ function renderStep1Services() {
     container.appendChild(row);
   });
 
-  const totalsSummary = document.createElement('div');
-  const totalPrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
-  const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
+  const totalPrice = selectedServices.reduce((sum, s) => sum + (Number(s.price) || 0), 0);
+  const totalDuration = selectedServices.reduce((sum, s) => sum + (Number(s.duration) || 0), 0);
   
-  totalsSummary.style.marginTop = '20px';
-  totalsSummary.style.textAlign = 'right';
-  totalsSummary.style.fontSize = '0.95rem';
+  const totalsSummary = document.createElement('div');
+  totalsSummary.style.marginTop = '16px';
+  totalsSummary.style.padding = '12px 16px';
+  totalsSummary.style.background = 'rgba(255, 255, 255, 0.03)';
+  totalsSummary.style.borderRadius = '8px';
+  totalsSummary.style.border = '1px dashed var(--border-color)';
+  totalsSummary.style.display = 'flex';
+  totalsSummary.style.justifyContent = 'space-between';
+  totalsSummary.style.alignItems = 'center';
   totalsSummary.innerHTML = `
-    <div>Total Time: <strong style="color:var(--text-light);">${totalDuration} mins</strong></div>
-    <div style="margin-top:6px; font-size:1.1rem;">Estimated Total: <strong style="color:var(--gold-primary);">₹${totalPrice}</strong></div>
+    <div>Estimated Time: <strong style="color:var(--text-light);">${totalDuration} mins</strong></div>
+    <div style="font-size:1.15rem;">Total: <strong style="color:var(--gold-primary); font-family: var(--font-serif);">₹${totalPrice}</strong></div>
   `;
   container.appendChild(totalsSummary);
+
+  // DIRECT CALL CONFIRMATION CARD (Manual slot booking via salon worker)
+  const callCard = document.createElement('div');
+  callCard.className = 'direct-booking-call-card';
+  callCard.innerHTML = `
+    <div style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--gold-primary); color: #000; font-size: 1.2rem; margin-bottom: 10px;">
+      <i class="fas fa-phone-alt"></i>
+    </div>
+    <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold-primary); margin-bottom: 6px;">
+      Confirm Booking via Direct Call
+    </h4>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+      Our salon workers manage 8 staff slots manually on our master calendar. Please call either desk number below to confirm and lock your appointment:
+    </p>
+
+    <!-- Line 1 -->
+    <div class="direct-call-pill">
+      <div style="text-align: left;">
+        <span style="font-size: 0.72rem; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em; display: block;">Primary Desk</span>
+        <strong style="font-size: 0.95rem; color: #fff;">+91 93707 56017</strong>
+      </div>
+      <div class="direct-call-actions">
+        <a href="tel:+919370756017" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.82rem; border-radius: 20px;">
+          <i class="fas fa-phone-alt"></i> Call Line 1
+        </a>
+      </div>
+    </div>
+
+    <!-- Line 2 -->
+    <div class="direct-call-pill">
+      <div style="text-align: left;">
+        <span style="font-size: 0.72rem; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em; display: block;">Secondary Desk</span>
+        <strong style="font-size: 0.95rem; color: #fff;">+91 90218 16517</strong>
+      </div>
+      <div class="direct-call-actions">
+        <a href="tel:+919021816517" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.82rem; border-radius: 20px;">
+          <i class="fas fa-phone-alt"></i> Call Line 2
+        </a>
+      </div>
+    </div>
+
+    <!-- Real-time Phone Sync for Live Slot Fixed Tick Confirmation -->
+    <div style="margin: 16px 0 6px 0; background: rgba(0,0,0,0.45); padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(197, 168, 128, 0.25); text-align: left;">
+      <label style="display: block; font-size: 0.8rem; color: var(--gold-primary); font-weight: 600; margin-bottom: 6px;">
+        <i class="fas fa-mobile-alt"></i> Your Mobile Number (for instant live slot confirmation):
+      </label>
+      <div style="display: flex; gap: 8px;">
+        <input type="tel" id="user-drawer-phone" placeholder="Enter 10-digit mobile" maxlength="10" value="${userPhone}" style="flex: 1; padding: 9px 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; color: #fff; font-size: 0.9rem;">
+        <button type="button" id="btn-save-drawer-phone" class="btn btn-secondary" style="padding: 9px 14px; font-size: 0.78rem; white-space: nowrap; border-radius: 8px;">
+          Save
+        </button>
+      </div>
+      <div style="margin-top: 10px; font-size: 0.76rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+        <span class="pulsing-live-dot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ffb74d;"></span>
+        <span>Once the salon desk books your slot, your confirmation tick will appear automatically!</span>
+      </div>
+      <button type="button" id="btn-check-slot-now" class="btn btn-secondary" style="margin-top: 10px; width: 100%; padding: 8px; font-size: 0.78rem; border-radius: 20px; border: 1px solid rgba(197,168,128,0.3); color: var(--gold-primary);">
+        <i class="fas fa-sync-alt"></i> Check If Slot Is Fixed
+      </button>
+    </div>
+  `;
+  container.appendChild(callCard);
+
+  // Hook phone input and check button
+  const phoneInput = callCard.querySelector('#user-drawer-phone');
+  const savePhoneBtn = callCard.querySelector('#btn-save-drawer-phone');
+  const checkSlotBtn = callCard.querySelector('#btn-check-slot-now');
+
+  if (savePhoneBtn && phoneInput) {
+    savePhoneBtn.addEventListener('click', () => {
+      const val = phoneInput.value.trim();
+      if (!val || val.length < 10) {
+        alert('Please enter your 10-digit mobile number so the desk worker can link your booking.');
+        return;
+      }
+      localStorage.setItem('makeme_client_phone', val);
+      savePhoneBtn.innerHTML = '<i class="fas fa-check"></i> Saved';
+      setTimeout(() => { savePhoneBtn.textContent = 'Save'; }, 1500);
+      checkAndShowCustomerSlotConfirmation();
+    });
+  }
+
+  if (checkSlotBtn && phoneInput) {
+    checkSlotBtn.addEventListener('click', () => {
+      const val = phoneInput.value.trim();
+      if (val && val.length >= 10) {
+        localStorage.setItem('makeme_client_phone', val);
+      }
+      const phone = localStorage.getItem('makeme_client_phone') || val;
+      if (!phone || phone.length < 10) {
+        alert('Please enter your 10-digit mobile number first.');
+        return;
+      }
+      const allBookings = JSON.parse(localStorage.getItem('makeme_bookings') || '[]');
+      const match = allBookings.find(b => b.clientPhone === phone && b.status === 'confirmed');
+      if (match) {
+        playCustomerChime();
+        localStorage.setItem('makeme_confirmed_ticket', match.ticketId);
+        renderSlotFixedView(match);
+      } else {
+        alert('No booking found for this number yet. Please call salon line 1 or line 2 to lock your slot with our staff.');
+      }
+    });
+  }
+}
+
+// Function to start a new customer booking
+function startNewCustomerBooking() {
+  sessionStorage.setItem('makeme_dismiss_confirmed', 'true');
+  localStorage.removeItem('makeme_confirmed_ticket');
+  selectedServices = [];
+  updateBookingBar();
+  
+  const titleEl = document.getElementById('booking-wizard-title');
+  if (titleEl) {
+    titleEl.textContent = 'Selected Package & Booking Confirmation';
+  }
+  const backBtn = document.getElementById('wizard-back-btn');
+  const nextBtn = document.getElementById('wizard-next-btn');
+  if (backBtn) backBtn.style.visibility = 'hidden';
+  if (nextBtn) {
+    nextBtn.innerHTML = 'Add More Services <i class="fas fa-plus"></i>';
+    nextBtn.onclick = () => { closeBookingModal(); };
+  }
+  renderStep1Services();
+}
+
+// Render Slot Fixed Flipkart-Style confirmation for the customer
+function renderSlotFixedView(booking) {
+  const container = document.getElementById('step-1-services-list');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  // Update modal title
+  const titleEl = document.getElementById('booking-wizard-title');
+  if (titleEl) {
+    titleEl.textContent = 'Slot Fixed — Appointment Confirmed';
+  }
+
+  // Update footer buttons - Provide clear "Book Another Appointment" & "Close"
+  const backBtn = document.getElementById('wizard-back-btn');
+  const nextBtn = document.getElementById('wizard-next-btn');
+  if (backBtn) {
+    backBtn.style.visibility = 'visible';
+    backBtn.innerHTML = '<i class="fas fa-times"></i> Close Receipt';
+    backBtn.onclick = closeBookingModal;
+  }
+  if (nextBtn) {
+    nextBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Book Another Appointment';
+    nextBtn.onclick = startNewCustomerBooking;
+  }
+
+  const serviceNames = (booking.services && booking.services.length > 0)
+    ? booking.services.map(s => s.name).join(', ')
+    : 'Salon Service';
+
+  const card = document.createElement('div');
+  card.className = 'slot-fixed-card';
+  card.innerHTML = `
+    <!-- Animated Checkmark Circle (Flipkart Style) -->
+    <div class="flipkart-checkmark-anim">
+      <svg class="checkmark-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+    </div>
+
+    <span style="display:inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; background: rgba(37, 211, 102, 0.15); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.3); margin-bottom: 12px; font-weight: 600;">
+      Booking ID: #${booking.ticketId}
+    </span>
+
+    <h3 style="font-family: var(--font-serif); font-size: 1.55rem; color: #fff; margin-bottom: 6px;">
+      Slot Fixed! Appointment Confirmed
+    </h3>
+    <p style="font-size: 0.88rem; color: #81c784; font-weight: 500; margin-bottom: 20px;">
+      <i class="fas fa-check-double"></i> Your appointment has been secured on the salon calendar!
+    </p>
+
+    <!-- Receipt Summary Card -->
+    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; text-align: left; margin-bottom: 20px; font-size: 0.88rem;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Client Name:</span>
+        <strong style="color: #fff;">${booking.clientName}</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Contact Phone:</span>
+        <span style="color: var(--gold-primary); font-weight: 600;">${booking.clientPhone}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Appointment Slot:</span>
+        <strong style="color: #fff;">${booking.appointmentDate} at ${booking.appointmentTime}</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Assigned Expert:</span>
+        <span style="color: var(--gold-primary); font-weight: 600;">${booking.stylistName}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Services:</span>
+        <span style="color: #fff; max-width: 200px; text-align: right;">${serviceNames}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 10px;">
+        <span style="color: var(--text-muted);">Total Amount:</span>
+        <strong style="color: var(--gold-primary); font-size: 1.15rem; font-family: var(--font-serif);">₹${booking.totalPrice || 0}</strong>
+      </div>
+    </div>
+
+    <div style="background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.25); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 0.82rem; color: #a5d6a7;">
+      <i class="fas fa-calendar-check" style="color: #25D366; margin-right: 4px;"></i>
+      <strong>Slot Confirmed!</strong> Please arrive 10 minutes prior to your time at MAKE ME Unisex Salon, Dharashiv.
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+      <button type="button" class="btn btn-primary" id="btn-reset-customer-booking" style="width: 100%; max-width: 340px; padding: 12px; font-size: 0.9rem; border-radius: 30px; font-weight: 600;">
+        <i class="fas fa-plus-circle"></i> Book Another Appointment
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="closeBookingModal()" style="width: 100%; max-width: 340px; padding: 10px; font-size: 0.85rem; border-radius: 30px; border: 1px solid var(--border-color);">
+        <i class="fas fa-times"></i> Close Receipt
+      </button>
+    </div>
+  `;
+
+  container.appendChild(card);
+
+  const resetBtn = card.querySelector('#btn-reset-customer-booking');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', startNewCustomerBooking);
+  }
+}
+
+// Check and automatically show slot confirmation when desk worker books client
+function checkAndShowCustomerSlotConfirmation(bookingsList) {
+  const userPhone = localStorage.getItem('makeme_client_phone') || '';
+  if (!userPhone || userPhone.length < 10) return;
+
+  const bookings = bookingsList || JSON.parse(localStorage.getItem('makeme_bookings') || '[]');
+  const match = bookings.find(b => b.clientPhone === userPhone && b.status === 'confirmed');
+
+  if (match) {
+    const lastSeenTicket = localStorage.getItem('makeme_last_seen_ticket');
+    if (lastSeenTicket !== match.ticketId) {
+      localStorage.setItem('makeme_last_seen_ticket', match.ticketId);
+      localStorage.setItem('makeme_confirmed_ticket', match.ticketId);
+      sessionStorage.removeItem('makeme_dismiss_confirmed');
+      playCustomerChime();
+      const modal = document.getElementById('booking-modal');
+      if (modal && modal.classList.contains('active')) {
+        renderSlotFixedView(match);
+      }
+    }
+  }
+}
+
+// Flipkart-style audio chime
+function playCustomerChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+    
+    // Note 1 (587.33 Hz - D5)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(587.33, now);
+    gain1.gain.setValueAtTime(0.18, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.35);
+
+    // Note 2 (880 Hz - A5)
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(880, now + 0.12);
+    gain2.gain.setValueAtTime(0.22, now + 0.12);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.12);
+    osc2.stop(now + 0.55);
+  } catch (e) {
+    // Ignore audio autoplay restrictions
+  }
+}
+
+// Helper to format today as YYYY-MM-DD
+function getTodayFormattedDate() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// STYLIST SLOTS SCHEDULE VIEWER (For customers & visitors to see empty and booked slots for any artist)
+function initStylistSlotViewers() {
+  document.querySelectorAll('.stylist-card[data-stylist-id]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      const stylistId = card.getAttribute('data-stylist-id');
+      if (stylistId) {
+        openStylistSlotsScheduleModal(stylistId);
+      }
+    });
+  });
+
+  document.querySelectorAll('.view-stylist-slots-trigger[data-stylist-id]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const stylistId = btn.getAttribute('data-stylist-id');
+      if (stylistId) {
+        openStylistSlotsScheduleModal(stylistId);
+      }
+    });
+  });
+}
+
+function openStylistSlotsScheduleModal(stylistId, customDate) {
+  const stylist = stylistsData.find(s => s.id === stylistId) || {
+    id: stylistId,
+    name: 'Salon Stylist',
+    role: 'Hair & Beauty Specialist',
+    avatar: 'assets/mukesh_sir.jpeg'
+  };
+
+  const todayStr = getTodayFormattedDate();
+  const targetDate = customDate || todayStr;
+
+  // Ensure modal DOM element exists
+  let modalOverlay = document.getElementById('stylist-slots-modal-overlay');
+  if (!modalOverlay) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'stylist-slots-modal-overlay';
+    modalOverlay.className = 'stylist-slots-modal-overlay';
+    document.body.appendChild(modalOverlay);
+  }
+
+  // Get live bookings
+  const bookings = JSON.parse(localStorage.getItem('makeme_bookings') || '[]');
+  const dateBookings = bookings.filter(b => b.appointmentDate === targetDate && b.status !== 'cancelled');
+
+  // Match bookings for this stylist
+  const isBookingForStylist = (b) => {
+    if (b.stylistId === stylist.id || b.stylistName === stylist.name) return true;
+    if (stylist.id === 'st1' && b.stylistName && b.stylistName.toUpperCase().includes('MUKESH')) return true;
+    if (stylist.id === 'st2' && b.stylistName && b.stylistName.toUpperCase().includes('AMAR')) return true;
+    if (stylist.id === 'st3' && b.stylistName && b.stylistName.toUpperCase().includes('BALAJI')) return true;
+    if (stylist.id === 'st4' && b.stylistName && b.stylistName.toUpperCase().includes('SAMARTH')) return true;
+    if (stylist.id === 'st5' && b.stylistName && b.stylistName.toUpperCase().includes('PRATIKSHA')) return true;
+    if (stylist.id === 'st6' && b.stylistName && b.stylistName.toUpperCase().includes('ANAS')) return true;
+    if (stylist.id === 'st7' && b.stylistName && b.stylistName.toUpperCase().includes('YOGITA')) return true;
+    if (stylist.id === 'st8' && b.stylistName && b.stylistName.toUpperCase().includes('DIVYA')) return true;
+    return false;
+  };
+
+  const stylistBookings = dateBookings.filter(isBookingForStylist);
+  const slotsList = [
+    '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', 
+    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', 
+    '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM', '10:00 PM'
+  ];
+  const bookedCount = stylistBookings.length;
+  const emptyCount = Math.max(0, slotsList.length - bookedCount);
+
+  const slotsHtml = slotsList.map(slot => {
+    const booking = stylistBookings.find(b => {
+      if (!b.appointmentTime) return false;
+      const bTime = b.appointmentTime.replace(/^0/, '').trim().toUpperCase();
+      const sTime = slot.replace(/^0/, '').trim().toUpperCase();
+      return bTime === sTime || b.appointmentTime === slot;
+    });
+
+    if (booking) {
+      // BOOKED / FIXED SLOT
+      return `
+        <div class="stylist-slot-item booked">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fas fa-lock" style="color: #ef5350; font-size: 0.95rem;"></i>
+            <strong style="color: #fff; font-size: 0.95rem;">${slot}</strong>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size: 0.74rem; color: #ef5350; background: rgba(239, 83, 80, 0.15); padding: 4px 10px; border-radius: 12px; font-weight: 600; border: 1px solid rgba(239, 83, 80, 0.3);">
+              ✓ Slot Fixed / Booked
+            </span>
+          </div>
+        </div>
+      `;
+    } else {
+      // EMPTY / AVAILABLE SLOT
+      return `
+        <div class="stylist-slot-item empty">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fas fa-check-circle" style="color: #25D366; font-size: 0.95rem;"></i>
+            <strong style="color: #fff; font-size: 0.95rem;">${slot}</strong>
+            <span style="font-size: 0.74rem; color: #81c784; background: rgba(37, 211, 102, 0.15); padding: 3px 8px; border-radius: 10px; font-weight: 600;">
+              Available Slot
+            </span>
+          </div>
+          <div>
+            <a href="tel:+919370756017" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 15px; display:inline-flex; align-items:center; gap:5px;">
+              <i class="fas fa-phone-alt"></i> Call to Lock
+            </a>
+          </div>
+        </div>
+      `;
+    }
+  }).join('');
+
+  modalOverlay.innerHTML = `
+    <div class="stylist-slots-modal-box">
+      <!-- Close Button -->
+      <button type="button" id="close-stylist-slots-modal" style="position: absolute; top: 16px; right: 18px; background: none; border: none; color: #fff; font-size: 1.25rem; cursor: pointer; padding: 4px;" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Stylist Header -->
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+        <img src="${stylist.avatar}" alt="${stylist.name}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-primary);">
+        <div>
+          <span style="font-size: 0.72rem; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Daily Slot Schedule</span>
+          <h3 style="font-family: var(--font-serif); font-size: 1.35rem; color: #fff; margin: 2px 0;">${stylist.name}</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">${stylist.role}</p>
+        </div>
+      </div>
+
+      <!-- Date Switcher & Capacity Stats -->
+      <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="font-size: 0.8rem; color: var(--gold-primary); font-weight: 600;"><i class="far fa-calendar-alt"></i> Date:</label>
+          <input type="date" id="stylist-slot-date-picker" value="${targetDate}" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 0.82rem;">
+        </div>
+        <div style="display: flex; gap: 8px; font-size: 0.78rem;">
+          <span style="color: #81c784; background: rgba(37,211,102,0.15); padding: 4px 10px; border-radius: 12px; font-weight: 600; border: 1px solid rgba(37,211,102,0.3);">
+            <i class="fas fa-check-circle"></i> ${emptyCount} Empty Slots
+          </span>
+          <span style="color: #ef5350; background: rgba(239,83,80,0.15); padding: 4px 10px; border-radius: 12px; font-weight: 600; border: 1px solid rgba(239,83,80,0.3);">
+            <i class="fas fa-lock"></i> ${bookedCount} Booked
+          </span>
+        </div>
+      </div>
+
+      <!-- Slots Matrix Container -->
+      <div style="margin-bottom: 18px;">
+        ${slotsHtml}
+      </div>
+
+      <!-- Direct Call Salon Desk Footer -->
+      <div style="background: rgba(197, 168, 128, 0.08); border: 1px solid rgba(197, 168, 128, 0.25); border-radius: 10px; padding: 12px 16px; text-align: center;">
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px;">
+          Call our salon desk now to confirm and reserve any of ${stylist.name}'s available slots:
+        </div>
+        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+          <a href="tel:+919370756017" class="btn btn-primary" style="padding: 7px 16px; font-size: 0.8rem; border-radius: 20px;">
+            <i class="fas fa-phone-alt"></i> Call Line 1 (+91 93707 56017)
+          </a>
+          <a href="tel:+919021816517" class="btn btn-secondary" style="padding: 7px 16px; font-size: 0.8rem; border-radius: 20px;">
+            <i class="fas fa-phone-alt"></i> Call Line 2 (+91 90218 16517)
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modalOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Bind close buttons
+  const closeBtn = modalOverlay.querySelector('#close-stylist-slots-modal');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+  }
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+  });
+
+  // Date change event
+  const datePicker = modalOverlay.querySelector('#stylist-slot-date-picker');
+  if (datePicker) {
+    datePicker.addEventListener('change', (e) => {
+      openStylistSlotsScheduleModal(stylist.id, e.target.value);
+    });
+  }
 }
 
 // Wizard Step 2: Select Stylist
@@ -1332,8 +1972,9 @@ function initTimePicker() {
   const timeSlotsContainer = document.getElementById('time-slots-container');
   if (!timeSlotsContainer) return;
 
-  // 1-hour slots from 11:00 AM to 10:00 PM (last slot starts at 9:00 PM)
+  // 1-hour slots from 10:00 AM to 10:00 PM (closing at 11:00 PM)
   const slots = [
+    '10:00 AM',
     '11:00 AM', 
     '12:00 PM', 
     '01:00 PM', 
@@ -1344,7 +1985,8 @@ function initTimePicker() {
     '06:00 PM', 
     '07:00 PM', 
     '08:00 PM', 
-    '09:00 PM'
+    '09:00 PM',
+    '10:00 PM'
   ];
   
   timeSlotsContainer.innerHTML = '';
@@ -1514,77 +2156,193 @@ function submitBookingForm() {
   const nextBtn = document.getElementById('wizard-next-btn');
   const backBtn = document.getElementById('wizard-back-btn');
   
-  nextBtn.disabled = true;
-  nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-  backBtn.style.visibility = 'hidden';
+  const nameInput = document.getElementById('booking-client-name');
+  const phoneInput = document.getElementById('booking-client-phone');
+  const dobInput = document.getElementById('booking-client-dob');
+  const notesInput = document.getElementById('booking-client-notes');
+
+  const clientName = nameInput ? nameInput.value.trim() : '';
+  const clientPhone = phoneInput ? phoneInput.value.trim() : '';
+  const clientDob = dobInput ? dobInput.value : '';
+  const clientNotes = notesInput ? notesInput.value.trim() : '';
+
+  if (nextBtn) {
+    nextBtn.disabled = true;
+    nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+  }
+  if (backBtn) {
+    backBtn.style.visibility = 'hidden';
+  }
 
   setTimeout(() => {
-    // Clear selections
-    selectedServices = [];
-    updateBookingBar();
-    
-    // Reset service grid buttons in main screen layout
-    document.querySelectorAll('.service-add-btn').forEach(btn => {
-      btn.classList.remove('added');
-      btn.querySelector('i').className = 'fas fa-plus';
-      btn.querySelector('span').textContent = 'Add to Booking';
-    });
+    try {
+      // Format appointment date safely as YYYY-MM-DD
+      let appDateStr = '';
+      if (selectedDate instanceof Date) {
+        appDateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+      } else if (typeof selectedDate === 'string' && selectedDate) {
+        appDateStr = selectedDate;
+      } else {
+        const today = new Date();
+        appDateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      }
 
-    const phone1 = "919370756017";
-    const phone2 = "919021816517";
-    const waText = encodeURIComponent("Hello MAKE ME Salon, I would like to book an appointment.");
-    const url1 = `https://api.whatsapp.com/send?phone=${phone1}&text=${waText}`;
-    const url2 = `https://api.whatsapp.com/send?phone=${phone2}&text=${waText}`;
+      // Generate Booking Details
+      const ticketId = 'MM-' + Math.floor(100000 + Math.random() * 900000);
+      const totalPrice = selectedServices.reduce((sum, s) => sum + (Number(s.price) || 0), 0);
+      const totalDuration = selectedServices.reduce((sum, s) => sum + (Number(s.duration) || 0), 0);
+      const bookedServices = [...selectedServices];
+      const stylistName = selectedStylist ? selectedStylist.name : 'Any Available Stylist';
+      const appTime = selectedTime || '11:00 AM';
 
-    // Render the maintenance screen into step-5-panel with the animated photo
-    const step5Panel = document.getElementById('step-5-panel');
-    if (step5Panel) {
-      step5Panel.innerHTML = `
-        <div class="booking-success-message booking-maintenance-message">
-          <div class="maintenance-animated-wrapper">
-            <img src="assets/maintenance-animated.svg" alt="Website Under Maintenance" class="maintenance-animated-img">
-          </div>
-          <div class="maintenance-badge-pill">
-            <span class="maintenance-pulse-dot"></span> System Maintenance in Progress
-          </div>
-          <h3 class="success-title text-gradient" style="font-size:1.85rem; margin-bottom:12px;">Website is Under Maintenance</h3>
-          <p class="maintenance-main-text">
-            Our online booking portal is currently undergoing scheduled maintenance and will be start soon!
-          </p>
+      const newBooking = {
+        ticketId: ticketId,
+        clientName: clientName,
+        clientPhone: clientPhone,
+        clientDob: clientDob,
+        appointmentDate: appDateStr,
+        appointmentTime: appTime,
+        stylist: stylistName,
+        services: bookedServices.map(s => ({ name: s.name, price: s.price, duration: s.duration })),
+        totalPrice: totalPrice,
+        totalDuration: totalDuration,
+        notes: clientNotes,
+        status: 'Confirmed',
+        createdAt: new Date().toISOString()
+      };
 
-          <div class="maintenance-direct-contact">
-            <div class="maintenance-contact-header" style="margin-bottom: 14px;">
-              <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold-primary); margin-bottom: 4px;">Contact to Salon</h4>
-              <p style="font-size: 0.85rem; color: var(--text-muted);">For appointments and bookings, please reach out to us directly:</p>
+      // Save to Firebase Cloud Firestore if available
+      if (window.db) {
+        window.db.collection('bookings').doc(ticketId).set(newBooking)
+          .then(() => console.log("Booking synced to Firebase Firestore:", ticketId))
+          .catch(err => console.error("Firebase booking save error:", err));
+      }
+
+      // Save to LocalStorage for offline and admin dashboard access
+      try {
+        const currentBookings = JSON.parse(localStorage.getItem('makeme_bookings') || '[]');
+        currentBookings.push(newBooking);
+        localStorage.setItem('makeme_bookings', JSON.stringify(currentBookings));
+      } catch (e) {
+        console.error("Local booking save error:", e);
+      }
+
+      // Prepare Google Calendar link
+      let gCalUrl = '#';
+      try {
+        if (typeof getGoogleCalendarUrl === 'function') {
+          gCalUrl = getGoogleCalendarUrl(newBooking);
+        }
+      } catch (calErr) {
+        console.warn("Could not generate Google Calendar link:", calErr);
+      }
+
+      // WhatsApp Direct Confirmation Text
+      const serviceListText = bookedServices.map(s => `• ${s.name} (₹${s.price})`).join('\n');
+      const waBookingRaw = `*NEW APPOINTMENT BOOKING - MAKE ME SALON*\n\n` +
+        `*Ticket:* #${ticketId}\n` +
+        `*Client:* ${clientName}\n` +
+        `*Phone:* ${clientPhone}\n` +
+        `*Date:* ${appDateStr}\n` +
+        `*Time:* ${appTime}\n` +
+        `*Stylist:* ${stylistName}\n\n` +
+        `*Services:*\n${serviceListText}\n\n` +
+        `*Total Amount:* ₹${totalPrice}\n` +
+        `*Duration:* ${totalDuration} mins` +
+        (clientNotes ? `\n*Notes:* ${clientNotes}` : '');
+
+      const waSalonUrl = `https://api.whatsapp.com/send?phone=919370756017&text=${encodeURIComponent(waBookingRaw)}`;
+
+      // Clear selections
+      selectedServices = [];
+      updateBookingBar();
+      
+      // Reset service grid buttons in main screen layout
+      document.querySelectorAll('.service-add-btn').forEach(btn => {
+        btn.classList.remove('added');
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fas fa-plus';
+        const span = btn.querySelector('span');
+        if (span) span.textContent = 'Add to Booking';
+      });
+
+      // Render the Confirmation screen into step-5-panel
+      const step5Panel = document.getElementById('step-5-panel');
+      if (step5Panel) {
+        step5Panel.innerHTML = `
+          <div class="booking-success-message">
+            <div class="success-icon-wrap">
+              <i class="fas fa-check"></i>
             </div>
-            <div class="maintenance-contact-btns">
-              <a href="${url1}" target="_blank" class="btn btn-wa-direct">
-                <i class="fab fa-whatsapp"></i> Chat on WhatsApp (Line 1)
+            <span style="display:inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; background: rgba(197, 168, 128, 0.15); color: var(--gold-primary); border: 1px solid rgba(197, 168, 128, 0.3); margin-bottom: 12px; font-weight: 600;">
+              Booking ID: #${ticketId}
+            </span>
+            <h3 class="success-title text-gradient" style="font-size:1.85rem; margin-bottom:8px;">Appointment Confirmed!</h3>
+            <p class="success-text" style="font-size:0.92rem; max-width: 440px; margin: 0 auto 20px auto; color: var(--text-muted);">
+              Thank you, <strong>${clientName}</strong>! Your salon appointment has been reserved for <strong>${appDateStr}</strong> at <strong>${appTime}</strong> with <strong>${stylistName}</strong>.
+            </p>
+
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: left;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.88rem;">
+                <span style="color: var(--text-muted);">Total Estimated:</span>
+                <strong style="color: var(--gold-primary);">₹${totalPrice}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+                <span style="color: var(--text-muted);">Estimated Duration:</span>
+                <span>${totalDuration} Mins</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; max-width: 420px; margin: 0 auto;">
+              <a href="${waSalonUrl}" target="_blank" class="btn btn-primary" style="border-radius: 30px; font-size: 0.85rem; padding: 12px 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; border-color: #25D366; color: #fff;">
+                <i class="fab fa-whatsapp" style="font-size: 1.1rem;"></i> Send Confirmation to Salon WhatsApp
               </a>
-              <a href="${url2}" target="_blank" class="btn btn-secondary" style="border-radius: 40px; font-size: 0.82rem; padding: 10px 16px;">
-                <i class="fab fa-whatsapp"></i> WhatsApp (Line 2)
-              </a>
-              <a href="tel:+919370756017" class="btn btn-call-direct">
-                <i class="fas fa-phone-alt"></i> Call +91 93707 56017
-              </a>
+              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <a href="${gCalUrl}" target="_blank" class="btn btn-secondary" style="border-radius: 30px; font-size: 0.8rem; padding: 10px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fab fa-google"></i> Google Calendar
+                </a>
+                <button class="btn btn-secondary" id="download-ics-btn" style="border-radius: 30px; font-size: 0.8rem; padding: 10px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fas fa-calendar-alt"></i> Download .ics File
+                </button>
+              </div>
+              <button class="btn btn-secondary" onclick="closeBookingModal();" style="margin-top: 10px; border-radius: 30px; font-size: 0.85rem; padding: 10px 24px; border: 1px solid var(--border-color);">
+                <i class="fas fa-check" style="margin-right: 6px;"></i> Done &amp; Return to Salon
+              </button>
             </div>
           </div>
+        `;
 
-          <button class="btn btn-secondary" onclick="closeBookingModal();" style="margin-top: 20px; border-radius: 30px; font-size: 0.85rem; padding: 10px 24px; border: 1px solid var(--border-color);">
-            <i class="fas fa-times" style="margin-right: 6px;"></i> Close &amp; Return to Salon
-          </button>
-        </div>
-      `;
+        const icsBtn = document.getElementById('download-ics-btn');
+        if (icsBtn) {
+          icsBtn.addEventListener('click', () => {
+            try {
+              downloadIcsFile(newBooking);
+            } catch (icsErr) {
+              console.error("Error generating .ics:", icsErr);
+            }
+          });
+        }
+      }
+
+      // Reset wizard input fields
+      if (nameInput) nameInput.value = '';
+      if (phoneInput) phoneInput.value = '';
+      if (dobInput) dobInput.value = '';
+      if (notesInput) notesInput.value = '';
+
+      // Push state step to 5 (confirmation end screen)
+      goToStep(5);
+    } catch (err) {
+      console.error("Booking submission error:", err);
+      if (nextBtn) {
+        nextBtn.disabled = false;
+        nextBtn.textContent = 'Confirm Booking';
+      }
+      if (backBtn) {
+        backBtn.style.visibility = 'visible';
+      }
+      alert('An error occurred while finalizing your appointment. Please check your connection or contact the salon directly.');
     }
-
-    // Reset wizard input fields
-    document.getElementById('booking-client-name').value = '';
-    document.getElementById('booking-client-phone').value = '';
-    document.getElementById('booking-client-dob').value = '';
-    document.getElementById('booking-client-notes').value = '';
-
-    // Push state step to 5 (maintenance end screen)
-    goToStep(5);
   }, 1000);
 }
 
@@ -1710,13 +2468,20 @@ function syncFirebaseData() {
   // 2. Sync Bookings using real-time listener for overlap check
   window.db.collection('bookings').onSnapshot(querySnapshot => {
     const liveBookings = [];
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     querySnapshot.forEach(doc => {
       // Exclude settings document from bookings array
       if (doc.id !== 'settings_holidays' && doc.data().ticketId) {
-        liveBookings.push(doc.data());
+        const data = doc.data();
+        // Automatically exclude previous days' appointments to keep website fast and smooth
+        if (!data.appointmentDate || data.appointmentDate >= todayStr) {
+          liveBookings.push(data);
+        }
       }
     });
     localStorage.setItem('makeme_bookings', JSON.stringify(liveBookings));
+    checkAndShowCustomerSlotConfirmation(liveBookings);
     // If user is currently picking a time slot, update UI
     if (selectedDate && selectedTime === null) {
       initTimePicker();
@@ -1724,35 +2489,68 @@ function syncFirebaseData() {
   }, err => {
     console.error("Firebase bookings real-time sync failed:", err);
   });
+
+  // Cross-tab / local storage real-time sync
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'makeme_bookings') {
+      try {
+        const list = JSON.parse(e.newValue || '[]');
+        checkAndShowCustomerSlotConfirmation(list);
+      } catch (err) {}
+    }
+  });
+}
+
+// Helper to parse booking date and time into start and end Date objects
+function getBookingStartAndEnd(booking) {
+  let dateStr = '';
+  if (typeof booking.appointmentDate === 'string' && booking.appointmentDate.includes('-')) {
+    dateStr = booking.appointmentDate;
+  } else if (booking.appointmentDate instanceof Date) {
+    const d = booking.appointmentDate;
+    dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  } else {
+    const today = new Date();
+    dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  }
+
+  const [year, month, day] = dateStr.split('-');
+  const time24 = booking.appointmentTime && (booking.appointmentTime.includes('AM') || booking.appointmentTime.includes('PM'))
+    ? convertTimeTo24(booking.appointmentTime)
+    : (booking.appointmentTime || '11:00');
+  
+  const [hours, minutes] = (time24.includes(':') ? time24 : '11:00').split(':');
+  const startDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes));
+  const duration = Number(booking.totalDuration) || 45;
+  const endDate = new Date(startDate.getTime() + duration * 60 * 1000);
+  return { startDate, endDate };
 }
 
 // Translate 12h time to 24h for calendar formatting
 function convertTimeTo24(timeStr) {
-  const [time, modifier] = timeStr.split(' ');
+  if (!timeStr) return '11:00';
+  const parts = timeStr.trim().split(/\s+/);
+  if (parts.length < 2) return timeStr;
+  const time = parts[0];
+  const modifier = parts[1].toUpperCase();
   let [hours, minutes] = time.split(':');
-  if (hours === '12') {
-    hours = '00';
+  let h = parseInt(hours, 10);
+  if (modifier === 'AM') {
+    if (h === 12) h = 0;
+  } else if (modifier === 'PM') {
+    if (h < 12) h += 12;
   }
-  if (modifier === 'PM') {
-    hours = parseInt(hours, 10) + 12;
-  }
-  return `${hours}:${minutes}`;
+  return `${String(h).padStart(2, '0')}:${minutes || '00'}`;
 }
 
 // Generate Google Calendar Link for Booking
 function getGoogleCalendarUrl(booking) {
   const title = `MAKE ME Salon Appointment (Ticket: ${booking.ticketId})`;
-  const details = `Hi ${booking.clientName},\nThis is your booking reminder for MAKE ME Unisex Salon.\n\nServices: ${booking.services.map(s => s.name).join(', ')}\nTotal Price: ₹${booking.totalPrice}\nDuration: ${booking.totalDuration} mins\nNotes: ${booking.notes}`;
-  const location = `MAKE ME Unisex Salon, Pune`;
+  const serviceNames = Array.isArray(booking.services) ? booking.services.map(s => s.name).join(', ') : '';
+  const details = `Hi ${booking.clientName || 'Valued Guest'},\nThis is your booking reminder for MAKE ME Unisex Salon.\n\nServices: ${serviceNames}\nTotal Price: ₹${booking.totalPrice}\nDuration: ${booking.totalDuration} mins\nNotes: ${booking.notes || 'None'}`;
+  const location = `MAKE ME Unisex Salon, Barshi Naka, Jijau Chowk, Dharashiv`;
   
-  const time24 = booking.appointmentTime.includes('AM') || booking.appointmentTime.includes('PM') 
-    ? convertTimeTo24(booking.appointmentTime) 
-    : '12:00';
-  const [year, month, day] = booking.appointmentDate.split('-');
-  const [hours, minutes] = time24.split(':');
-  
-  const startDate = new Date(year, month - 1, day, hours, minutes);
-  const endDate = new Date(startDate.getTime() + booking.totalDuration * 60 * 1000);
+  const { startDate, endDate } = getBookingStartAndEnd(booking);
   
   const formatISO = (date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   const dates = `${formatISO(startDate)}/${formatISO(endDate)}`;
@@ -1762,14 +2560,8 @@ function getGoogleCalendarUrl(booking) {
 
 // Generate and trigger download of .ics calendar file with alert reminder
 function downloadIcsFile(booking) {
-  const time24 = booking.appointmentTime.includes('AM') || booking.appointmentTime.includes('PM') 
-    ? convertTimeTo24(booking.appointmentTime) 
-    : '12:00';
-  const [year, month, day] = booking.appointmentDate.split('-');
-  const [hours, minutes] = time24.split(':');
-  
-  const startDate = new Date(year, month - 1, day, hours, minutes);
-  const endDate = new Date(startDate.getTime() + booking.totalDuration * 60 * 1000);
+  const { startDate, endDate } = getBookingStartAndEnd(booking);
+  const serviceNames = Array.isArray(booking.services) ? booking.services.map(s => s.name).join(', ') : '';
   
   const formatICS = (date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   
@@ -1780,8 +2572,8 @@ function downloadIcsFile(booking) {
     `SUMMARY:MAKE ME Salon Appointment (Ticket: ${booking.ticketId})\n` +
     `DTSTART:${formatICS(startDate)}\n` +
     `DTEND:${formatICS(endDate)}\n` +
-    `DESCRIPTION:Hi ${booking.clientName}\\, this is your booking reminder for MAKE ME Unisex Salon.\\n\\nServices: ${booking.services.map(s => s.name).join(', ')}\\nTotal Price: INR ${booking.totalPrice}\\nDuration: ${booking.totalDuration} mins\\nNotes: ${booking.notes}\n` +
-    "LOCATION:MAKE ME Unisex Salon, Pune\n" +
+    `DESCRIPTION:Hi ${booking.clientName || 'Valued Guest'}\\, this is your booking reminder for MAKE ME Unisex Salon.\\n\\nServices: ${serviceNames}\\nTotal Price: INR ${booking.totalPrice}\\nDuration: ${booking.totalDuration} mins\\nNotes: ${booking.notes || 'None'}\n` +
+    "LOCATION:MAKE ME Unisex Salon, Barshi Naka, Jijau Chowk, Dharashiv\n" +
     "BEGIN:VALARM\n" +
     "TRIGGER:-PT1H\n" +
     "ACTION:DISPLAY\n" +

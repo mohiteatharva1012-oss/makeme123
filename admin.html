@@ -829,6 +829,290 @@
       color: #ef5350;
       font-weight: 500;
     }
+
+    /* Common Salon Calendar & 8 Staff Matrix */
+    .staff-legend-bar {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .staff-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .staff-chip:hover {
+      border-color: var(--gold-primary);
+      background: rgba(197, 168, 128, 0.12);
+      transform: translateY(-1px);
+    }
+    .staff-chip.active {
+      background: var(--gold-primary);
+      color: #000;
+      border-color: var(--gold-primary);
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(197, 168, 128, 0.35);
+    }
+    .staff-chip.active i {
+      color: #000;
+    }
+    .slots-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .slot-card {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      transition: var(--transition-fast);
+      position: relative;
+    }
+    .slot-card:hover {
+      border-color: rgba(197, 168, 128, 0.4);
+      transform: translateY(-2px);
+    }
+    .slot-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .slot-time {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+    .slot-badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .slot-badge.all-free {
+      background: rgba(76, 175, 80, 0.15);
+      color: #81c784;
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+    .slot-badge.has-remaining {
+      background: rgba(255, 183, 77, 0.15);
+      color: #ffb74d;
+      border: 1px solid rgba(255, 183, 77, 0.3);
+    }
+    .slot-badge.full {
+      background: rgba(239, 83, 80, 0.15);
+      color: #e57373;
+      border: 1px solid rgba(239, 83, 80, 0.3);
+    }
+    .slot-progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .slot-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .slot-bookings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+      max-height: 110px;
+      overflow-y: auto;
+    }
+    .slot-booking-pill {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px 10px;
+      border-radius: 6px;
+      border-left: 3px solid var(--gold-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .slot-book-btn {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(197, 168, 128, 0.1);
+      border: 1px solid rgba(197, 168, 128, 0.3);
+      color: var(--gold-primary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .slot-book-btn:hover {
+      background: var(--gold-primary);
+      color: #000;
+    }
+
+    /* Admin Appointment Modal */
+    .admin-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .admin-modal-overlay.active {
+      display: flex;
+    }
+    .admin-modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      animation: modalFadeIn 0.3s ease;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .admin-modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .admin-modal-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .admin-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: var(--bg-tertiary);
+      border-radius: 0 0 14px 14px;
+    }
+    .admin-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .admin-form-group label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .admin-form-input, .admin-form-select, .admin-form-textarea {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .admin-form-input:focus, .admin-form-select:focus, .admin-form-textarea:focus {
+      border-color: var(--gold-primary);
+      outline: none;
+    }
+
+    /* Flipkart-Style Order Confirmation Tick Animation */
+    .badge-ticket-pill {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      background: rgba(197, 168, 128, 0.15);
+      color: var(--gold-primary);
+      border: 1px solid rgba(197, 168, 128, 0.35);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .flipkart-checkmark-anim {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 16px auto;
+    }
+    .checkmark-svg {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      display: block;
+      stroke-width: 3.5;
+      stroke: #25D366;
+      stroke-miterlimit: 10;
+      box-shadow: 0 0 25px rgba(37, 211, 102, 0.35);
+      animation: fk-fill .4s ease-in-out .4s forwards, fk-scale .3s ease-in-out .9s both;
+    }
+    .checkmark-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 3.5;
+      stroke-miterlimit: 10;
+      stroke: #25D366;
+      fill: none;
+      animation: fk-stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    .checkmark-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      stroke: #ffffff;
+      stroke-width: 4;
+      animation: fk-stroke 0.35s cubic-bezier(0.65, 0, 0.45, 1) 0.65s forwards;
+    }
+    @keyframes fk-stroke {
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes fk-scale {
+      0%, 100% {
+        transform: none;
+      }
+      50% {
+        transform: scale3d(1.12, 1.12, 1);
+      }
+    }
+    @keyframes fk-fill {
+      100% {
+        box-shadow: inset 0px 0px 0px 50px rgba(37, 211, 102, 0.2), 0 0 30px rgba(37, 211, 102, 0.4);
+      }
+    }
   </style>
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -935,6 +1219,44 @@
         </div>
       </div>
 
+      <!-- COMMON SALON CALENDAR & 8-STAFF LIVE SLOT MATRIX -->
+      <div class="panel" style="margin-bottom: 24px;">
+        <div class="panel-header" style="flex-wrap: wrap; gap: 15px;">
+          <div>
+            <h2 class="panel-title" style="display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-calendar-check" style="color: var(--gold-primary);"></i>
+              Common Salon Calendar &amp; Slot Availability (8 Staff Capacity)
+            </h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+              Live slot capacity across all 8 salon workers. Total salon capacity is 8 simultaneous client appointments per time slot.
+            </p>
+          </div>
+          
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <button class="btn-db" id="cal-nav-prev" style="padding: 7px 12px; font-size: 0.8rem;"><i class="fas fa-chevron-left"></i> Prev Day</button>
+            <button class="btn-db" id="cal-nav-today" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 600; color: var(--gold-primary);">Today</button>
+            <input type="date" id="calendar-view-date" class="admin-date-input" style="padding: 6px 12px; font-size: 0.85rem;">
+            <button class="btn-db" id="cal-nav-next" style="padding: 7px 12px; font-size: 0.8rem;">Next Day <i class="fas fa-chevron-right"></i></button>
+            <button class="btn-db" id="btn-purge-past" style="padding: 7px 12px; font-size: 0.8rem; background: rgba(239, 83, 80, 0.12); color: #ef5350; border: 1px solid rgba(239, 83, 80, 0.3); border-radius: 6px; cursor: pointer;" title="Delete Previous Days' Data to keep website smooth">
+              <i class="fas fa-broom"></i> Clean Past Days
+            </button>
+            <button class="btn-db primary" id="btn-open-appointment-modal" style="background: var(--gold-primary); color: #000; font-weight: 600; padding: 8px 18px; font-size: 0.85rem; border: none; cursor: pointer; border-radius: 6px;">
+              <i class="fas fa-plus-circle"></i> + Add Appointment
+            </button>
+          </div>
+        </div>
+
+        <!-- 8 Workers Legend Bar -->
+        <div class="staff-legend-bar" id="staff-legend-container">
+          <!-- Injected dynamically with 8 staff chips -->
+        </div>
+
+        <!-- Slots Matrix (10:00 AM to 10:00 PM) -->
+        <div class="slots-matrix-grid" id="slots-matrix-grid">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
       <!-- SPLIT PANELS -->
       <div class="dashboard-layout">
         
@@ -953,14 +1275,15 @@
             </div>
             
             <select class="filter-select" id="filter-stylist">
-              <option value="all">All Stylists</option>
-              <option value="MUKESH SIR">MUKESH SIR</option>
-              <option value="AMAR SIR">AMAR SIR</option>
-              <option value="BALAJI SIR">BALAJI SIR</option>
-              <option value="SAMARTH SIR">SAMARTH SIR</option>
-              <option value="PRATIKSHA MAM">PRATIKSHA MAM</option>
-              <option value="COMING SOON">COMING SOON</option>
-              <option value="Any Available Expert">Any Available Expert</option>
+              <option value="all">All Stylists (8 Staff)</option>
+              <option value="st1">Worker 1 (MUKESH SIR)</option>
+              <option value="st2">Worker 2 (AMAR SIR)</option>
+              <option value="st3">Worker 3 (BALAJI SIR)</option>
+              <option value="st4">Worker 4 (SAMARTH SIR)</option>
+              <option value="st5">Worker 5 (PRATIKSHA MAM)</option>
+              <option value="st6">Worker 6 (ANAS SIR)</option>
+              <option value="st7">Worker 7 (YOGITA MAM)</option>
+              <option value="st8">Worker 8 (DIVYA MAM)</option>
             </select>
             
             <select class="filter-select" id="filter-date">
@@ -1027,7 +1350,9 @@
               <option value="st3">BALAJI SIR</option>
               <option value="st4">SAMARTH SIR</option>
               <option value="st5">PRATIKSHA MAM</option>
-              <option value="st6">COMING SOON</option>
+              <option value="st6">ANAS SIR</option>
+              <option value="st7">YOGITA MAM</option>
+              <option value="st8">DIVYA MAM</option>
             </select>
             <button class="btn-db primary" id="add-holiday-btn" style="padding: 10px 18px; border-radius: 8px; font-size: 0.85rem;"><i class="fas fa-ban"></i> Block Date</button>
           </div>
@@ -1055,6 +1380,159 @@
       </div>
 
     </main>
+  </div>
+
+  <!-- MODAL: ADD NEW APPOINTMENT (SALON WORKERS DESK) -->
+  <div class="admin-modal-overlay" id="admin-appointment-modal">
+    <div class="admin-modal-box">
+      <div class="admin-modal-header">
+        <h3 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold-primary); display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-calendar-plus"></i> Add Appointment (8 Staff Capacity)
+        </h3>
+        <button type="button" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;" id="btn-close-appointment-modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <form id="admin-add-booking-form" onsubmit="event.preventDefault(); saveNewAppointmentFromModal();">
+        <div class="admin-modal-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="admin-form-group">
+              <label for="modal-client-name">Client Full Name *</label>
+              <input type="text" id="modal-client-name" class="admin-form-input" placeholder="e.g. Rahul Sharma" required>
+            </div>
+            <div class="admin-form-group">
+              <label for="modal-client-phone">Client Phone Number *</label>
+              <input type="tel" id="modal-client-phone" class="admin-form-input" placeholder="e.g. 9876543210" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="admin-form-group">
+              <label for="modal-booking-date">Appointment Date *</label>
+              <input type="date" id="modal-booking-date" class="admin-form-input" required>
+            </div>
+            <div class="admin-form-group">
+              <label for="modal-booking-time">Time Slot *</label>
+              <select id="modal-booking-time" class="admin-form-select" required>
+                <!-- Populated dynamically with remaining slots count -->
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="modal-booking-worker">Assign Salon Worker (1 of 8 Workers) *</label>
+            <select id="modal-booking-worker" class="admin-form-select" required>
+              <!-- Populated dynamically with live worker availability -->
+            </select>
+            <span id="worker-status-hint" style="font-size: 0.75rem; color: #81c784; margin-top: 2px;"></span>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="modal-booking-services">Services Booked *</label>
+            <input type="text" id="modal-booking-services" class="admin-form-input" placeholder="e.g. Hair Cut + Beard Grooming" required>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+              <button type="button" class="btn-db" style="padding: 3px 8px; font-size: 0.72rem;" onclick="addQuickService('Hair Cut', 300, 30)">+ Hair Cut (₹300)</button>
+              <button type="button" class="btn-db" style="padding: 3px 8px; font-size: 0.72rem;" onclick="addQuickService('Hair Wash & Advance Setting', 300, 45)">+ Hair Wash (₹300)</button>
+              <button type="button" class="btn-db" style="padding: 3px 8px; font-size: 0.72rem;" onclick="addQuickService('Beard Grooming', 150, 25)">+ Beard (₹150)</button>
+              <button type="button" class="btn-db" style="padding: 3px 8px; font-size: 0.72rem;" onclick="addQuickService('Premium Hydra Facial', 2500, 90)">+ Hydra Facial (₹2500)</button>
+              <button type="button" class="btn-db" style="padding: 3px 8px; font-size: 0.72rem;" onclick="addQuickService('Gold Clean Up', 800, 50)">+ Clean Up (₹800)</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="admin-form-group">
+              <label for="modal-booking-price">Total Price (₹) *</label>
+              <input type="number" id="modal-booking-price" class="admin-form-input" placeholder="300" min="0" required>
+            </div>
+            <div class="admin-form-group">
+              <label for="modal-booking-duration">Duration (Minutes) *</label>
+              <input type="number" id="modal-booking-duration" class="admin-form-input" placeholder="45" min="10" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="admin-form-group">
+              <label for="modal-client-dob">Client Date of Birth (Optional)</label>
+              <input type="date" id="modal-client-dob" class="admin-form-input">
+            </div>
+            <div class="admin-form-group">
+              <label for="modal-booking-notes">Special Instructions / Remarks</label>
+              <input type="text" id="modal-booking-notes" class="admin-form-input" placeholder="e.g. VIP client, preferred tea">
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" class="btn-db" id="btn-cancel-modal">Cancel</button>
+          <button type="submit" class="btn-db primary" style="background: var(--gold-primary); color: #000; font-weight: 600; padding: 10px 22px;">
+            <i class="fas fa-check-circle"></i> Save &amp; Lock Slot
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLIPKART-STYLE SUCCESS TICK MODAL -->
+  <div class="admin-modal-overlay" id="admin-success-modal" style="z-index: 10000;">
+    <div class="admin-modal-box" style="max-width: 480px; text-align: center; padding: 32px 24px; position: relative;">
+      
+      <!-- Animated Checkmark Circle (Flipkart Style) -->
+      <div class="flipkart-checkmark-anim">
+        <svg class="checkmark-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+
+      <span class="badge-ticket-pill" id="success-ticket-badge">#MM-849201</span>
+      
+      <h3 style="font-family: var(--font-serif); font-size: 1.65rem; color: #fff; margin: 12px 0 6px 0;">
+        Appointment Confirmed!
+      </h3>
+      <p style="font-size: 0.88rem; color: #81c784; font-weight: 500; margin-bottom: 20px;">
+        <i class="fas fa-check-double"></i> Slot Successfully Locked on Salon Calendar
+      </p>
+
+      <!-- Receipt Summary Card -->
+      <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; text-align: left; margin-bottom: 22px; font-size: 0.88rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted);">Client:</span>
+          <strong id="success-client-name" style="color: #fff;">Rahul Sharma</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted);">Phone:</span>
+          <span id="success-client-phone" style="color: var(--gold-primary);">9876543210</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted);">Slot Locked:</span>
+          <strong id="success-slot-time" style="color: #fff;">Today at 01:00 PM</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted);">Assigned Staff:</span>
+          <span id="success-worker-name" style="color: var(--gold-primary); font-weight: 600;">Worker 1 (MUKESH SIR)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted);">Remaining Capacity:</span>
+          <span id="success-remaining-slots" style="color: #81c784; font-weight: 600;">7 of 8 Slots Free</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 10px;">
+          <span style="color: var(--text-muted);">Total Amount:</span>
+          <strong id="success-total-price" style="color: var(--gold-primary); font-size: 1.15rem; font-family: var(--font-serif);">₹300</strong>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a id="success-whatsapp-link" href="#" target="_blank" class="btn-db primary" style="background: #25D366; color: #fff; font-weight: 600; padding: 12px; border-radius: 30px; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> Send Confirmation on WhatsApp
+        </a>
+        <button type="button" class="btn-db" id="btn-close-success-modal" style="padding: 10px; border-radius: 30px; font-size: 0.85rem; border: 1px solid var(--border-color); cursor: pointer;">
+          <i class="fas fa-calendar-alt" style="margin-right: 6px;"></i> Done &amp; Back to Calendar
+        </button>
+      </div>
+
+    </div>
   </div>
 
   <script>
@@ -1290,20 +1768,65 @@
 
     // Load Database Bookings (utilizing synchronized live cache or localStorage)
     function getBookings() {
+      const todayStr = getRelativeDate(0);
       if (liveBookingsCache && liveBookingsCache.length > 0) {
-        return liveBookingsCache;
+        return liveBookingsCache.filter(b => !b.appointmentDate || b.appointmentDate >= todayStr);
       }
       const stored = localStorage.getItem('makeme_bookings');
       if (!stored) {
         return [];
       }
-      return JSON.parse(stored);
+      try {
+        const parsed = JSON.parse(stored);
+        // Automatically prune previous day's appointments to keep website smooth
+        const cleaned = parsed.filter(b => !b.appointmentDate || b.appointmentDate >= todayStr);
+        if (cleaned.length !== parsed.length) {
+          localStorage.setItem('makeme_bookings', JSON.stringify(cleaned));
+        }
+        return cleaned;
+      } catch (e) {
+        return [];
+      }
+    }
+
+    // Purge Previous Days' appointments from Cloud and Local Storage
+    function purgePreviousDaysBookings(showAlert = false) {
+      const todayStr = getRelativeDate(0);
+      const stored = localStorage.getItem('makeme_bookings');
+      let currentBookings = [];
+      try {
+        currentBookings = JSON.parse(stored || '[]');
+      } catch (e) {}
+
+      const pastList = currentBookings.filter(b => b.appointmentDate && b.appointmentDate < todayStr);
+      const activeList = currentBookings.filter(b => !b.appointmentDate || b.appointmentDate >= todayStr);
+
+      // Delete past appointments from Firebase Cloud Firestore
+      if (window.db && pastList.length > 0) {
+        pastList.forEach(b => {
+          if (b.ticketId) {
+            window.db.collection('bookings').doc(b.ticketId).delete()
+              .then(() => console.log(`Purged previous day booking: ${b.ticketId} (${b.appointmentDate})`))
+              .catch(err => console.error("Error purging past booking from Firebase:", err));
+          }
+        });
+      }
+
+      liveBookingsCache = activeList;
+      localStorage.setItem('makeme_bookings', JSON.stringify(activeList));
+      renderDashboard();
+
+      if (showAlert) {
+        alert(`🧹 Website Cleaned!\n\n${pastList.length} previous day bookings purged. Active appointments (Today & Upcoming) are running smoothly.`);
+      }
     }
 
     // Save Database Bookings locally (fallback/offline sync mirror)
     function saveBookings(bookings) {
-      localStorage.setItem('makeme_bookings', JSON.stringify(bookings));
-      liveBookingsCache = bookings;
+      const todayStr = getRelativeDate(0);
+      const cleaned = (bookings || []).filter(b => !b.appointmentDate || b.appointmentDate >= todayStr);
+      localStorage.setItem('makeme_bookings', JSON.stringify(cleaned));
+      liveBookingsCache = cleaned;
       renderDashboard();
     }
 
@@ -1315,38 +1838,32 @@
         return;
       }
 
+      const todayStr = getRelativeDate(0);
+
       window.db.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(querySnapshot => {
         const bookings = [];
+        const pastDocsToDelete = [];
         querySnapshot.forEach(doc => {
           // Exclude metadata/settings document from bookings array
           if (doc.id !== 'settings_holidays' && doc.data().ticketId) {
-            bookings.push(doc.data());
+            const data = doc.data();
+            // Automatically delete previous day's appointments from Cloud Firestore
+            if (data.appointmentDate && data.appointmentDate < todayStr) {
+              pastDocsToDelete.push(doc.id);
+            } else {
+              bookings.push(data);
+            }
           }
         });
 
-        // Run one-time migration to fix the specific bookings that shifted due to timezone bug
-        let firebaseMigrated = false;
-        bookings.forEach(b => {
-          if ((b.ticketId === 'MM-998513' || b.ticketId === 'MM-621304') && b.appointmentDate === '2026-07-30') {
-            window.db.collection('bookings').doc(b.ticketId).update({
-              appointmentDate: '2026-07-31'
-            }).then(() => {
-              console.log(`One-time migration: fixed booking ${b.ticketId} to 2026-07-31`);
-            });
-            firebaseMigrated = true;
-          }
-          if (b.ticketId === 'MM-844515' && b.appointmentDate === '2026-07-01') {
-            window.db.collection('bookings').doc(b.ticketId).update({
-              appointmentDate: '2026-07-02'
-            }).then(() => {
-              console.log(`One-time migration: fixed booking ${b.ticketId} to 2026-07-02`);
-            });
-            firebaseMigrated = true;
-          }
-        });
-        if (firebaseMigrated) return;
-        
-        // Do not auto-seed database if Firestore has absolutely no bookings
+        // Automatically delete previous day's documents from Firebase in background
+        if (pastDocsToDelete.length > 0) {
+          pastDocsToDelete.forEach(docId => {
+            window.db.collection('bookings').doc(docId).delete()
+              .then(() => console.log(`Auto-purged previous day booking from Cloud: ${docId}`))
+              .catch(err => console.error("Error auto-purging past booking:", err));
+          });
+        }
 
         liveBookingsCache = bookings;
         localStorage.setItem('makeme_bookings', JSON.stringify(bookings));
@@ -1506,8 +2023,718 @@
         });
       }
 
-      // 3. Render Schedules Table with Filters
+      // 3. Render Common Salon Calendar & 8-Staff Live Slots Matrix
+      renderCommonCalendar();
+
+      // 4. Render Schedules Table with Filters
       renderSchedulesTable(bookings);
+    }
+
+    // 8 SALON WORKERS SYSTEM & COMMON CALENDAR
+    const SALON_WORKERS = [
+      { id: 'st1', name: 'Worker 1 (MUKESH SIR)', short: 'Worker 1', role: 'Director & Hair Artist' },
+      { id: 'st2', name: 'Worker 2 (AMAR SIR)', short: 'Worker 2', role: 'Master Hair Stylist' },
+      { id: 'st3', name: 'Worker 3 (BALAJI SIR)', short: 'Worker 3', role: 'Junior Artist' },
+      { id: 'st4', name: 'Worker 4 (SAMARTH SIR)', short: 'Worker 4', role: 'Creative Hair Artist' },
+      { id: 'st5', name: 'Worker 5 (PRATIKSHA MAM)', short: 'Worker 5', role: 'Senior Skincare Artist' },
+      { id: 'st6', name: 'Worker 6 (ANAS SIR)', short: 'Worker 6', role: 'Hair & Styling Expert' },
+      { id: 'st7', name: 'Worker 7 (YOGITA MAM)', short: 'Worker 7', role: 'Senior Skincare Specialist' },
+      { id: 'st8', name: 'Worker 8 (DIVYA MAM)', short: 'Worker 8', role: 'Salon & Beauty Specialist' }
+    ];
+    const TOTAL_STAFF_CAPACITY = 8;
+    const SALON_SLOTS = [
+      '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', 
+      '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', 
+      '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM', '10:00 PM'
+    ];
+
+    let currentCalendarDate = getRelativeDate(0); // Today YYYY-MM-DD
+    let selectedWorkerFilter = 'all'; // 'all' or worker.id
+
+    function setWorkerCalendarFilter(workerId) {
+      selectedWorkerFilter = workerId;
+      renderCommonCalendar();
+    }
+
+    // Renders the 8 staff common calendar view & slot capacity
+    function renderCommonCalendar() {
+      const dateInput = document.getElementById('calendar-view-date');
+      if (dateInput) dateInput.value = currentCalendarDate;
+
+      // Render 8 workers legend chips (Clickable to view individual empty & booked slots)
+      const legendContainer = document.getElementById('staff-legend-container');
+      if (legendContainer) {
+        legendContainer.innerHTML = `
+          <div class="staff-chip ${selectedWorkerFilter === 'all' ? 'active' : ''}" onclick="setWorkerCalendarFilter('all')" title="View Master Capacity for All 8 Staff">
+            <i class="fas fa-users"></i>
+            <span><strong>All Staff</strong> (8 Workers)</span>
+          </div>
+        ` + SALON_WORKERS.map(w => `
+          <div class="staff-chip ${selectedWorkerFilter === w.id ? 'active' : ''}" onclick="setWorkerCalendarFilter('${w.id}')" title="Click to view ${w.name}'s Empty & Booked Slots">
+            <i class="fas fa-user-circle"></i>
+            <span><strong>${w.short}</strong>: ${w.name.replace(/Worker \d+ \((.*?)\)/, '$1')}</span>
+          </div>
+        `).join('');
+      }
+
+      // Render Live Slots Matrix
+      const matrixGrid = document.getElementById('slots-matrix-grid');
+      if (!matrixGrid) return;
+
+      const bookings = getBookings();
+      // Filter non-cancelled bookings for current calendar date
+      const dateBookings = bookings.filter(b => b.appointmentDate === currentCalendarDate && b.status !== 'cancelled');
+
+      // INDIVIDUAL WORKER VIEW (e.g. Mukesh Sir, Amar Sir, etc.)
+      if (selectedWorkerFilter !== 'all') {
+        const worker = SALON_WORKERS.find(w => w.id === selectedWorkerFilter) || SALON_WORKERS[0];
+
+        const isBookingForWorker = (b) => {
+          return b.stylistId === worker.id ||
+                 b.stylistName === worker.name ||
+                 (b.stylistName && b.stylistName.includes(worker.short)) ||
+                 (worker.id === 'st1' && b.stylistName && b.stylistName.toUpperCase().includes('MUKESH')) ||
+                 (worker.id === 'st2' && b.stylistName && b.stylistName.toUpperCase().includes('AMAR')) ||
+                 (worker.id === 'st3' && b.stylistName && b.stylistName.toUpperCase().includes('BALAJI')) ||
+                 (worker.id === 'st4' && b.stylistName && b.stylistName.toUpperCase().includes('SAMARTH')) ||
+                 (worker.id === 'st5' && b.stylistName && b.stylistName.toUpperCase().includes('PRATIKSHA')) ||
+                 (worker.id === 'st6' && b.stylistName && b.stylistName.toUpperCase().includes('ANAS')) ||
+                 (worker.id === 'st7' && b.stylistName && b.stylistName.toUpperCase().includes('YOGITA')) ||
+                 (worker.id === 'st8' && b.stylistName && b.stylistName.toUpperCase().includes('DIVYA'));
+        };
+
+        const workerDateBookings = dateBookings.filter(isBookingForWorker);
+        const bookedSlotsCount = workerDateBookings.length;
+        const emptySlotsCount = SALON_SLOTS.length - bookedSlotsCount;
+
+        const headerBannerHtml = `
+          <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: rgba(197, 168, 128, 0.08); border: 1px solid rgba(197, 168, 128, 0.3); border-radius: 12px; padding: 14px 20px; margin-bottom: 8px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--gold-primary); letter-spacing: 0.06em; font-weight: 600; display: block;">Individual Staff Slot Schedule</span>
+              <h3 style="margin: 2px 0 0 0; font-size: 1.2rem; color: #fff; font-family: var(--font-serif);">${worker.name}</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">${worker.role} • ${currentCalendarDate}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span style="background: rgba(37, 211, 102, 0.15); color: #81c784; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(37, 211, 102, 0.3);">
+                <i class="fas fa-check-circle"></i> ${emptySlotsCount} Empty Slots Available
+              </span>
+              <span style="background: rgba(239, 83, 80, 0.15); color: #ef5350; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(239, 83, 80, 0.3);">
+                <i class="fas fa-lock"></i> ${bookedSlotsCount} Booked Slots
+              </span>
+              <button class="btn-db" onclick="setWorkerCalendarFilter('all')" style="padding: 6px 14px; font-size: 0.78rem; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); color: var(--gold-primary); cursor: pointer;">
+                <i class="fas fa-users"></i> Back to All Staff
+              </button>
+            </div>
+          </div>
+        `;
+
+        const slotsHtml = SALON_SLOTS.map(slot => {
+          const booking = workerDateBookings.find(b => {
+            if (!b.appointmentTime) return false;
+            const bTime = b.appointmentTime.replace(/^0/, '').trim().toUpperCase();
+            const sTime = slot.replace(/^0/, '').trim().toUpperCase();
+            return bTime === sTime || b.appointmentTime === slot;
+          });
+
+          if (booking) {
+            // BOOKED SLOT FOR THIS WORKER
+            return `
+              <div class="slot-card" style="border: 1px solid rgba(239, 83, 80, 0.45); background: rgba(239, 83, 80, 0.04);">
+                <div class="slot-card-header">
+                  <span class="slot-time"><i class="far fa-clock" style="color:var(--gold-primary); margin-right:6px;"></i>${slot}</span>
+                  <span class="slot-badge full"><i class="fas fa-lock"></i> BOOKED (Slot Fixed)</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.35); border-radius: 8px; padding: 12px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.06);">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <strong style="color: #fff; font-size: 0.92rem;">${booking.clientName}</strong>
+                    <span style="font-size: 0.7rem; color: var(--gold-primary); background: rgba(197,168,128,0.15); padding: 2px 6px; border-radius: 4px;">#${booking.ticketId}</span>
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">
+                    <i class="fas fa-phone-alt" style="margin-right: 4px; color: var(--gold-primary);"></i>${booking.clientPhone}
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--gold-primary);">
+                    ${(booking.services && booking.services[0]) ? booking.services[0].name : 'Appointment'} • ₹${booking.totalPrice || 0}
+                  </div>
+                </div>
+                <div style="font-size: 0.74rem; color: #ef5350; font-weight: 500; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-check-circle" style="color: #25D366;"></i> Slot Fixed with ${worker.short}
+                </div>
+              </div>
+            `;
+          } else {
+            // EMPTY SLOT FOR THIS WORKER
+            return `
+              <div class="slot-card" style="border: 1px solid rgba(37, 211, 102, 0.45); background: rgba(37, 211, 102, 0.04);">
+                <div class="slot-card-header">
+                  <span class="slot-time"><i class="far fa-clock" style="color:var(--gold-primary); margin-right:6px;"></i>${slot}</span>
+                  <span class="slot-badge all-free"><i class="fas fa-check-circle"></i> EMPTY (FREE SLOT)</span>
+                </div>
+                <div style="padding: 14px 6px; text-align: center;">
+                  <i class="fas fa-calendar-check" style="color: #25D366; font-size: 1.35rem; display: block; margin-bottom: 6px;"></i>
+                  <strong style="color: #fff; font-size: 0.88rem;">${worker.short} is Available</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Slot is completely free to book</div>
+                </div>
+                <button class="slot-book-btn" onclick="openAddAppointmentModal('${currentCalendarDate}', '${slot}', '${worker.id}')" style="background: #25D366; color: #000; font-weight: 600; border-color: #25D366;">
+                  <i class="fas fa-plus"></i> Book ${worker.short} (${slot})
+                </button>
+              </div>
+            `;
+          }
+        }).join('');
+
+        matrixGrid.innerHTML = headerBannerHtml + slotsHtml;
+        return;
+      }
+
+      // MASTER MATRIX VIEW (ALL 8 WORKERS)
+      matrixGrid.innerHTML = SALON_SLOTS.map(slot => {
+        // Find bookings in this time slot
+        const slotBookings = dateBookings.filter(b => {
+          if (!b.appointmentTime) return false;
+          const bTime = b.appointmentTime.replace(/^0/, '').trim().toUpperCase();
+          const sTime = slot.replace(/^0/, '').trim().toUpperCase();
+          return bTime === sTime || b.appointmentTime === slot;
+        });
+
+        const bookedCount = slotBookings.length;
+        const remainingSlots = Math.max(0, TOTAL_STAFF_CAPACITY - bookedCount);
+        const percentFilled = Math.min(100, Math.round((bookedCount / TOTAL_STAFF_CAPACITY) * 100));
+
+        let badgeHtml = '';
+        let progressFillColor = '#81c784';
+
+        if (remainingSlots === TOTAL_STAFF_CAPACITY) {
+          badgeHtml = `<span class="slot-badge all-free"><i class="fas fa-check-circle"></i> 8 Slots Remaining (All Free)</span>`;
+          progressFillColor = '#81c784';
+        } else if (remainingSlots > 0) {
+          badgeHtml = `<span class="slot-badge has-remaining"><i class="fas fa-user-check"></i> ${remainingSlots} Slots Remaining (${bookedCount} / 8 Booked)</span>`;
+          progressFillColor = '#ffb74d';
+        } else {
+          badgeHtml = `<span class="slot-badge full"><i class="fas fa-ban"></i> 0 Slots Remaining (FULL)</span>`;
+          progressFillColor = '#ef5350';
+        }
+
+        // List booked worker pills with green tick
+        const bookingsListHtml = slotBookings.length > 0 ? `
+          <div class="slot-bookings-list">
+            ${slotBookings.map(b => {
+              const workerLabel = b.stylistName || 'Staff';
+              const serviceLabel = (b.services && b.services[0]) ? b.services[0].name : 'Appointment';
+              return `
+                <div class="slot-booking-pill" style="display:flex; justify-content:space-between; align-items:center; background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.25); padding: 7px 10px; border-radius: 8px; margin-bottom: 6px;">
+                  <span style="font-size:0.82rem; color:#fff; display:flex; align-items:center; gap:6px;">
+                    <i class="fas fa-check-circle" style="color:#25D366; font-size:0.9rem;"></i>
+                    <strong>${workerLabel}</strong>: ${b.clientName}
+                  </span>
+                  <span style="font-size:0.72rem; color:#81c784; background:rgba(37,211,102,0.15); padding:2px 8px; border-radius:12px; font-weight:600;">
+                    ✓ Slot Fixed
+                  </span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        ` : `<div style="font-size:0.75rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">All 8 workers free for this slot.</div>`;
+
+        const bookBtnHtml = remainingSlots > 0 ? `
+          <button class="slot-book-btn" onclick="openAddAppointmentModal('${currentCalendarDate}', '${slot}')">
+            <i class="fas fa-plus"></i> Book Slot (${remainingSlots} Free)
+          </button>
+        ` : `
+          <button class="slot-book-btn" disabled style="opacity:0.6; cursor:not-allowed; background:#222; border-color:#555; color:#999;">
+            <i class="fas fa-lock"></i> All 8 Slots Fixed (FULL)
+          </button>
+        `;
+
+        return `
+          <div class="slot-card">
+            <div class="slot-card-header">
+              <span class="slot-time"><i class="far fa-clock" style="color:var(--gold-primary); margin-right:6px;"></i>${slot}</span>
+              ${badgeHtml}
+            </div>
+            
+            <div class="slot-progress-bar">
+              <div class="slot-progress-fill" style="width: ${percentFilled}%; background: ${progressFillColor};"></div>
+            </div>
+
+            ${bookingsListHtml}
+
+            ${bookBtnHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Opens Add Appointment modal with pre-filled date, slot & worker
+    function openAddAppointmentModal(preDate, preSlot, preWorkerId) {
+      const modal = document.getElementById('admin-appointment-modal');
+      if (!modal) return;
+
+      const dateField = document.getElementById('modal-booking-date');
+      const timeField = document.getElementById('modal-booking-time');
+
+      const targetDate = preDate || currentCalendarDate || getRelativeDate(0);
+      const targetSlot = preSlot || '01:00 PM';
+
+      dateField.value = targetDate;
+
+      // Populate slots with remaining capacity count
+      const bookings = getBookings();
+      const dateBookings = bookings.filter(b => b.appointmentDate === targetDate && b.status !== 'cancelled');
+
+      timeField.innerHTML = SALON_SLOTS.map(slot => {
+        const slotBookings = dateBookings.filter(b => {
+          const bTime = (b.appointmentTime || '').replace(/^0/, '').trim().toUpperCase();
+          const sTime = slot.replace(/^0/, '').trim().toUpperCase();
+          return bTime === sTime || b.appointmentTime === slot;
+        });
+        const remaining = Math.max(0, TOTAL_STAFF_CAPACITY - slotBookings.length);
+        const isSelected = (slot === targetSlot || slot.replace(/^0/, '').toUpperCase() === targetSlot.replace(/^0/, '').toUpperCase());
+        return `<option value="${slot}" ${isSelected ? 'selected' : ''}>${slot} — (${remaining} of 8 slots remaining)</option>`;
+      }).join('');
+
+      // Populate workers with busy/free state and pre-select if provided
+      updateModalWorkersList(preWorkerId);
+
+      // Reset submit button state
+      const saveBtn = document.querySelector('#admin-appointment-modal button[type="submit"]');
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-check-circle"></i> Save &amp; Lock Slot';
+      }
+
+      // Reset client fields
+      document.getElementById('modal-client-name').value = '';
+      document.getElementById('modal-client-phone').value = '';
+      document.getElementById('modal-booking-services').value = '';
+      document.getElementById('modal-booking-price').value = '300';
+      document.getElementById('modal-booking-duration').value = '45';
+      document.getElementById('modal-client-dob').value = '';
+      document.getElementById('modal-booking-notes').value = '';
+
+      modal.classList.add('active');
+    }
+
+    // Dynamic worker availability evaluation for selected date and slot
+    function updateModalWorkersList(preferredWorkerId) {
+      const dateVal = document.getElementById('modal-booking-date').value;
+      const timeVal = document.getElementById('modal-booking-time').value;
+      const workerSelect = document.getElementById('modal-booking-worker');
+      const hint = document.getElementById('worker-status-hint');
+
+      if (!workerSelect) return;
+
+      const bookings = getBookings();
+      // Find bookings at that date and time
+      const activeAtSlot = bookings.filter(b => {
+        if (b.status === 'cancelled') return false;
+        if (b.appointmentDate !== dateVal) return false;
+        const bTime = (b.appointmentTime || '').replace(/^0/, '').trim().toUpperCase();
+        const sTime = (timeVal || '').replace(/^0/, '').trim().toUpperCase();
+        return bTime === sTime || b.appointmentTime === timeVal;
+      });
+
+      let freeCount = 0;
+      workerSelect.innerHTML = SALON_WORKERS.map(worker => {
+        // Check if this worker is booked
+        const booking = activeAtSlot.find(b => 
+          b.stylistId === worker.id || 
+          b.stylistName === worker.name ||
+          (b.stylistName && b.stylistName.includes(worker.short)) ||
+          (worker.id === 'st1' && b.stylistName && b.stylistName.toUpperCase().includes('MUKESH')) ||
+          (worker.id === 'st2' && b.stylistName && b.stylistName.toUpperCase().includes('AMAR')) ||
+          (worker.id === 'st3' && b.stylistName && b.stylistName.toUpperCase().includes('BALAJI')) ||
+          (worker.id === 'st4' && b.stylistName && b.stylistName.toUpperCase().includes('SAMARTH')) ||
+          (worker.id === 'st5' && b.stylistName && b.stylistName.toUpperCase().includes('PRATIKSHA')) ||
+          (worker.id === 'st6' && b.stylistName && b.stylistName.toUpperCase().includes('ANAS')) ||
+          (worker.id === 'st7' && b.stylistName && b.stylistName.toUpperCase().includes('YOGITA')) ||
+          (worker.id === 'st8' && b.stylistName && b.stylistName.toUpperCase().includes('DIVYA'))
+        );
+
+        if (booking) {
+          return `<option value="${worker.id}" disabled style="color: #ef5350; background: #1a1a1a;" data-busy="true">🔒 ${worker.name} — [SLOT FIXED / BUSY with ${booking.clientName}]</option>`;
+        } else {
+          freeCount++;
+          const isPref = preferredWorkerId && (worker.id === preferredWorkerId || worker.short === preferredWorkerId);
+          return `<option value="${worker.id}" ${isPref ? 'selected' : ''} style="color: #81c784;" data-busy="false">✓ ${worker.name} — [AVAILABLE TO BOOK]</option>`;
+        }
+      }).join('');
+
+      // Auto-select the first available worker if none selected
+      if (!workerSelect.value) {
+        const firstAvailable = workerSelect.querySelector('option[data-busy="false"]');
+        if (firstAvailable) {
+          firstAvailable.selected = true;
+        } else {
+          workerSelect.innerHTML = '<option value="" disabled selected>❌ All 8 Staff Workers are already Booked at this slot!</option>';
+        }
+      }
+
+      if (hint) {
+        hint.innerHTML = `<i class="fas fa-info-circle"></i> <strong>${freeCount} of 8 Workers Available</strong> at ${timeVal} on ${dateVal}.`;
+        hint.style.color = freeCount > 0 ? '#81c784' : '#ef5350';
+      }
+    }
+
+    // Quick add service helper
+    function addQuickService(name, price, duration) {
+      const sInput = document.getElementById('modal-booking-services');
+      const pInput = document.getElementById('modal-booking-price');
+      const dInput = document.getElementById('modal-booking-duration');
+
+      if (!sInput) return;
+
+      if (sInput.value.trim() === '') {
+        sInput.value = name;
+        pInput.value = price;
+        dInput.value = duration;
+      } else {
+        sInput.value += ', ' + name;
+        pInput.value = (Number(pInput.value) || 0) + price;
+        dInput.value = (Number(dInput.value) || 0) + duration;
+      }
+    }
+
+    // Pleasant Flipkart/PhonePe style audio chime confirmation
+    function playSuccessChime() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const now = ctx.currentTime;
+        
+        // Note 1 (587.33 Hz - D5)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, now);
+        gain1.gain.setValueAtTime(0.18, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.35);
+
+        // Note 2 (880 Hz - A5, chime finish)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880, now + 0.12);
+        gain2.gain.setValueAtTime(0.22, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.55);
+      } catch (e) {
+        // Audio policy or restriction - silently continue
+      }
+    }
+
+    // Saves new appointment created by salon workers
+    function saveNewAppointmentFromModal() {
+      const saveBtn = document.querySelector('#admin-appointment-modal button[type="submit"]');
+      try {
+        const nameInput = document.getElementById('modal-client-name');
+        const phoneInput = document.getElementById('modal-client-phone');
+        const dateInput = document.getElementById('modal-booking-date');
+        const timeInput = document.getElementById('modal-booking-time');
+        const workerInput = document.getElementById('modal-booking-worker');
+        const servicesInput = document.getElementById('modal-booking-services');
+        const priceInput = document.getElementById('modal-booking-price');
+        const durationInput = document.getElementById('modal-booking-duration');
+        const dobInput = document.getElementById('modal-client-dob');
+        const notesInput = document.getElementById('modal-booking-notes');
+
+        const name = (nameInput ? nameInput.value : '').trim();
+        const phone = (phoneInput ? phoneInput.value : '').trim();
+        const date = (dateInput ? dateInput.value : '');
+        const time = (timeInput ? timeInput.value : '');
+        const workerId = (workerInput ? workerInput.value : '');
+        const services = (servicesInput ? servicesInput.value : '').trim();
+        const price = Number(priceInput ? priceInput.value : 0) || 0;
+        const duration = Number(durationInput ? durationInput.value : 30) || 30;
+        const dob = (dobInput ? dobInput.value : '');
+        const notes = (notesInput ? notesInput.value : '').trim();
+
+        if (!name || !phone || !date || !time) {
+          alert('Please fill out all required fields.');
+          return;
+        }
+
+        if (!workerId) {
+          alert('All 8 staff workers are booked for this slot. Please choose another time slot.');
+          return;
+        }
+
+        const worker = SALON_WORKERS.find(w => w.id === workerId) || { id: workerId, name: 'Worker' };
+
+        // Double booking check - STRICTLY PREVENT BOOKING 2 TIMES
+        const bookings = getBookings();
+        const isAlreadyBusy = bookings.some(b => {
+          if (b.status === 'cancelled') return false;
+          if (b.appointmentDate !== date) return false;
+          const bTime = (b.appointmentTime || '').replace(/^0/, '').trim().toUpperCase();
+          const sTime = time.replace(/^0/, '').trim().toUpperCase();
+          return (bTime === sTime || b.appointmentTime === time) && (
+            b.stylistId === workerId || 
+            b.stylistName === worker.name ||
+            (b.stylistName && b.stylistName.includes(worker.short))
+          );
+        });
+
+        if (isAlreadyBusy) {
+          alert(`❌ DOUBLE BOOKING BLOCKED!\n\n${worker.name} already has a FIXED slot at ${time} on ${date}.\nPlease select an available worker from the staff list.`);
+          return;
+        }
+
+        // Prevent duplicate booking for the same client phone at same slot
+        const isClientDoubleBooked = bookings.some(b => {
+          if (b.status === 'cancelled') return false;
+          if (b.appointmentDate !== date) return false;
+          const bTime = (b.appointmentTime || '').replace(/^0/, '').trim().toUpperCase();
+          const sTime = time.replace(/^0/, '').trim().toUpperCase();
+          return (bTime === sTime || b.appointmentTime === time) && (b.clientPhone && String(b.clientPhone) === phone);
+        });
+
+        if (isClientDoubleBooked) {
+          alert(`❌ DUPLICATE BOOKING BLOCKED!\n\nClient with phone ${phone} is already booked at ${time} on ${date}. This prevents creating duplicate bookings.`);
+          return;
+        }
+
+        const ticketId = 'MM-' + Math.floor(100000 + Math.random() * 900000);
+        const newBooking = {
+          ticketId: ticketId,
+          clientName: name,
+          clientPhone: phone,
+          clientDob: dob || '',
+          appointmentDate: date,
+          appointmentTime: time,
+          stylistId: worker.id,
+          stylistName: worker.name,
+          services: services ? services.split(',').map(s => ({ name: s.trim(), price: price, duration: duration })) : [{ name: 'Salon Service', price: price, duration: duration }],
+          totalPrice: price,
+          totalDuration: duration,
+          notes: notes,
+          status: 'confirmed',
+          createdAt: new Date().toISOString()
+        };
+
+        // CLOSE appointment input modal IMMEDIATELY
+        const modal = document.getElementById('admin-appointment-modal');
+        if (modal) modal.classList.remove('active');
+
+        // Reset submit button state
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="fas fa-check-circle"></i> Save &amp; Lock Slot';
+        }
+
+        // Add to local bookings cache and localStorage
+        bookings.unshift(newBooking);
+        try {
+          saveBookings(bookings);
+        } catch (saveErr) {
+          console.error("Local saveBookings error:", saveErr);
+          localStorage.setItem('makeme_bookings', JSON.stringify(bookings));
+          liveBookingsCache = bookings;
+        }
+
+        // Save to Firebase Cloud asynchronously
+        if (window.db) {
+          window.db.collection('bookings').doc(ticketId).set(newBooking)
+            .then(() => console.log("New appointment saved to Firebase:", ticketId))
+            .catch(err => console.error("Firebase save error:", err));
+        }
+
+        // Update current calendar date to match booked date
+        currentCalendarDate = date;
+        try {
+          renderCommonCalendar();
+        } catch (calErr) {
+          console.error("renderCommonCalendar error:", calErr);
+        }
+
+        // Calculate remaining slots at that time after booking
+        const slotBookingsAfter = bookings.filter(b => {
+          if (b.status === 'cancelled') return false;
+          if (b.appointmentDate !== date) return false;
+          const bTime = (b.appointmentTime || '').replace(/^0/, '').trim().toUpperCase();
+          const sTime = time.replace(/^0/, '').trim().toUpperCase();
+          return bTime === sTime || b.appointmentTime === time;
+        });
+        const remainingSlotsNow = Math.max(0, TOTAL_STAFF_CAPACITY - slotBookingsAfter.length);
+
+        // Play Flipkart-style audio chime
+        try {
+          playSuccessChime();
+        } catch (chimeErr) {
+          console.log("Audio chime error:", chimeErr);
+        }
+
+        // Show Flipkart-Style Animated Checkmark Modal
+        const successModal = document.getElementById('admin-success-modal');
+        if (successModal) {
+          const badgeEl = document.getElementById('success-ticket-badge');
+          if (badgeEl) badgeEl.textContent = `#${ticketId}`;
+
+          const nameEl = document.getElementById('success-client-name');
+          if (nameEl) nameEl.textContent = name;
+
+          const phoneEl = document.getElementById('success-client-phone');
+          if (phoneEl) phoneEl.textContent = phone;
+
+          const slotEl = document.getElementById('success-slot-time');
+          if (slotEl) slotEl.textContent = `${date} at ${time}`;
+
+          const workerEl = document.getElementById('success-worker-name');
+          if (workerEl) workerEl.textContent = worker.name;
+
+          const remainingEl = document.getElementById('success-remaining-slots');
+          if (remainingEl) remainingEl.textContent = `${remainingSlotsNow} of 8 Slots Free`;
+
+          const priceEl = document.getElementById('success-total-price');
+          if (priceEl) priceEl.textContent = `₹${price}`;
+
+          const waReceipt = `*APPOINTMENT CONFIRMED - MAKE ME SALON*\n\n` +
+            `*Ticket ID:* #${ticketId}\n` +
+            `*Client:* ${name}\n` +
+            `*Date:* ${date}\n` +
+            `*Time:* ${time}\n` +
+            `*Assigned Stylist:* ${worker.name}\n` +
+            `*Services:* ${services || 'Salon Services'}\n` +
+            `*Total Price:* ₹${price}\n\n` +
+            `Thank you for booking with MAKE ME Unisex Salon!\n📍 *Location:* MAKE ME Unisex Salon, Barshi Naka, Jijau Chowk, Dharashiv.`;
+
+          const waLink = document.getElementById('success-whatsapp-link');
+          if (waLink) {
+            waLink.href = `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(waReceipt)}`;
+          }
+
+          successModal.classList.add('active');
+        }
+      } catch (err) {
+        console.error("Fatal error in saveNewAppointmentFromModal:", err);
+        const modal = document.getElementById('admin-appointment-modal');
+        if (modal) modal.classList.remove('active');
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="fas fa-check-circle"></i> Save &amp; Lock Slot';
+        }
+      }
+    }
+
+    // Initialize Common Calendar navigation & modal controls
+    function initCalendarHandlers() {
+      const prevBtn = document.getElementById('cal-nav-prev');
+      const todayBtn = document.getElementById('cal-nav-today');
+      const nextBtn = document.getElementById('cal-nav-next');
+      const dateInput = document.getElementById('calendar-view-date');
+      const purgePastBtn = document.getElementById('btn-purge-past');
+      const openModalBtn = document.getElementById('btn-open-appointment-modal');
+      const closeModalBtn = document.getElementById('btn-close-appointment-modal');
+      const cancelModalBtn = document.getElementById('btn-cancel-modal');
+      const modalDate = document.getElementById('modal-booking-date');
+      const modalTime = document.getElementById('modal-booking-time');
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          const parts = currentCalendarDate.split('-');
+          const d = new Date(parts[0], parts[1] - 1, parts[2]);
+          d.setDate(d.getDate() - 1);
+          currentCalendarDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          renderCommonCalendar();
+        });
+      }
+      if (todayBtn) {
+        todayBtn.addEventListener('click', () => {
+          currentCalendarDate = getRelativeDate(0);
+          renderCommonCalendar();
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const parts = currentCalendarDate.split('-');
+          const d = new Date(parts[0], parts[1] - 1, parts[2]);
+          d.setDate(d.getDate() + 1);
+          currentCalendarDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          renderCommonCalendar();
+        });
+      }
+      if (dateInput) {
+        dateInput.addEventListener('change', (e) => {
+          if (e.target.value) {
+            currentCalendarDate = e.target.value;
+            renderCommonCalendar();
+          }
+        });
+      }
+      if (purgePastBtn) {
+        purgePastBtn.addEventListener('click', () => {
+          if (confirm("Are you sure you want to clean and permanently delete previous days' bookings to keep the system smooth?")) {
+            purgePreviousDaysBookings(true);
+          }
+        });
+      }
+      if (openModalBtn) {
+        openModalBtn.addEventListener('click', () => {
+          openAddAppointmentModal(currentCalendarDate, '01:00 PM');
+        });
+      }
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+          document.getElementById('admin-appointment-modal').classList.remove('active');
+        });
+      }
+      if (cancelModalBtn) {
+        cancelModalBtn.addEventListener('click', () => {
+          document.getElementById('admin-appointment-modal').classList.remove('active');
+        });
+      }
+      if (modalDate) {
+        modalDate.addEventListener('change', () => {
+          const timeField = document.getElementById('modal-booking-time');
+          const targetDate = modalDate.value;
+          const bookings = getBookings();
+          const dateBookings = bookings.filter(b => b.appointmentDate === targetDate && b.status !== 'cancelled');
+          const currentSlot = timeField.value || '01:00 PM';
+          timeField.innerHTML = SALON_SLOTS.map(slot => {
+            const slotBookings = dateBookings.filter(b => {
+              const bTime = (b.appointmentTime || '').replace(/^0/, '').trim().toUpperCase();
+              const sTime = slot.replace(/^0/, '').trim().toUpperCase();
+              return bTime === sTime || b.appointmentTime === slot;
+            });
+            const remaining = Math.max(0, TOTAL_STAFF_CAPACITY - slotBookings.length);
+            const isSelected = (slot === currentSlot);
+            return `<option value="${slot}" ${isSelected ? 'selected' : ''}>${slot} — (${remaining} of 8 slots remaining)</option>`;
+          }).join('');
+          updateModalWorkersList();
+        });
+      }
+      if (modalTime) {
+        modalTime.addEventListener('change', updateModalWorkersList);
+      }
+
+      const closeSuccessModalBtn = document.getElementById('btn-close-success-modal');
+      if (closeSuccessModalBtn) {
+        closeSuccessModalBtn.addEventListener('click', () => {
+          const successModal = document.getElementById('admin-success-modal');
+          if (successModal) successModal.classList.remove('active');
+        });
+      }
+
+      // Close on backdrop click
+      const appointModal = document.getElementById('admin-appointment-modal');
+      if (appointModal) {
+        appointModal.addEventListener('click', (e) => {
+          if (e.target === appointModal) appointModal.classList.remove('active');
+        });
+      }
+      const successModalEl = document.getElementById('admin-success-modal');
+      if (successModalEl) {
+        successModalEl.addEventListener('click', (e) => {
+          if (e.target === successModalEl) successModalEl.classList.remove('active');
+        });
+      }
     }
 
     // Helper to get ordinal suffix for ages
@@ -1522,20 +2749,35 @@
       const tbody = document.getElementById('schedules-tbody');
       if (!tbody) return;
 
-      const searchValue = document.getElementById('search-bookings').value.toLowerCase().trim();
-      const stylistFilter = document.getElementById('filter-stylist').value;
-      const dateFilter = document.getElementById('filter-date').value;
+      const searchInput = document.getElementById('search-bookings');
+      const searchValue = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const stylistFilterEl = document.getElementById('filter-stylist');
+      const stylistFilter = stylistFilterEl ? stylistFilterEl.value : 'all';
+      const dateFilterEl = document.getElementById('filter-date');
+      const dateFilter = dateFilterEl ? dateFilterEl.value : 'all';
       const todayStr = getRelativeDate(0);
       const tomorrowStr = getRelativeDate(1);
 
-      let filtered = bookings.filter(b => {
-        // Search filter
-        const matchSearch = b.clientName.toLowerCase().includes(searchValue) || 
-                            b.clientPhone.includes(searchValue) ||
-                            b.ticketId.toLowerCase().includes(searchValue);
+      let filtered = (bookings || []).filter(b => {
+        if (!b) return false;
+        // Search filter with safe property access
+        const cName = (b.clientName || '').toLowerCase();
+        const cPhone = String(b.clientPhone || '');
+        const tId = (b.ticketId || '').toLowerCase();
+        const matchSearch = !searchValue || cName.includes(searchValue) || 
+                            cPhone.includes(searchValue) ||
+                            tId.includes(searchValue);
 
-        // Stylist filter
-        const matchStylist = (stylistFilter === 'all') || (b.stylistName === stylistFilter);
+        // Stylist filter matching by worker id, worker name, or keyword
+        let matchStylist = (stylistFilter === 'all');
+        if (!matchStylist) {
+          const sFilterLower = stylistFilter.toLowerCase();
+          const bStylistNameLower = (b.stylistName || '').toLowerCase();
+          const bStylistIdLower = (b.stylistId || '').toLowerCase();
+          matchStylist = (bStylistIdLower === sFilterLower) || 
+                         (bStylistNameLower === sFilterLower) || 
+                         (bStylistNameLower.includes(sFilterLower));
+        }
 
         // Date filter
         let matchDate = true;
@@ -1550,15 +2792,20 @@
         return matchSearch && matchStylist && matchDate;
       });
 
-      // Sort bookings by appointment date and time
+      // Sort bookings by appointment date and time safely
       filtered.sort((a, b) => {
-        const dateA = new Date(a.appointmentDate + ' ' + (a.appointmentTime.includes('AM') || a.appointmentTime.includes('PM') ? convertTimeTo24(a.appointmentTime) : '00:00'));
-        const dateB = new Date(b.appointmentDate + ' ' + (b.appointmentTime.includes('AM') || b.appointmentTime.includes('PM') ? convertTimeTo24(b.appointmentTime) : '00:00'));
+        const timeStrA = (a.appointmentTime && typeof a.appointmentTime === 'string') ? a.appointmentTime : '11:00 AM';
+        const timeStrB = (b.appointmentTime && typeof b.appointmentTime === 'string') ? b.appointmentTime : '11:00 AM';
+        const dateAStr = a.appointmentDate || '2000-01-01';
+        const dateBStr = b.appointmentDate || '2000-01-01';
+        const dateA = new Date(`${dateAStr} ${convertTimeTo24(timeStrA)}`);
+        const dateB = new Date(`${dateBStr} ${convertTimeTo24(timeStrB)}`);
         return dateB - dateA; // Newest first
       });
 
       // Update count label
-      document.getElementById('table-count-label').textContent = `Showing ${filtered.length} bookings`;
+      const countLabel = document.getElementById('table-count-label');
+      if (countLabel) countLabel.textContent = `Showing ${filtered.length} bookings`;
 
       tbody.innerHTML = '';
 
@@ -1620,7 +2867,7 @@
                              `*Stylist:* ${b.stylistName}\n` +
                              `*Services:* \n${servicesListText}\n` +
                              `*Total Amount:* ₹${b.totalPrice}\n\n` +
-                             `📍 *Location:* MAKE ME Unisex Salon, Pune\n` +
+                             `📍 *Location:* MAKE ME Unisex Salon, Barshi Naka, Jijau Chowk, Dharashiv\n` +
                              `📞 *Contact:* +91 93707 56017\n\n` +
                              `We look forward to styling you! Please arrive 5-10 minutes early.`;
         const waReminderUrl = `https://api.whatsapp.com/send?phone=91${b.clientPhone}&text=${encodeURIComponent(reminderText)}`;
@@ -1692,17 +2939,21 @@
       });
     }
 
-    // Helper to translate 12h time to 24h for sorting
+    // Helper to translate 12h time to 24h for sorting safely
     function convertTimeTo24(timeStr) {
-      const [time, modifier] = timeStr.split(' ');
-      let [hours, minutes] = time.split(':');
-      if (hours === '12') {
-        hours = '00';
+      if (!timeStr || typeof timeStr !== 'string') return '00:00';
+      const parts = timeStr.trim().split(' ');
+      if (parts.length < 2) return timeStr.includes(':') ? timeStr : '00:00';
+      const [time, modifier] = parts;
+      let [hours, minutes] = (time || '00:00').split(':');
+      hours = parseInt(hours || '0', 10);
+      if (modifier && modifier.toUpperCase() === 'PM' && hours < 12) {
+        hours += 12;
       }
-      if (modifier === 'PM') {
-        hours = parseInt(hours, 10) + 12;
+      if (modifier && modifier.toUpperCase() === 'AM' && hours === 12) {
+        hours = 0;
       }
-      return `${hours}:${minutes}`;
+      return `${String(hours).padStart(2, '0')}:${minutes || '00'}`;
     }
 
     // Update Booking Date in Cloud Database
@@ -2072,6 +3323,7 @@
     // Initial load
     window.addEventListener('DOMContentLoaded', () => {
       initLoginHandler();
+      initCalendarHandlers();
       if (checkAdminSession()) {
         // Initialize Firebase Real-time listeners
         startBookingsListener();

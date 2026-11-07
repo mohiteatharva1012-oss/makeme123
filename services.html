@@ -229,11 +229,11 @@
 
       <div class="footer-bottom">
         <p class="copyright">&copy; 2026 MAKE ME Unisex Salon. All Rights Reserved.</p>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted);">
-          <span>MADE WITH LOVE ❤️</span>
-          <img src="assets/logo_am_groups.jpeg" alt="AM DIGITAL AND CO." class="footer-logo-anim">
-          <span class="footer-text-anim">AM DIGITAL AND CO.</span>
-        </div>
+        <a href="https://amstudioz99.vercel.app" target="_blank" rel="noopener noreferrer" class="footer-credit-link" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); text-decoration: none;">
+          <span>MADE WITH LOVE ❤️ BY</span>
+          <img src="assets/logo_am_groups.jpeg" alt="AM STUDIOZ" class="footer-logo-anim">
+          <span class="footer-text-anim">AM STUDIOZ</span>
+        </a>
         <div class="footer-bottom-links">
           <a href="admin.html" style="color: var(--gold-primary); font-weight: 500;"><i class="fas fa-user-shield"></i> Admin Portal</a>
           <a href="#">Privacy Policy</a>
@@ -344,36 +344,16 @@
       </div>
 
       <div class="wizard-step-panel" id="step-5-panel">
-        <div class="booking-success-message booking-maintenance-message">
-          <div class="maintenance-animated-wrapper">
-            <img src="assets/maintenance-animated.svg" alt="Website Under Maintenance" class="maintenance-animated-img">
+        <div class="booking-success-message">
+          <div class="success-icon-wrap">
+            <i class="fas fa-check"></i>
           </div>
-          <div class="maintenance-badge-pill">
-            <span class="maintenance-pulse-dot"></span> System Maintenance in Progress
-          </div>
-          <h3 class="success-title text-gradient" style="font-size:1.85rem; margin-bottom:12px;">Website is Under Maintenance</h3>
-          <p class="maintenance-main-text">
-            Our online booking portal is currently undergoing scheduled maintenance and will be start soon!
+          <h3 class="success-title text-gradient">Appointment Confirmed!</h3>
+          <p class="success-text">
+            Thank you for booking with MAKE ME Unisex Salon. Your appointment details have been reserved.
           </p>
-          <div class="maintenance-direct-contact">
-            <div class="maintenance-contact-header" style="margin-bottom: 14px;">
-              <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--gold-primary); margin-bottom: 4px;">Contact to Salon</h4>
-              <p style="font-size: 0.85rem; color: var(--text-muted);">For appointments and bookings, please reach out to us directly:</p>
-            </div>
-            <div class="maintenance-contact-btns">
-              <a href="https://api.whatsapp.com/send?phone=919370756017&text=Hello%20MAKE%20ME%20Salon%2C%20I%20would%20like%20to%20book%20an%20appointment." target="_blank" class="btn btn-wa-direct">
-                <i class="fab fa-whatsapp"></i> Chat on WhatsApp (Line 1)
-              </a>
-              <a href="https://api.whatsapp.com/send?phone=919021816517&text=Hello%20MAKE%20ME%20Salon%2C%20I%20would%20like%20to%20book%20an%20appointment." target="_blank" class="btn btn-secondary" style="border-radius: 40px; font-size: 0.82rem; padding: 10px 16px;">
-                <i class="fab fa-whatsapp"></i> WhatsApp (Line 2)
-              </a>
-              <a href="tel:+919370756017" class="btn btn-call-direct">
-                <i class="fas fa-phone-alt"></i> Call +91 93707 56017
-              </a>
-            </div>
-          </div>
-          <button class="btn btn-secondary" onclick="closeBookingModal();" style="margin-top: 20px; border-radius: 30px; font-size: 0.85rem; padding: 10px 24px; border: 1px solid var(--border-color);">
-            <i class="fas fa-times" style="margin-right: 6px;"></i> Close &amp; Return to Salon
+          <button class="btn btn-secondary" onclick="closeBookingModal();" style="border-radius: 30px; font-size: 0.85rem; padding: 10px 24px;">
+            Done &amp; Return to Salon
           </button>
         </div>
       </div>
